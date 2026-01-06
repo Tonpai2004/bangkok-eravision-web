@@ -3,18 +3,19 @@
 import Navbar from "@/components/Navbar";
 import { useLanguage } from "@/context/LanguageContext";
 import { useState } from "react";
-// 1. เพิ่ม useTransformContext เพื่อดึงค่าการซูมมาใช้คำนวณ
+
 import { TransformWrapper, TransformComponent, useControls, useTransformContext } from "react-zoom-pan-pinch";
+import { useRouter } from "next/navigation";
 
 const MAP_LOCATIONS = [
-  { id: 1, th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument", top: "28.5%", left: "41%" },
-  { id: 2, th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung", top: "62.5%", left: "44.5%" },
-  { id: 3, th: "เสาชิงช้า & วัดสุทัศน์", en: "Giant Swing & Wat Suthat", top: "45%", left: "43.5%" },
-  { id: 4, th: "ถนนข้าวสาร", en: "Khaosan Road", top: "26%", left: "28%" },
-  { id: 5, th: "ป้อมพระสุเมรุ", en: "Phra Sumen Fort", top: "10.8%", left: "20%" },
-  { id: 6, th: "พิพิธภัณฑสถานแห่งชาติ", en: "National Museum", top: "34.5%", left: "17.25%" },
-  { id: 7, th: "ถนนเยาวราช", en: "Yaowarat (Chinatown)", top: "72.5%", left: "70%" },
-  { id: 8, th: "สนามหลวง", en: "Sanam Luang", top: "45%", left: "21%" },
+  { id: 1, th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument", top: "28.5%", left: "41%", videoUrl: "/videos/demo1.mp4" },
+  { id: 2, th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung", top: "62.5%", left: "44.5%", videoUrl: "/videos/demo2.mp4" },
+  { id: 3, th: "เสาชิงช้า & วัดสุทัศน์", en: "Giant Swing & Wat Suthat", top: "45%", left: "43.5%", videoUrl: "/videos/demo3.mp4" },
+  { id: 4, th: "ถนนข้าวสาร", en: "Khaosan Road", top: "26%", left: "28%", videoUrl: "/videos/demo4.mp4" },
+  { id: 5, th: "ป้อมพระสุเมรุ", en: "Phra Sumen Fort", top: "10.8%", left: "20%", videoUrl: "/videos/demo5.mp4" },
+  { id: 6, th: "พิพิธภัณฑสถานแห่งชาติ", en: "National Museum", top: "34.5%", left: "17.25%", videoUrl: "/videos/demo6.mp4" },
+  { id: 7, th: "ถนนเยาวราช", en: "Yaowarat (Chinatown)", top: "72.5%", left: "70%", videoUrl: "/videos/demo7.mp4" },
+  { id: 8, th: "สนามหลวง", en: "Sanam Luang", top: "45%", left: "21%", videoUrl: "/videos/demo8.mp4" },
 ];
 
 // --- Component ย่อย 1: ปุ่มควบคุมการซูม ---
@@ -36,14 +37,14 @@ const Controls = () => {
 };
 
 // --- Component ย่อย 2: หมุดแผนที่ (จัดการเรื่องขนาดคงที่) ---
-const MapPin = ({ loc, activePin, setActivePin, language }: any) => {
+const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
   // ดึงค่า scale ปัจจุบันจาก Library
   const { transformState } = useTransformContext();
   const scale = transformState.scale;
 
   // สูตรคำนวณ: ยิ่งแมพเล็ก (scale น้อย) -> หมุดต้องยิ่งขยาย (counterScale มาก)
   // Math.max(1, ...) เพื่อกันไม่ให้หมุดเล็กกว่าปกติเวลาซูมเข้าลึกๆ
-  const counterScale = 1 / scale; 
+  const counterScale = 1 / Math.min(scale, 2.5); 
 
   return (
     <div 
@@ -57,6 +58,11 @@ const MapPin = ({ loc, activePin, setActivePin, language }: any) => {
         onMouseLeave={() => setActivePin(null)}
         onMouseDown={(e) => e.stopPropagation()} 
         onTouchStart={(e) => e.stopPropagation()}
+
+        onClick={(e) => {
+            e.stopPropagation(); // ป้องกันไม่ให้ทะลุไปกด map
+            onClick(loc);
+        }}
     >
         {/* ส่วนรูปภาพหมุด */}
         <div 
@@ -66,7 +72,7 @@ const MapPin = ({ loc, activePin, setActivePin, language }: any) => {
                 transformOrigin: 'bottom center' 
             }}
         >
-            <img src="/svg/pin-gold.svg" alt="Pin" className="w-8 h-8 md:w-16 md:h-16"/>
+            <img src="/svg/pin-gold.svg" alt="Pin" className="w-16 h-16"/>
         </div>
 
         {/* ส่วนข้อความ Tooltip */}
@@ -89,15 +95,86 @@ const MapPin = ({ loc, activePin, setActivePin, language }: any) => {
   );
 };
 
+// --- Component ย่อย 3: Video Modal (Pop-up) ---
+const VideoModal = ({ location, onClose, language }: any) => {
+    const router = useRouter(); // 2. เรียกใช้ Router
+
+    if (!location) return null;
+
+    // ฟังก์ชันกดปุ่มแล้วย้ายหน้า
+    const handleNavigateToUpload = () => {
+        // ส่งชื่อภาษาไทย (location.th) ไป เพราะใน UploadSection เราใช้ชื่อไทยเป็น ID
+        // ใช้ encodeURIComponent เผื่อภาษาไทยมีปัญหาใน URL
+        router.push(`/?location=${encodeURIComponent(location.th)}`);
+    };
+
+    return (
+        <div className="fixed inset-0 z-[100] bg-black/90 flex justify-center items-center p-4 backdrop-blur-sm" onClick={onClose}>
+            <div 
+                className="bg-background rounded-3xl w-full max-w-4xl relative flex flex-col"
+                onClick={e => e.stopPropagation()} 
+            >
+              <div className="bg-[#F4EDDB] px-8 rounded-3xl overflow-hidden flex flex-col">
+                {/* Header */}
+                <div className="text-dark py-6 flex justify-between items-center">
+                    <h3 className="serif-font font-bold text-xl md:text-3xl tracking-wide">
+                        {language === 'TH' ? location.th : location.en}
+                    </h3>
+                    <button onClick={onClose} className="text-2xl text-white bg-dark hover:bg-accent px-3 py-1 transition-colors font-bold">&times;</button>
+                </div>
+
+                {/* Video Player */}
+                <div className="w-full aspect-video bg-black relative">
+                    <video 
+                        src={location.videoUrl} 
+                        className="w-full h-full object-contain"
+                        controls 
+                        autoPlay
+                    >
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                {/* Footer with Action Button */}
+                <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-dark">
+                   <span className="font-mono text-sm opacity-70">
+                       {language === 'TH' ? "*วิดีโอจำลองบรรยากาศช่วงทศวรรษที่ 1960" : "*1960s Atmosphere Simulation Video"}
+                   </span>
+
+                   {/* 3. ✅ ปุ่ม CTA ใหม่ */}
+                   <button 
+                        onClick={handleNavigateToUpload}
+                        className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2"
+                   >
+                      {language === 'TH' ? "ลองสร้างวิดีโอของคุณ" : "Generate Your Own"}
+                   </button>
+                </div>
+              </div>
+                
+            </div>
+        </div>
+    );
+};
+
 // --- Main Page Component ---
 export default function MapPage() {
   const { language } = useLanguage();
   const [activePin, setActivePin] = useState<number | null>(null);
 
+  const [selectedLocation, setSelectedLocation] = useState<any>(null);
+
   return (
     <main className="w-full px-4 md:px-6 pb-20 mx-auto">
       <Navbar />
       
+      {selectedLocation && (
+          <VideoModal 
+            location={selectedLocation} 
+            onClose={() => setSelectedLocation(null)} 
+            language={language}
+          />
+      )}
+
       <h1 className="bg-dark text-white p-3 text-center text-xl md:text-5xl font-bold tracking-[0.2em] mt-10 mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
           {language === 'TH' ? "แผนที่ประวัติศาสตร์" : "Historical Map"}
       </h1>
@@ -136,6 +213,7 @@ export default function MapPage() {
                                 activePin={activePin}
                                 setActivePin={setActivePin}
                                 language={language}
+                                onClick={(location: any) => setSelectedLocation(location)}
                             />
                         ))}
                     </div>
