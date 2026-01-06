@@ -3,45 +3,45 @@
 import Navbar from "@/components/Navbar";
 import UploadSection from "@/components/UploadSection";
 import Link from "next/link";
-import { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // 1. สร้างชุดคำแปลสำหรับหน้าหลัก
 const PAGE_TEXT = {
   TH: {
-    title: "BANGKOK ERAVISION คืออะไร?",
-    desc_prefix: "คืออินเทอร์เฟซไทม์แมชชีนที่จะพาคุณย้อนเวลากลับไปสู่พระนครในยุค 2500 สัมผัสประสบการณ์",
-    desc_highlight: "เวนิสตะวันออก",
-    desc_suffix: "สุดคลาสสิกผ่านเทคโนโลยีจำลองสถานการณ์ด้วย AI ขั้นสูงของเรา",
-    link_dev: "พบกับทีมนักพัฒนาของเรา →"
+    brand_name: "บางกอกทวิกาล",
+    title: "บางกอกทวิกาล คืออะไร?",
+    // ปรับให้ดูเป็นการเชื้อเชิญ (Inviting) และบอกสถานที่/ยุคสมัยชัดเจน
+    desc_prefix: "คือนวัตกรรมย้อนเวลาอัจฉริยะ ที่พร้อมพาคุณข้ามศตวรรษกลับไปสัมผัสเสน่ห์แห่ง 'พระนคร' ยุค 2500 อันรุ่งโรจน์ เปิดประสบการณ์ทัศนาจรผ่านมุมมองใหม่ด้วย", 
+    // ใช้คำที่ดู High-tech แต่ยังเข้ากับบริบทศิลปะ
+    desc_highlight: "เทคโนโลยีปัญญาประดิษฐ์จำลองบรรยากาศ", 
+    // ปิดท้ายด้วยผลลัพธ์ที่ผู้ใช้จะได้รับ (Benefit)
+    desc_suffix: "ที่จะเนรมิตภาพถ่ายปัจจุบันของคุณ ให้กลายเป็นความทรงจำแสนคลาสสิก เสมือนหลุดยังวันวานแห่งมนต์ขลังของพระนครในอดีต",
+    link_dev: "ยลโฉมผู้พรังสรรค์ผลงาน →"
   },
   ENG: {
+    brand_name: "Bangkok EraVision",
     title: "WHAT IS BANGKOK ERAVISION?",
-    desc_prefix: "is a time-machine interface that transports you back to Phra Nakhon in the 1960s. Experience the classic",
-    desc_highlight: "Venice of the East",
-    desc_suffix: "through our advanced AI simulation technology.",
-    link_dev: "Meet our developers →"
+    // ใช้คำศัพท์ที่สื่อถึงการค้นพบใหม่ (Rediscover) และความรุ่งเรือง (Golden Era)
+    desc_prefix: "is a digital time gateway designed to transport you back to the golden era of 'Phra Nakhon' in the 1960s. Rediscover the vibrant soul of the past through our",
+    // ใช้คำว่า Generative / Simulation ให้ดูโปร
+    desc_highlight: "cutting-edge AI retro-simulation technology",
+    // ขยายความว่ามันเปลี่ยนภาพ Modern ให้เป็น Vintage
+    desc_suffix: "that seamlessly transforms your modern perspective into a vintage masterpiece, capturing the authentic atmosphere of the Venice of the East.",
+    link_dev: "The Project's Development Team →"
   }
 };
 
 export default function Home() {
 
-  // 1. สร้าง State ภาษา (ค่าเริ่มต้น ENG)
-  const [language, setLanguage] = useState<'TH' | 'ENG'>('ENG');
+  // ใช้ Context แทน Local State
+  const { language } = useLanguage();
 
-  // 2. ฟังก์ชันสลับภาษา
-  const handleLanguageChange = (lang: 'TH' | 'ENG') => {
-    setLanguage(lang);
-  };
-
-  // 3. ดึงคำศัพท์ตามภาษาปัจจุบันมาใช้
+  // ดึงคำศัพท์ตามภาษาปัจจุบันมาใช้
   const text = PAGE_TEXT[language];
 
   return (
     <main className="w-full px-6 pb-20 mx-auto">
-      <Navbar 
-        language={language} 
-        onLanguageChange={handleLanguageChange} 
-      />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="mt-0 mb-0 md:mt-10 md:mb-7">
@@ -57,7 +57,8 @@ export default function Home() {
           {/* ส่วนที่ 2: กล่องข้อความ */}
           <div className="w-full md:flex-1 flex flex-col justify-between">
             <p className="text-base md:text-lg leading-loose mb-6 text-justify">
-              <strong className="text-2xl serif-font italic">Bangkok EraVision</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
+              {/* เรียกใช้ text.brand_name แทน Text เดิม */}
+              <strong className="text-2xl serif-font italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
             </p>
             <Link href="/about" className="self-start font-bold text-xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors">
               {text.link_dev}

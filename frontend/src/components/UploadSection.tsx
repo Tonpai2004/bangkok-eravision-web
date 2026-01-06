@@ -1,5 +1,7 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+// เพิ่ม Hook สำหรับรับค่าจาก URL (Map Integration)
+import { useSearchParams } from 'next/navigation';
 
 // 1. ข้อมูลสถานที่
 const LOCATIONS_DATA = [
@@ -19,7 +21,7 @@ const UI_TEXT = {
     label_location: "เลือกสถานที่",
     label_upload: "อัปโหลดรูปถ่ายของคุณ",
     dropzone_text: "คลิก หรือ ลากรูปมาวางที่นี่",
-    btn_main: "เริ่มย้อนเวลา",
+    btn_main: "หวนคืนสู่วันวาน 1960s",
     btn_try_again: "ลองรูปอื่น",
     btn_retry: "ลองใหม่อีกครั้ง",
     btn_download: "ดาวน์โหลดรูปภาพ",
@@ -29,10 +31,10 @@ const UI_TEXT = {
     status_verify_fail: "การตรวจสอบไม่ผ่าน",
     status_tech_error: "เกิดข้อผิดพลาดทางเทคนิค",
     
-    status_reconstructing: "กำลังจำลองภาพอดีต...",
-    sub_analyzing: "ตรวจสอบความถูกต้องทางประวัติศาสตร์",
+    status_reconstructing: "เตรียมหวนสู่ความวิจิตรในวันวานแห่ง 1960s",
+    sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ",
     sub_reconstructing: "อยู่ระหว่างดำเนินการ...",
-    auto_proceed: "กำลังเริ่มกระบวนการย้อนเวลา...",
+    auto_proceed: "กำลังเริ่มกระบวนการ...",
     
     error_desc_prefix: "ระบบขัดข้อง: "
   },
@@ -40,7 +42,7 @@ const UI_TEXT = {
     label_location: "Choose a location",
     label_upload: "Upload your Photo",
     dropzone_text: "Click or Drag photo here",
-    btn_main: "GENERATE",
+    btn_main: "Transform to 1960s",
     btn_try_again: "Try Another Photo",
     btn_retry: "Retry again",
     btn_download: "Download Image",
@@ -50,8 +52,8 @@ const UI_TEXT = {
     status_verify_fail: "VERIFICATION REJECTED",
     status_tech_error: "TECHNICAL ERROR",
     
-    status_reconstructing: "RECONSTRUCTING",
-    sub_analyzing: "Verifying historical compatibility...",
+    status_reconstructing: "Let's Back to 1960s",
+    sub_analyzing: "Verifying photo compatibility...",
     sub_reconstructing: "In process...",
     auto_proceed: "Initializing Time Travel Sequence...",
 
@@ -79,6 +81,27 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   const text = UI_TEXT[currentLang];
 
+  // --- เพิ่มส่วนต่อขยายจาก Classifier (Map Integration) ---
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const locationParam = searchParams.get('location');
+    
+    // ถ้ามีค่าส่งมา และค่านั้นมีอยู่จริงใน LOCATIONS_DATA
+    if (locationParam) {
+       const isValidLocation = LOCATIONS_DATA.some(loc => loc.id === locationParam);
+       
+       if (isValidLocation) {
+         setSelectedLocation(locationParam);
+         
+         // เลื่อนหน้าจอลงมาที่ส่วน Upload อัตโนมัติ
+         const element = document.getElementById('upload-section-start');
+         if (element) element.scrollIntoView({ behavior: 'smooth' });
+       }
+    }
+  }, [searchParams]);
+  // ----------------------------------------------------
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) {
@@ -92,6 +115,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   };
 
   // --- ฟังก์ชันเดียวจบ (One Click Flow) ---
+  // ใช้ Logic เดิมของ Processing (127.0.0.1) เพื่อไม่ให้กระทบงานเดิม
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !selectedLocation) return alert(currentLang === 'ENG' ? "Please select location and image." : "กรุณาเลือกสถานที่และรูปภาพ");
@@ -108,7 +132,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
     try {
       // ------------------------------------------------
-      // STEP 1: Verify (เปลี่ยน URL เป็น 127.0.0.1)
+      // STEP 1: Verify (ใช้ 127.0.0.1 ตามเดิมของ Processing)
       // ------------------------------------------------
       const verifyRes = await fetch('http://127.0.0.1:5000/verify', {
         method: 'POST',
@@ -141,7 +165,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      // (เปลี่ยน URL เป็น 127.0.0.1)
+      // (ใช้ 127.0.0.1 ตามเดิมของ Processing)
       const genRes = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
           body: genFormData,
@@ -160,7 +184,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       }
 
     } catch (err: any) {
-        console.error("Fetch Error Details:", err); // เพิ่ม Log ให้ดูง่ายขึ้น
+        console.error("Fetch Error Details:", err);
         setFailReason(err.message);
         
         if (currentStep === 'generating') {
@@ -174,7 +198,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   return (
     <>
-      <form onSubmit={handleGenerate} className="w-full mx-auto mt-8">
+      {/* เพิ่ม ID เพื่อให้ Auto Scroll ทำงานได้ */}
+      <form id="upload-section-start" onSubmit={handleGenerate} className="w-full mx-auto mt-8">
         
         <div className="dashed-box-container">
             {/* Location Select */}
@@ -206,14 +231,11 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             {/* File Upload */}
             <div className="flex justify-between items-end pb-2 font-bold text-xl md:text-2xl mb-3 serif-font border-b-2 border-dark relative">
                 <label htmlFor="file-upload" className="flex-1">{text.label_upload}</label>
-                <button 
-                    type="button" 
-                    onClick={() => fileInputRef.current?.click()} 
-                    className="text-3xl hover:scale-110 transition-transform"
-                    title="Click to select image"
-                >
-                    📷
+
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-3xl hover:scale-110 transition-transform" title="Click to select image">
+                    <img src="/svg/photo-camera.svg" alt="Camera Icon" className="w-8 h-8 md:w-10 md:h-10"/>
                 </button>
+
                 <input 
                     id="file-upload" type="file" ref={fileInputRef} onChange={handleFileChange} 
                     accept="image/*" className="hidden"
@@ -228,9 +250,11 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 {preview ? (
                     <img src={preview} alt="Preview" className="max-h-[300px] w-auto object-contain border-2 border-dark shadow-md" />
                 ) : (
-                    <div className="flex flex-col items-center opacity-50 hover:opacity-80 transition-opacity">
-                        <span className="text-6xl mb-2">⬆</span>
-                        <span className="text-sm font-mono">{text.dropzone_text}</span>
+                    <div className="flex flex-col items-center text-dark  hover:scale-105 transition-transform">
+                        <span className="text-6xl mb-1">
+                            <img src="/svg/upload-1.svg" alt="Upload Icon" className="w-10 h-10 md:w-20 md:h-20"/>
+                        </span>
+                        <span className="text-lg text-center font-mono">{text.dropzone_text}</span>
                     </div>
                 )}
             </div>

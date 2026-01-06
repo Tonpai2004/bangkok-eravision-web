@@ -4,6 +4,9 @@ import { Courier_Prime, Playfair_Display } from "next/font/google";
 // *** บรรทัดนี้สำคัญที่สุด! ห้ามลืม ***
 import "./globals.css"; 
 
+// เพิ่ม Provider จาก Classifier
+import { LanguageProvider } from "@/context/LanguageContext";
+
 // Setup Fonts
 const courier = Courier_Prime({ 
   weight: ['400', '700'], 
@@ -13,7 +16,7 @@ const courier = Courier_Prime({
 });
 
 const playfair = Playfair_Display({ 
-  weight: ['400', '700', '900'], // เพิ่มน้ำหนัก 900 สำหรับหัวข้อหนาๆ
+  weight: ['400', '700', '900'], 
   subsets: ["latin"],
   variable: '--font-playfair',
   display: 'swap',
@@ -34,7 +37,10 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col items-center antialiased overflow-x-hidden">
         {/* Container หลักเพื่อคุมความกว้างให้เหมือน Design */}
         <div className="w-full max-w-[1440px] flex flex-col items-center">
-          {children}
+          {/* ครอบด้วย LanguageProvider */}
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
         </div>
       </body>
     </html>

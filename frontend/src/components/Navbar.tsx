@@ -3,32 +3,24 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+// Import Context
+import { useLanguage } from '@/context/LanguageContext';
 
-// 1. สร้างชุดคำแปลสำหรับเมนู
 const NAV_TEXT = {
-  TH: {
-    home: "หน้าหลัก",
-    map: "แผนที่",
-    about: "เกี่ยวกับเรา"
-  },
-  ENG: {
-    home: "Home",
-    map: "Map",
-    about: "About Us"
-  }
+  TH: { home: "หน้าหลัก", map: "แผนที่", about: "เกี่ยวกับเรา" },
+  ENG: { home: "Home", map: "Map", about: "About Us" }
 };
 
-interface NavbarProps {
-  language: 'TH' | 'ENG';
-  onLanguageChange: (lang: 'TH' | 'ENG') => void;
-}
+// ลบ Interface Props เดิมออก
+// interface NavbarProps { ... } 
 
-export default function Navbar({ language, onLanguageChange }: NavbarProps) {
+export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   
-  // 2. ดึงคำศัพท์ตามภาษาปัจจุบันมาใช้
+  // เรียกใช้ Context แทน Props
+  const { language, setLanguage } = useLanguage();
   const text = NAV_TEXT[language];
 
   const isActive = (path: string) => 
@@ -43,7 +35,7 @@ export default function Navbar({ language, onLanguageChange }: NavbarProps) {
   );
 
   const handleSelectLang = (lang: 'TH' | 'ENG') => {
-    onLanguageChange(lang);
+    setLanguage(lang); // ใช้ setLanguage จาก Context
     setIsLangDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
@@ -57,7 +49,6 @@ export default function Navbar({ language, onLanguageChange }: NavbarProps) {
 
         <div className="w-full border-y-[2px] border-dark flex justify-between items-center px-3 py-3 relative">
           <div className="flex gap-12 font-bold italic text-xl tracking-wide">
-            {/* 3. ใช้ตัวแปร text แทนคำว่า Home, Map, About Us */}
             <Link href="/" className={`${isActive('/')} hover:opacity-70 transition-opacity`}>
               {text.home}
             </Link>
@@ -111,7 +102,6 @@ export default function Navbar({ language, onLanguageChange }: NavbarProps) {
 
         {/* Mobile Menu Dropdown */}
         <div className={`flex flex-col items-center gap-6 py-6 border-b-[2px] border-dark bg-background absolute w-full transition-all duration-300 ease-in-out origin-top z-10 ${isMobileMenuOpen ? 'opacity-100 top-full' : 'opacity-0 -top-[500px] pointer-events-none'}`}>
-            {/* 4. ใช้ตัวแปร text ใน Mobile Menu ด้วย */}
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/')} text-xl font-bold italic`}>
               {text.home}
             </Link>
@@ -122,7 +112,6 @@ export default function Navbar({ language, onLanguageChange }: NavbarProps) {
               {text.about}
             </Link>
             
-            {/* Mobile Language Options */}
             <div className="pt-4 border-t border-gray-300 w-1/2 flex justify-center gap-6">
                 <button 
                   onClick={() => handleSelectLang('ENG')}
