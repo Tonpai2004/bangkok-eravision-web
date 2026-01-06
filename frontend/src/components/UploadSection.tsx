@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 // 1. ข้อมูลสถานที่
 const LOCATIONS_DATA = [
@@ -78,6 +79,29 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const text = UI_TEXT[currentLang];
+
+  // 3. เรียกใช้ Hook ดึงค่าจาก URL
+  const searchParams = useSearchParams();
+
+  // 4. ✅ เพิ่ม useEffect เพื่อเช็คว่ามีค่า location ส่งมาใน URL ไหม
+  useEffect(() => {
+    const locationParam = searchParams.get('location');
+    
+    // ถ้ามีค่าส่งมา และค่านั้นมีอยู่จริงใน LOCATIONS_DATA ของเรา
+    if (locationParam) {
+       // เช็คความปลอดภัยนิดนึงว่าชื่อสถานที่ตรงกับที่มีในระบบไหม
+       const isValidLocation = LOCATIONS_DATA.some(loc => loc.id === locationParam);
+       
+       if (isValidLocation) {
+         setSelectedLocation(locationParam);
+         
+         // (Optional) เลื่อนหน้าจอลงมาที่ส่วน Upload อัตโนมัติ
+         const element = document.getElementById('upload-section-start');
+         if (element) element.scrollIntoView({ behavior: 'smooth' });
+       }
+    }
+  }, [searchParams]);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -176,7 +200,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   return (
     <>
-      <form onSubmit={handleGenerate} className="w-full mx-auto mt-8">
+      <form id="upload-section-start" onSubmit={handleGenerate} className="w-full mx-auto mt-8">
         
         <div className="dashed-box-container">
             {/* Location Select */}
