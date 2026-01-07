@@ -165,6 +165,17 @@ export default function MapPage() {
 
   return (
     <main className="w-full px-4 md:px-6 pb-20 mx-auto">
+      {/* --- Background Texture Layer --- */}
+      <div 
+        className="fixed inset-0 -z-10 pointer-events-none opacity-[0.4]"
+        style={{ 
+          backgroundImage: "url('/images/grunge-paper-background.jpg')", 
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+      
       <Navbar />
       
       {selectedLocation && (
@@ -176,10 +187,10 @@ export default function MapPage() {
       )}
 
       <h1 className="bg-dark text-white p-3 text-center text-xl md:text-5xl font-bold tracking-[0.2em] mt-10 mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
-          {language === 'TH' ? "แผนที่ประวัติศาสตร์" : "Historical Map"}
+          {language === 'TH' ? "แผนที่สถานที่" : "Location Map"}
       </h1>
 
-      <div className="w-full mx-auto border-[4px] border-dark p-2"> 
+      <div className="w-full mx-auto border-[4px] border-dark bg-background p-2"> 
         
         <div className="w-full h-[500px] md:h-[650px] relative overflow-hidden bg-dark cursor-grab active:cursor-grabbing">
              

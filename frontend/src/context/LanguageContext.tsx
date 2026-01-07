@@ -12,7 +12,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('ENG');
+  const [language, setLanguage] = useState<Language>('TH');
 
   // 1. โหลดภาษาเดิมจากความจำเครื่อง (ถ้ามี)
   useEffect(() => {

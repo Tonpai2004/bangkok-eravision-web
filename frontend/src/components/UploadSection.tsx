@@ -20,7 +20,7 @@ const UI_TEXT = {
     label_location: "เลือกสถานที่",
     label_upload: "อัปโหลดรูปถ่ายของคุณ",
     dropzone_text: "คลิก หรือ ลากรูปมาวางที่นี่",
-    btn_main: "หวนคืนสู่วันวาน 1960s",
+    btn_main: "หวนคืนสู่ทศวรรษที่ 1960s",
     btn_try_again: "ลองรูปอื่น",
     btn_retry: "ลองใหม่อีกครั้ง",
     btn_download: "ดาวน์โหลดรูปภาพ",

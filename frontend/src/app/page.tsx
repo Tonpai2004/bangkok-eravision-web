@@ -10,22 +10,16 @@ const PAGE_TEXT = {
   TH: {
     brand_name: "บางกอกทวิกาล",
     title: "บางกอกทวิกาล คืออะไร?",
-    // ปรับให้ดูเป็นการเชื้อเชิญ (Inviting) และบอกสถานที่/ยุคสมัยชัดเจน
     desc_prefix: "คือนวัตกรรมย้อนเวลาอัจฉริยะ ที่พร้อมพาคุณข้ามศตวรรษกลับไปสัมผัสเสน่ห์แห่ง 'พระนคร' ยุค 2500 อันรุ่งโรจน์ เปิดประสบการณ์ทัศนาจรผ่านมุมมองใหม่ด้วย", 
-    // ใช้คำที่ดู High-tech แต่ยังเข้ากับบริบทศิลปะ
     desc_highlight: "เทคโนโลยีปัญญาประดิษฐ์จำลองบรรยากาศ", 
-    // ปิดท้ายด้วยผลลัพธ์ที่ผู้ใช้จะได้รับ (Benefit)
     desc_suffix: "ที่จะเนรมิตภาพถ่ายปัจจุบันของคุณ ให้กลายเป็นความทรงจำแสนคลาสสิก เสมือนหลุดยังวันวานแห่งมนต์ขลังของพระนครในอดีต",
-    link_dev: "ยลโฉมผู้พรังสรรค์ผลงาน →"
+    link_dev: "พบกับเจ้าของผลงาน →"
   },
   ENG: {
     brand_name: "Bangkok EraVision",
     title: "WHAT IS BANGKOK ERAVISION?",
-    // ใช้คำศัพท์ที่สื่อถึงการค้นพบใหม่ (Rediscover) และความรุ่งเรือง (Golden Era)
     desc_prefix: "is a digital time gateway designed to transport you back to the golden era of 'Phra Nakhon' in the 1960s. Rediscover the vibrant soul of the past through our",
-    // ใช้คำว่า Generative / Simulation ให้ดูโปร
     desc_highlight: "cutting-edge AI retro-simulation technology",
-    // ขยายความว่ามันเปลี่ยนภาพ Modern ให้เป็น Vintage
     desc_suffix: "that seamlessly transforms your modern perspective into a vintage masterpiece, capturing the authentic atmosphere of the Venice of the East.",
     link_dev: "The Project's Development Team →"
   }
@@ -40,6 +34,17 @@ export default function Home() {
 
   return (
     <main className="w-full px-6 pb-20 mx-auto">
+      {/* --- Background Texture Layer --- */}
+      <div 
+        className="fixed inset-0 -z-10 pointer-events-none opacity-[0.4]"
+        style={{ 
+          backgroundImage: "url('/images/grunge-paper-background.jpg')", 
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+
       <Navbar />
 
       {/* Hero Section */}
