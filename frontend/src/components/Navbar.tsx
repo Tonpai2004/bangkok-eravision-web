@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-// 👇 1. Import Hook
+
 import { useLanguage } from '@/context/LanguageContext';
 
 const NAV_TEXT = {
@@ -11,16 +11,12 @@ const NAV_TEXT = {
   ENG: { home: "Home", map: "Map", about: "About Us" }
 };
 
-// ❌ ลบ Interface Props ทิ้งไปเลย ไม่ต้องใช้แล้ว
-// interface NavbarProps { ... }
-
-// 👇 2. ไม่ต้องรับ props อะไรแล้ว
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   
-  // 👇 3. ดึงค่าภาษาและฟังก์ชันเปลี่ยนภาษาจาก Context โดยตรง
+  // เรียกใช้ Context แทน Props
   const { language, setLanguage } = useLanguage();
   const text = NAV_TEXT[language];
 
@@ -36,7 +32,7 @@ export default function Navbar() {
   );
 
   const handleSelectLang = (lang: 'TH' | 'ENG') => {
-    setLanguage(lang); // ✅ ใช้ setLanguage จาก Context
+    setLanguage(lang); // ใช้ setLanguage จาก Context
     setIsLangDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
@@ -49,9 +45,15 @@ export default function Navbar() {
         <div className="py-8"><Logo /></div>
         <div className="w-full border-y-[2px] border-dark flex justify-between items-center px-3 py-3 relative">
           <div className="flex gap-12 font-bold italic text-xl tracking-wide">
-            <Link href="/" className={`${isActive('/')} hover:opacity-70 transition-opacity`}>{text.home}</Link>
-            <Link href="/map" className={`${isActive('/map')} hover:opacity-70 transition-opacity`}>{text.map}</Link>
-            <Link href="/about" className={`${isActive('/about')} hover:opacity-70 transition-opacity`}>{text.about}</Link>
+            <Link href="/" className={`${isActive('/')} hover:opacity-70 transition-opacity`}>
+              {text.home}
+            </Link>
+            <Link href="/map" className={`${isActive('/map')} hover:opacity-70 transition-opacity`}>
+              {text.map}
+            </Link>
+            <Link href="/about" className={`${isActive('/about')} hover:opacity-70 transition-opacity`}>
+              {text.about}
+            </Link>
           </div>
 
           <div className="relative">
@@ -83,9 +85,15 @@ export default function Navbar() {
         </div>
 
         <div className={`flex flex-col items-center gap-6 py-6 border-b-[2px] border-dark bg-background absolute w-full transition-all duration-300 ease-in-out origin-top z-10 ${isMobileMenuOpen ? 'opacity-100 top-full' : 'opacity-0 -top-[500px] pointer-events-none'}`}>
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/')} text-xl font-bold italic`}>{text.home}</Link>
-            <Link href="/map" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/map')} text-xl font-bold italic`}>{text.map}</Link>
-            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/about')} text-xl font-bold italic`}>{text.about}</Link>
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/')} text-xl font-bold italic`}>
+              {text.home}
+            </Link>
+            <Link href="/map" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/map')} text-xl font-bold italic`}>
+              {text.map}
+            </Link>
+            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/about')} text-xl font-bold italic`}>
+              {text.about}
+            </Link>
             
             <div className="pt-4 border-t border-gray-300 w-1/2 flex justify-center gap-6">
                 <button onClick={() => handleSelectLang('ENG')} className={`font-bold text-lg ${language === 'ENG' ? 'underline decoration-gold decoration-4' : 'opacity-50'}`}>ENG</button>
