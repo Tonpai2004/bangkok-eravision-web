@@ -18,7 +18,6 @@ const MAP_LOCATIONS = [
   { id: 8, th: "สนามหลวง", en: "Sanam Luang", top: "45%", left: "21%", videoUrl: "/videos/demo8.mp4" },
 ];
 
-// --- Component ย่อย 1: ปุ่มควบคุมการซูม ---
 const Controls = () => {
   const { zoomIn, zoomOut, centerView } = useControls();
   
@@ -36,14 +35,9 @@ const Controls = () => {
   );
 };
 
-// --- Component ย่อย 2: หมุดแผนที่ (จัดการเรื่องขนาดคงที่) ---
 const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
-  // ดึงค่า scale ปัจจุบันจาก Library
   const { transformState } = useTransformContext();
   const scale = transformState.scale;
-
-  // สูตรคำนวณ: ยิ่งแมพเล็ก (scale น้อย) -> หมุดต้องยิ่งขยาย (counterScale มาก)
-  // Math.max(1, ...) เพื่อกันไม่ให้หมุดเล็กกว่าปกติเวลาซูมเข้าลึกๆ
   const counterScale = 1 / Math.min(scale, 2.5); 
 
   return (
@@ -52,30 +46,27 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
         style={{ 
             top: loc.top, 
             left: loc.left, 
-            transform: 'translate(-50%, -100%)' // จุดอ้างอิงอยู่ตรงปลายแหลมหมุด
+            transform: 'translate(-50%, -100%)' 
         }}
         onMouseEnter={() => setActivePin(loc.id)}
         onMouseLeave={() => setActivePin(null)}
         onMouseDown={(e) => e.stopPropagation()} 
         onTouchStart={(e) => e.stopPropagation()}
-
         onClick={(e) => {
-            e.stopPropagation(); // ป้องกันไม่ให้ทะลุไปกด map
+            e.stopPropagation();
             onClick(loc);
         }}
     >
-        {/* ส่วนรูปภาพหมุด */}
         <div 
             className="text-4xl md:text-5xl drop-shadow-md text-red-600 hover:scale-125 transition-transform animate-bounce"
             style={{ 
-                transform: `scale(${counterScale})`, // ขยายสวนทางกับแผนที่
+                transform: `scale(${counterScale})`, 
                 transformOrigin: 'bottom center' 
             }}
         >
             <img src="/svg/pin-gold.svg" alt="Pin" className="w-16 h-16"/>
         </div>
 
-        {/* ส่วนข้อความ Tooltip */}
         <div 
             className={`
                 absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max px-3 py-1 
@@ -84,9 +75,9 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
                 ${activePin === loc.id ? 'opacity-100' : 'opacity-0'}
             `}
             style={{
-                transform: `scale(${counterScale})`, // ขยายข้อความด้วย
+                transform: `scale(${counterScale})`,
                 transformOrigin: 'bottom center',
-                marginBottom: `${10 * counterScale}px` // ดันข้อความหนีหมุดขึ้นไปตามสัดส่วน
+                marginBottom: `${10 * counterScale}px` 
             }}
         >
             {language === 'TH' ? loc.th : loc.en}
@@ -95,16 +86,12 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
   );
 };
 
-// --- Component ย่อย 3: Video Modal (Pop-up) ---
 const VideoModal = ({ location, onClose, language }: any) => {
-    const router = useRouter(); // 2. เรียกใช้ Router
+    const router = useRouter(); 
 
     if (!location) return null;
 
-    // ฟังก์ชันกดปุ่มแล้วย้ายหน้า
     const handleNavigateToUpload = () => {
-        // ส่งชื่อภาษาไทย (location.th) ไป เพราะใน UploadSection เราใช้ชื่อไทยเป็น ID
-        // ใช้ encodeURIComponent เผื่อภาษาไทยมีปัญหาใน URL
         router.push(`/?location=${encodeURIComponent(location.th)}`);
     };
 
@@ -115,7 +102,6 @@ const VideoModal = ({ location, onClose, language }: any) => {
                 onClick={e => e.stopPropagation()} 
             >
               <div className="bg-[#F4EDDB] px-8 rounded-3xl overflow-hidden flex flex-col">
-                {/* Header */}
                 <div className="text-dark py-6 flex justify-between items-center">
                     <h3 className="serif-font font-bold text-xl md:text-3xl tracking-wide">
                         {language === 'TH' ? location.th : location.en}
@@ -123,7 +109,6 @@ const VideoModal = ({ location, onClose, language }: any) => {
                     <button onClick={onClose} className="text-2xl text-white bg-dark hover:bg-accent px-3 py-1 transition-colors font-bold">&times;</button>
                 </div>
 
-                {/* Video Player */}
                 <div className="w-full aspect-video bg-black relative">
                     <video 
                         src={location.videoUrl} 
@@ -135,28 +120,23 @@ const VideoModal = ({ location, onClose, language }: any) => {
                     </video>
                 </div>
 
-                {/* Footer with Action Button */}
                 <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-dark">
                    <span className="font-mono text-sm opacity-70">
                        {language === 'TH' ? "*วิดีโอจำลองบรรยากาศช่วงทศวรรษที่ 1960" : "*1960s Atmosphere Simulation Video"}
                    </span>
-
-                   {/* 3. ✅ ปุ่ม CTA ใหม่ */}
                    <button 
-                        onClick={handleNavigateToUpload}
-                        className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2"
+                       onClick={handleNavigateToUpload}
+                       className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2"
                    >
                       {language === 'TH' ? "ลองสร้างวิดีโอของคุณ" : "Generate Your Own"}
                    </button>
                 </div>
               </div>
-                
             </div>
         </div>
     );
 };
 
-// --- Main Page Component ---
 export default function MapPage() {
   const { language } = useLanguage();
   const [activePin, setActivePin] = useState<number | null>(null);
@@ -191,21 +171,17 @@ export default function MapPage() {
                 wheel={{ step: 0.1 }}
                 limitToBounds={false}
              >
-                {/* Controls และ MapPin ต้องอยู่ภายใน TransformWrapper ถึงจะใช้ Context ได้ */}
                 <Controls />
                 
                 <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full flex items-center justify-center">
                     
                     <div className="relative w-auto h-auto inline-block">
-                        {/* รูปภาพแผนที่ */}
                         <img 
                             src="/images/map.png" 
                             alt="Phra Nakhon Map"
                             className="block max-w-none h-auto object-contain"
                             draggable={false}
                         />
-
-                        {/* เรียกใช้ Component หมุดที่เราสร้างไว้ */}
                         {MAP_LOCATIONS.map((loc) => (
                             <MapPin 
                                 key={loc.id}
@@ -220,7 +196,6 @@ export default function MapPage() {
                 </TransformComponent>
              </TransformWrapper>
 
-             {/* คำอธิบายวิธีใช้ */}
              <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm p-2 border border-dark text-xs font-mono pointer-events-none z-10">
                 {language === 'TH' ? "🖱️ เลื่อนเมาส์เพื่อซูม / คลิกแล้วลากเพื่อขยับ" : "🖱️ Scroll to Zoom / Drag to Pan"}
              </div>

@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-// Import Context
 import { useLanguage } from '@/context/LanguageContext';
 
 const NAV_TEXT = {
@@ -11,15 +10,12 @@ const NAV_TEXT = {
   ENG: { home: "Home", map: "Map", about: "About Us" }
 };
 
-// ลบ Interface Props เดิมออก
-// interface NavbarProps { ... } 
-
 export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   
-  // เรียกใช้ Context แทน Props
+  // เรียกใช้ Context
   const { language, setLanguage } = useLanguage();
   const text = NAV_TEXT[language];
 
@@ -35,7 +31,7 @@ export default function Navbar() {
   );
 
   const handleSelectLang = (lang: 'TH' | 'ENG') => {
-    setLanguage(lang); // ใช้ setLanguage จาก Context
+    setLanguage(lang);
     setIsLangDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
@@ -60,7 +56,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Language Dropdown (Desktop) */}
           <div className="relative">
             <button 
               onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
@@ -100,7 +95,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         <div className={`flex flex-col items-center gap-6 py-6 border-b-[2px] border-dark bg-background absolute w-full transition-all duration-300 ease-in-out origin-top z-10 ${isMobileMenuOpen ? 'opacity-100 top-full' : 'opacity-0 -top-[500px] pointer-events-none'}`}>
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={`${isActive('/')} text-xl font-bold italic`}>
               {text.home}
