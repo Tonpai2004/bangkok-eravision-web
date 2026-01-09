@@ -4,15 +4,13 @@ import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 
-// 2. สร้างชุดคำแปล
 const PAGE_TEXT = {
   TH: {
-    header_title: "บางกอก", // ชื่อแบรนด์ทับศัพท์ หรือจะใช้ภาษาไทยก็ได้ครับ
+    header_title: "บางกอก",
     header_subtitle: "ทวิกาล",
     section_created_by: "สร้างสรรค์โดย",
     section_advisor: "อาจารย์ที่ปรึกษา",
     
-    // ข้อมูลสมาชิก (แก้ไขชื่อไทยได้ตามจริงเลยนะครับ)
     member1_name: "ณัฐภัทร ชาลี",
     member2_name: "มาดามพงษ์ พฤกษา",
     advisor_name: "อ.ณัฐพงศ์ ประเสริฐสังข์",
@@ -32,7 +30,6 @@ const PAGE_TEXT = {
 };
 
 export default function AboutPage() {
-  // 3. ดึงค่าภาษาจาก Context
   const { language } = useLanguage();
   const text = PAGE_TEXT[language];
 

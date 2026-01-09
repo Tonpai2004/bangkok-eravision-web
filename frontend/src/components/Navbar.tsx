@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-
 import { useLanguage } from '@/context/LanguageContext';
 
 const NAV_TEXT = {
@@ -16,7 +15,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   
-  // เรียกใช้ Context แทน Props
+  // เรียกใช้ Context
   const { language, setLanguage } = useLanguage();
   const text = NAV_TEXT[language];
 
@@ -32,7 +31,7 @@ export default function Navbar() {
   );
 
   const handleSelectLang = (lang: 'TH' | 'ENG') => {
-    setLanguage(lang); // ใช้ setLanguage จาก Context
+    setLanguage(lang);
     setIsLangDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };

@@ -2,7 +2,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-// 1. ข้อมูลสถานที่
 const LOCATIONS_DATA = [
   { id: "อนุสาวรีย์ประชาธิปไตย", th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument" },
   { id: "ศาลาเฉลิมกรุง", th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung" },
@@ -14,7 +13,7 @@ const LOCATIONS_DATA = [
   { id: "พิพิธภัณฑสถานแห่งชาติ", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
 ];
 
-// 2. ปรับข้อความ UI 
+// ใช้ข้อความ UI แบบ Processing (เน้นความคลาสสิก/Time Travel)
 const UI_TEXT = {
   TH: {
     label_location: "เลือกสถานที่",
@@ -33,7 +32,6 @@ const UI_TEXT = {
     status_reconstructing: "เตรียมหวนสู่ความวิจิตรในวันวานแห่ง 1960s",
     sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ",
     sub_reconstructing: "อยู่ระหว่างดำเนินการ...",
-    auto_proceed: "กำลังเริ่มกระบวนการ...",
     
     error_desc_prefix: "ระบบขัดข้อง: "
   },
@@ -54,7 +52,6 @@ const UI_TEXT = {
     status_reconstructing: "Let's Back to 1960s",
     sub_analyzing: "Verifying photo compatibility...",
     sub_reconstructing: "In process...",
-    auto_proceed: "Initializing Time Travel Sequence...",
 
     error_desc_prefix: "System Failure: "
   }
@@ -80,20 +77,18 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   const text = UI_TEXT[currentLang];
 
-  // --- เพิ่มส่วนต่อขยายจาก Classifier (Map Integration) ---
+  // --- Logic Map Integration: รับค่า Location จาก URL ---
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const locationParam = searchParams.get('location');
     
-    // ถ้ามีค่าส่งมา และค่านั้นมีอยู่จริงใน LOCATIONS_DATA
     if (locationParam) {
        const isValidLocation = LOCATIONS_DATA.some(loc => loc.id === locationParam);
        
        if (isValidLocation) {
          setSelectedLocation(locationParam);
-         
-         // เลื่อนหน้าจอลงมาที่ส่วน Upload อัตโนมัติ
+         // Auto Scroll
          const element = document.getElementById('upload-section-start');
          if (element) element.scrollIntoView({ behavior: 'smooth' });
        }
@@ -113,13 +108,10 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     }
   };
 
-  // --- ฟังก์ชันเดียวจบ (One Click Flow) ---
-  // ใช้ Logic เดิมของ Processing (127.0.0.1) เพื่อไม่ให้กระทบงานเดิม
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !selectedLocation) return alert(currentLang === 'ENG' ? "Please select location and image." : "กรุณาเลือกสถานที่และรูปภาพ");
 
-    // 1. สร้างตัวแปรมาคอยจำว่าตอนนี้อยู่ขั้นตอนไหน
     let currentStep = 'verifying'; 
 
     setStatus('verifying'); 
@@ -130,9 +122,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     formData.append('language', currentLang); 
 
     try {
-      // ------------------------------------------------
-      // STEP 1: Verify (ใช้ 127.0.0.1 ตามเดิมของ Processing)
-      // ------------------------------------------------
+      // --- STEP 1: Verify (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
       const verifyRes = await fetch('http://127.0.0.1:5000/verify', {
         method: 'POST',
         body: formData,
@@ -145,16 +135,13 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         return; 
       }
 
-      // ------------------------------------------------
-      // STEP 2: Passed Verify -> Wait -> Generate
-      // ------------------------------------------------
+      // --- STEP 2: Verify Passed ---
       setPassDetails({
         score: verifyData.analysis_report?.score || 0,
         place: verifyData.analysis_report?.detected_place || "Confirmed"
       });
       setStatus('verified_pass');
 
-      // หน่วงเวลา 2 วิ ให้ User ดีใจว่าผ่าน
       await new Promise(r => setTimeout(r, 2000));
 
       currentStep = 'generating';
@@ -164,7 +151,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      // (ใช้ 127.0.0.1 ตามเดิมของ Processing)
+      // --- STEP 3: Generate (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
       const genRes = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
           body: genFormData,
@@ -189,7 +176,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         if (currentStep === 'generating') {
             setStatus('error'); 
         } else {
-            // ถ้า Error ตั้งแต่ Verify (เช่น Failed to fetch) จะมาตกตรงนี้
             setStatus('verified_fail'); 
         }
     }
@@ -258,7 +244,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             </div>
         </div>
 
-        {/* ปุ่มเดียวจบ: GENERATE */}
+        {/* Generate Button (แก้ไขตรงนี้ครับ เปลี่ยนเป็น transition-all) */}
         <button 
             type="submit" 
             disabled={status !== 'idle' && status !== 'verified_fail' && status !== 'finished'}
@@ -268,11 +254,10 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         </button>
       </form>
 
-      {/* --- OVERLAY --- */}
+      {/* --- OVERLAY & MODALS --- */}
       {status !== 'idle' && status !== 'finished' && (
         <div className="fixed inset-0 bg-black/95 z-50 flex flex-col justify-center items-center text-white px-4 text-center">
             
-            {/* 1. STATE: VERIFYING */}
             {status === 'verifying' && (
                 <>
                     <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold">
@@ -284,7 +269,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </>
             )}
 
-            {/* 2. STATE: VERIFIED PASS */}
             {status === 'verified_pass' && (
                 <>
                     <div className="text-6xl mb-4 text-green-500">✓</div>
@@ -300,7 +284,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </>
             )}
 
-            {/* 3. STATE: VERIFIED FAIL (User Error) */}
             {status === 'verified_fail' && (
                 <div className="border-2 border-accent p-8 max-w-2xl bg-black">
                     <div className="text-6xl mb-4 text-accent">✕</div>
@@ -319,7 +302,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </div>
             )}
 
-            {/* 4. STATE: TECHNICAL ERROR (System Error) */}
             {status === 'error' && (
                 <div className="border-2 border-accent p-8 max-w-2xl bg-black shadow-[0_0_50px_rgba(255,255,255,0.1)]">
                     <div className="text-6xl mb-4 text-red-500">✕</div>
@@ -338,7 +320,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </div>
             )}
 
-            {/* 5. STATE: GENERATING */}
             {status === 'generating' && (
                 <>
                     <div className="text-4xl md:text-6xl font-bold mb-6 animate-blink serif-font tracking-widest text-gold">
@@ -352,7 +333,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         </div>
       )}
 
-      {/* --- RESULT MODAL --- */}
       {result && (
         <div className="fixed inset-0 bg-black/85 z-50 flex justify-center items-center p-4" onClick={() => setResult(null)}>
             <div className="bg-background p-6 md:p-8 max-w-3xl w-full border-[3px] border-dark shadow-[15px_15px_0px_rgba(0,0,0,0.5)] relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>

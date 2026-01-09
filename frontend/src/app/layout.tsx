@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 // Import Google Fonts
 import { Courier_Prime, Playfair_Display } from "next/font/google";
-// *** บรรทัดนี้สำคัญที่สุด! ห้ามลืม ***
 import "./globals.css"; 
 
-// เพิ่ม Provider จาก Classifier
+// Import Provider
 import { LanguageProvider } from "@/context/LanguageContext";
 
 // Setup Fonts
@@ -35,9 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${courier.variable} ${playfair.variable}`}>
       <body className="min-h-screen flex flex-col items-center antialiased overflow-x-hidden">
-        {/* Container หลักเพื่อคุมความกว้างให้เหมือน Design */}
+        {/* Container หลักเพื่อคุมความกว้าง */}
         <div className="w-full max-w-[1440px] flex flex-col items-center">
-          {/* ครอบด้วย LanguageProvider */}
           <LanguageProvider>
             {children}
           </LanguageProvider>
