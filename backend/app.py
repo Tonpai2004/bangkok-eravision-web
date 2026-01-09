@@ -5,6 +5,8 @@ import time
 import random
 import pickle
 import numpy as np
+import tempfile
+import datetime # เพิ่ม datetime เข้ามาสำหรับ timestamp
 from scipy.spatial.distance import cdist
 from sentence_transformers import SentenceTransformer
 from PIL import Image
@@ -14,13 +16,62 @@ from google import genai
 from google.genai import types
 from flask_cors import CORS
 
+# Import Classifier Logic
+from classifier import classify_image
+
 # --- 1. Setup ---
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
 # ==========================================
-# 🧠 AI MEMORY LOADING
+# 💾 AUTO-SAVE SYSTEM (DEV ONLY)
+# ==========================================
+# ส่วนนี้เพิ่มเข้ามาใหม่สำหรับการบันทึกไฟล์อัตโนมัติ
+HISTORY_FOLDER = os.path.join(os.path.dirname(__file__), 'generated_history')
+
+def save_generated_image(image_bytes, location_name_th):
+    """
+    ฟังก์ชันบันทึกรูปผลลัพธ์ลง Local Folder เพื่อการ Debug/Dev
+    """
+    try:
+        # 1. สร้างโฟลเดอร์ถ้ายังไม่มี
+        if not os.path.exists(HISTORY_FOLDER):
+            os.makedirs(HISTORY_FOLDER)
+            print(f"📂 Created history folder at: {HISTORY_FOLDER}")
+
+        # 2. แปลงชื่อสถานที่ให้เป็นภาษาอังกฤษแบบง่าย (สำหรับชื่อไฟล์)
+        file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
+        
+        # ตัดแต่งชื่อให้สั้นลงและปลอดภัยกับชื่อไฟล์
+        safe_name = "place"
+        if "Democracy" in file_prefix: safe_name = "democracymonument"
+        elif "Sala" in file_prefix: safe_name = "salachalermkrung"
+        elif "Swing" in file_prefix: safe_name = "giantswing"
+        elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
+        elif "Khao San" in file_prefix: safe_name = "khaosan"
+        elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
+        elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
+        elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
+        
+        # 3. สร้างชื่อไฟล์: [place]_1960s_[timestamp].png
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{safe_name}_1960s_{timestamp}.png"
+        filepath = os.path.join(HISTORY_FOLDER, filename)
+
+        # 4. บันทึกไฟล์
+        with open(filepath, "wb") as f:
+            f.write(image_bytes)
+        
+        print(f"💾 Auto-saved result to: {filename}")
+        return filepath
+
+    except Exception as e:
+        print(f"⚠️ Failed to auto-save image: {e}")
+        return None
+
+# ==========================================
+# 🧠 AI MEMORY LOADING (FROM PROCESSING)
 # ==========================================
 print("⏳ Initializing System...")
 SEARCH_MODEL = None
@@ -52,7 +103,7 @@ def load_ai_memory():
 load_ai_memory()
 
 # ==========================================
-# 📍 MAPPINGS
+# 📍 MAPPINGS & DATA
 # ==========================================
 
 LOCATION_MAPPING_TH_TO_EN = {
@@ -65,6 +116,9 @@ LOCATION_MAPPING_TH_TO_EN = {
     "สนามหลวง": "Sanam Luang (Royal Field)",
     "พิพิธภัณฑสถานแห่งชาติ": "National Museum Bangkok"
 }
+
+# Mapping สำหรับแปลชื่อกลับเป็นไทยตอน Error Message
+LOCATION_MAPPING_EN_TO_TH = {v: k for k, v in LOCATION_MAPPING_TH_TO_EN.items()}
 
 LOCATION_KEY_MAP = {
     "อนุสาวรีย์ประชาธิปไตย": "Democracy Monument",
@@ -87,121 +141,114 @@ LOCATION_INFO = {
     "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
 }
 
-# --- THE MASTER PROMPT DATABASE (ULTIMATE FIX VERSION) ---
+# --- THE MASTER PROMPT DATABASE (REFINED V.4 - USER FEEDBACK FIX) ---
 LOCATION_PROMPTS = {
-    # 1. อนุสาวรีย์ฯ: แก้สีพานดำ, เพิ่มรายละเอียดตึกและรถ
     "Democracy Monument": """
           **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the 1960s Democracy Monument.
           **STRUCTURAL LOCK:** Maintain original perspective and geometry 100%. Aspect Ratio must match input.
-
-          **COLOR & MATERIAL SPECIFICATION (STRICT):**
-          - **The Phan (Constitution Tray at the very top):** MUST be **DARK BLACK / BRONZE METAL**. This is the ONLY black element on the monument.
-          - **Main Wings & Central Turret:** **Matte, weathered concrete (Off-white/Cream/Light Grey)** with rain stains. NOT BLACK.
-          - **Doors:** **Deep Red Ochre**.
-
-          **SURROUNDING CONTEXT (1960s):**
-          - **Flanking Buildings:** The Ratchadamnoen Avenue buildings must be visible, colored in **Terracotta/Burnt Orange**, with 1960s shop signs (Thai script).
-          - **Street:** Wide asphalt, **NO traffic lines**.
-          - **Vehicles:** **White 'Nai Lert' Buses** (rounded body), vintage cars (Austin, Fiat), samlors.
-          - **Atmosphere:** Bright daylight, natural color film grain (Kodachrome).
+          
+          **GEOMETRY FIX (IMPORTANT):**
+          - The four wings must look like **SOLID, HEAVY CONCRETE MASS**. They are NOT flat sheets; they have thickness and curve inward.
+          - The surface is **Smooth Plaster/Concrete**, painted Off-white/Cream.
+          
+          **COLOR & DETAIL:**
+          - **The Phan (Top Tray ONLY):** Dark Black/Bronze Metal.
+          - **The Turret (Center):** Cream body with **Red Ochre Doors**.
+          
+          **CONTEXT:**
+          - **Street:** Wide **Asphalt** road. Clean, NOT muddy. NO traffic lines.
+          - **Vehicles:** White 'Nai Lert' Buses (Rounded shape), Austin/Fiat cars.
+          - **Vibe:** Bright tropical daylight, film grain.
       """,
 
-    # 2. ศาลาเฉลิมกรุง: เติมตึกข้างๆ คืนมาแบบย้อนยุค, ไม่ให้โล่ง
     "Sala Chalermkrung": """
-        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre, 1967.
-        **STRUCTURE LOCK:** - **ROOF SIGN:** The "ศาลาเฉลิมกรุง" wire-frame sign MUST remain 100% IDENTICAL.
-        - **THEATER SHAPE:** Keep the Art Deco architecture.
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
 
-        **SURROUNDING RECONSTRUCTION (CRITICAL):**
-        - **DO NOT** make the surroundings empty space.
-        - **RESTORE ADJACENT BUILDINGS:** To the immediate left and right, reconstruct **1960s-style shophouses** (2-3 stories, weathered concrete, wooden shutters) that physically connect to or flank the theater. They should look lived-in, not like modern voids.
-        - **CLEAR SKY:** Remove modern utility poles/wires, but keep the vintage buildings.
+        **ABSOLUTE STRUCTURE LOCK (DO NOT CHANGE):**
+        - The main building shape and the wire-frame **"ศาลาเฉลิมกรุง"** sign on the roof MUST remain **100% IDENTICAL** to the original reference image. 
+        - DO NOT transform, warp, or redesign the architecture. Keep it exactly as it appears in the 1960s reference.
 
-        **THE MOVIE POSTER INJECTION:**
-        - **Action:** Overlay a massive, hand-painted oil cut-out billboard titled "**บางกอกทวิกาล**".
-        - **Visuals:** Muscular man in suit with glasses + Slim man with middle-part hair.
-        
-        **STREET LEVEL:**
-        - **Road:** Asphalt. **NO TRAMS/TRACKS.** Vintage Taxis, 60s pedestrians.
+        **THE MOVIE POSTER (ADD-ON):**
+        - **Placement:** Overlay a **Hand-painted Cut-out Billboard** ABOVE the entrance marquee. It should look like an added layer, not part of the wall.
+        - **Visuals:** Two men standing back-to-back (One with glasses, one without). White shirts.
+        - **Thai Text:** Title "**บางกอกทวิกาล**", Starring "ม.ร.ว.มาดามพงษ์ และ ณัฐภัทร", Director "ตอตุ้ม".
+
+        **CONTEXT:**
+        - **Surroundings:** Keep the surrounding shophouses visible but ensure they look like the 1960s era. Do not leave the sides empty.
+        - **Street:** **Asphalt Road**. Vintage Taxis/Pedestrians. NO TRAMS.
     """,
 
-    # 3. เสาชิงช้า: เน้นภาพคมชัด, วัดสุทัศน์สมจริง
     "Giant Swing": """
-        **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
-        **STRUCTURAL LOCK:** Keep exact perspective. Ensure sharp focus on the swing and Wat Suthat.
+        **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing.
+        **STRUCTURAL LOCK:** Keep exact perspective. Focus on the Red Pillars.
 
         **VISUAL ELEMENTS:**
-        - **Swing:** Vibrant Red Teak Logs on a **Raised Stone Plinth**.
-        - **Traffic Rule:** Traffic goes AROUND the plinth. **NO vehicles under the swing.** NO TRAMS.
-        - **Wat Suthat (Background):** Must look sharp, aged, and historically accurate with weathered roofs and walls.
-        **SURROUNDING COMMUNITY:**
-        - **Architecture:** 1960s Bangkok Style shophouses (Sino-Portuguese/wooden). Weathered, lived-in.
-        - **Road:** Rough asphalt/paved stone, dusty.
+        - **Swing:** Vibrant **Red Teak Logs** standing on a **White Stone Plinth**.
+        - **Wat Suthat (Back):** Must look sharp and aged (weathered roof tiles).
+        - **Ground:** **Paved Asphalt or Stone**. CLEAN road. **NOT muddy/dilapidated**.
+        - **Traffic:** Cars drive AROUND the plinth. NO vehicles under the red pillars.
     """,
 
-    # 4. เยาวราช: ลดความรกของป้าย, เน้นบรรยากาศโปร่ง
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
-        **ATMOSPHERE & SIGNAGE (CRITICAL REDUCTION):**
-        - **REDUCE SIGN DENSITY:** The street should look **less cluttered** than modern times. There are fewer signs, making the street feel wider and more open.
-        - **Sign Style:** **Hand-painted wooden/metal signs** and vertical cloth banners. **NO NEON GLOW.** NO LED.
-        - **Text:** THAI SCRIPT or Chinese characters only.
-
-        **VISUAL ELEMENTS:**
-        - **TRAM SYSTEM:** Open-sided Tram running **CLOSE TO THE SIDEWALK**, NOT in the middle.
-        - **ARCHITECTURE:** Old Sino-Thai shophouses. Weathered concrete.
-        - **Traffic:** Vintage trucks, rickshaws.
-        - **Color Grade:** Warm, golden hour light, rich film colors.
+        **TRAM SYSTEM:**
+        - **The Tram:** A vintage **Yellow & Red Wooden Tram**.
+        - **Position:** Running **Close to the sidewalk**.
+        
+        **CLEAN UP INSTRUCTION:**
+        - **REDUCE SIGNAGE:** Remove excessive signs. The street should look **OPEN and WIDE**.
+        - **Text Rule:** **THAI SCRIPT ONLY** for the remaining signs. Hand-painted style.
+        
+        **ATMOSPHERE:**
+        - **Road:** Asphalt.
+        - **Lighting:** Warm "Golden Hour" sunlight. NO LED/Neon glow.
     """,
 
-    # 5. ข้าวสาร: ยืนยันความเงียบสงบ (Prompt เดิมดีอยู่แล้ว)
     "Khaosan Road": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
-        **CONTEXT:** A quiet **Rice Trading Residential Community**. NOT a tourist street.
-        **NEGATIVE PROMPT:** Tourist, Backpacker, Bar, Club, Beer, English Sign, Neon, Party.
-
-        **VISUAL ELEMENTS:**
-        - **Architecture:** **Wooden Row Houses** (2 stories) with "Baan Fiam" doors. 
-        - **Trade:** Piles of **Hemp Rice Sacks** stacked in front. White rice dust on the ground. 
-        - **Signs:** Simple wooden signs in **THAI LANGUAGE** (e.g., "หจก. ข้าวสาร").
-        - **Activity:** Children playing. Quiet, domestic vibe. Old men sitting.
+        **CONTEXT:** A quiet **Rice Trading Residential Community**. 
+        
+        **VISUALS:**
+        - **Architecture:** Wooden row houses painted **YELLOWISH WOOD** with **GREEN WINDOWS**.
+        - **Street:** **WIDE ASPHALT ROAD**. Clean and orderly. NOT muddy.
+        - **Clean Up:** **REMOVE SIGNS** from the front of the houses. Keep it minimal.
+        - **Props:** **White Hemp Rice Sacks** stacked neatly.
+        - **Vibe:** Domestic, sleepy, non-tourist.
     """,
 
-    # 6. ป้อมพระสุเมรุ: บ้านเรือนไม่ติดป้อมเกินไป, หัวป้อมทรุดโทรม
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
-        **CRITICAL:** **NO MODERN PARK. NO LAWN.**
-
-        **THE FORT CONDITION:**
-        - **Texture:** Aged white plaster, heavily stained with black mold and green moss.
-        - **Top Structure:** The battlements and the roof spire must look **slightly crumbled, weathered, or imperfect**, showing age and lack of modern restoration.
-
-        **SURROUNDINGS (SETBACK & REPLACEMENT):**
-        - **IF GRASS IS DETECTED:** Replace with **DIRT GROUND** or **CANAL WATER**.
-        - **Community Setback:** Ramshackle wooden houses are present but maintain a **small dirt path or gap** from the fort wall, not physically fused to it.
-        - **River side:** Muddy banks, traditional boats.
+        
+        **CONDITION FIX (NOT A RUIN):**
+        - **Status:** The fort is **STRUCTURALLY INTACT**. It should look **AGED** with black mold/stains on white plaster, but NOT crumbled or abandoned like a jungle ruin.
+        
+        **SURROUNDINGS (STREET VIEW):**
+        - **Viewpoint:** From the street level.
+        - **Community:** Show **Wooden Residential Houses** built near the fort.
+        - **Environment:** **NO Jungle/Forest.** Minimize the canal view if it distracts.
+        - **Road:** **Asphalt/Dirt Road**. Not a swamp.
     """,
 
-    # 7. สนามหลวง: เน้นสีสันตลาด, ว่าวน้อย (Prompt เดิมดี)
     "Sanam Luang": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
-        **VISUAL ELEMENTS:**
-        - **Market Layout:** Stalls are **spaced out**. Colorful canvas parasols (Red/White/Blue).
-        - **The Sky:** A **FEW** Thai Kites flying.
-        - **Backdrop (Grand Palace):** Aged walls, dulled gold spires. **NO SCAFFOLDING.**
-        - **Ground:** Red dirt (Sanarm Chai) mixed with dry grass.
+        
+        **VISUALS:**
+        - **Market:** **Canvas Parasols** (Red, White, Blue stripes) spaced out.
+        - **Sky:** Many **Thai Kites** (Chula/Pakpao) floating.
+        - **Ground:** **Red Dust/Dirt (Laterite)** mixed with dry grass.
+        - **Road:** Surrounding roads are **Asphalt**.
     """,
 
-    # 8. พิพิธภัณฑ์: เน้นความสมจริงของอาคารเก่า (Prompt เดิมดี)
     "National Museum": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of National Museum Bangkok (1960).
-        **VISUAL ELEMENTS:**
-        - **Viewpoint:** Focus on the **Front Facade**.
-        - **Building Condition:** Dignified but aged. Off-white walls with natural weathering/rain stains. Darkened tiles.
-        - **Context:** Large trees providing shade.
-        - **Ground:** Gravel paths, well-swept but unpaved.
-        - **Fence:** Black iron spearhead fence (slightly rusted).
+        **FOCUS:** Authentic Thai Architecture.
+        
+        **DETAILS:**
+        - **Building:** Traditional Thai gable roof (dark tiles). White walls with rain streaks.
+        - **Garden:** Large shade trees.
+        - **Ground:** Gravel/Dirt paths. Clean and swept.
+        - **Fence:** Black iron spearhead fence.
     """
 }
 
@@ -214,6 +261,30 @@ def get_client():
     if not api_key: raise ValueError("GEMINI_API_KEY not found")
     return genai.Client(api_key=api_key)
 
+# --- Friendly Error Message (From Classifier Branch) ---
+def get_friendly_error_message(raw_reason, lang='TH'):
+    raw_reason = raw_reason.lower()
+    is_eng = (lang == 'ENG')
+
+    if any(x in raw_reason for x in ['night', 'dark', 'sunset', 'evening']):
+        return "The image is too dark or taken at night." if is_eng else "ภาพมืดหรือเป็นเวลากลางคืน (AI ต้องการแสงธรรมชาติ)"
+    if any(x in raw_reason for x in ['person', 'selfie', 'face', 'crowd', 'body']):
+        return "People are obstructing the view." if is_eng else "ตรวจพบบุคคลหรือฝูงชนบดบังทัศนียภาพ"
+    if any(x in raw_reason for x in ['close-up', 'detail', 'macro', 'texture', 'wall']):
+        return "The shot is too close or detailed." if is_eng else "ภาพถ่ายระยะใกล้เกินไป กรุณาถ่ายมุมกว้าง"
+    if any(x in raw_reason for x in ['vehicle', 'bus', 'truck', 'car', 'traffic']):
+        return "Vehicles are blocking the architecture." if is_eng else "มียานพาหนะบดบังตัวอาคารมากเกินไป"
+    if any(x in raw_reason for x in ['text', 'screenshot', 'map', 'drawing']):
+        return "This image does not appear to be a real photo." if is_eng else "ภาพนี้ไม่ใช่ภาพถ่ายสถานที่จริง"
+    if "other" in raw_reason:
+        guess = raw_reason.replace("other", "").replace("(", "").replace(")", "").strip()
+        if guess:
+            return f"System identifies this as: {guess}" if is_eng else f"ระบบระบุว่าเป็น: {guess} ซึ่งไม่ตรงกับที่เลือก"
+        return "System could not identify the location." if is_eng else "ระบบไม่สามารถระบุสถานที่ในภาพได้"
+    
+    return "Image composition is unclear." if is_eng else "องค์ประกอบภาพยังไม่ชัดเจน"
+
+# --- CLIP Logic (From Processing Branch) ---
 def get_best_match_reference(location_th, user_img_bytes):
     if location_th == "ถนนข้าวสาร":
         print(f"🌾 Khaosan Road: Using Prompt Only.")
@@ -259,6 +330,7 @@ def get_random_reference(folder_name):
     with open(selected, "rb") as f:
         return f.read()
 
+# --- Gemini Generation Logic (From Processing Branch) ---
 def step1_analyze(client, img_bytes):
     prompt = "Analyze the precise geometry, camera angle, and structural layout..."
     max_retries = 3
@@ -279,7 +351,6 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # เพิ่มคำสั่งบังคับสีและสไตล์รวมในทุก request
     global_style = """
     **GLOBAL STYLE INSTRUCTION (MUST FOLLOW):**
     - **OUTPUT MUST BE A PHOTOREALISTIC COLOR PHOTOGRAPH.** Do not generate black and white images.
@@ -312,7 +383,6 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             response = client.models.generate_content(
                 model="nano-banana-pro-preview", 
                 contents=parts,
-                # บังคับให้ API พยายามรักษา aspect ratio ของภาพต้นฉบับ (แม้จะคุมไม่ได้ 100% แต่ช่วยได้)
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
                     temperature=0.4
@@ -334,6 +404,78 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 # 🚀 ROUTES
 # ==========================================
 
+# 1. VERIFY (Logic from Classifier Branch)
+@app.route('/verify', methods=['POST'])
+def verify_image_route():
+    temp_path = None
+    try:
+        if 'image' not in request.files or 'location' not in request.form:
+            return jsonify({'error': 'Missing data'}), 400
+        
+        file = request.files['image']
+        location_th = request.form['location']
+        lang = request.form.get('language', 'TH').upper() # รับค่าภาษามาด้วย
+        
+        # ตรวจสอบชื่อสถานที่
+        if location_th not in LOCATION_MAPPING_TH_TO_EN:
+             return jsonify({'error': 'Invalid location selection'}), 400
+
+        # Save Temp File for Google Vision
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
+            file.save(temp_file.name)
+            temp_path = temp_file.name
+
+        print(f"🕵️‍♂️ Verifying: {location_th} (Lang: {lang})...")
+        
+        # CALL CLASSIFIER LOGIC
+        detected_place, score, is_valid = classify_image(temp_path)
+        expected_place_en = LOCATION_MAPPING_TH_TO_EN.get(location_th)
+        
+        analysis_report = {
+            "status": "success" if is_valid else "rejected",
+            "detected_place": detected_place,
+            "score": round(score * 100, 2),
+            "is_valid": is_valid
+        }
+
+        # --- CASE 1: Rejected by Rules ---
+        if not is_valid:
+            friendly_message = get_friendly_error_message(detected_place, lang)
+            return jsonify({
+                'status': 'rejected', 
+                'details': friendly_message, 
+                'analysis_report': analysis_report
+            }), 200
+        
+        # --- CASE 2: Location Mismatch ---
+        if detected_place != expected_place_en:
+             if lang == 'ENG':
+                 detected_name = detected_place
+                 selected_name = LOCATION_MAPPING_TH_TO_EN.get(location_th, location_th)
+                 msg = f"AI detected: '{detected_name}'\nwhich does not match your selection ({selected_name})"
+             else:
+                 detected_name = LOCATION_MAPPING_EN_TO_TH.get(detected_place, detected_place)
+                 msg = f"AI ตรวจพบ: '{detected_name}'\nซึ่งไม่ตรงกับที่คุณเลือก ({location_th})"
+             
+             return jsonify({
+                'status': 'rejected', 
+                'details': msg,
+                'analysis_report': analysis_report
+            }), 200
+
+        # --- CASE 3: Success ---
+        return jsonify({
+            'status': 'success',
+            'analysis_report': analysis_report
+        })
+
+    except Exception as e:
+        print(f"Verify Error: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if temp_path and os.path.exists(temp_path): os.remove(temp_path)
+
+# 2. GENERATE (Logic from Processing Branch)
 @app.route('/generate', methods=['POST'])
 def generate_image_route():
     try:
@@ -356,6 +498,12 @@ def generate_image_route():
         
         if result_bytes:
             print("🎉 Success!")
+            
+            # --- AUTO-SAVE LOGIC (NEW) ---
+            # บันทึกไฟล์ลง Folder ทันทีที่ Gen เสร็จ
+            save_generated_image(result_bytes, location_th)
+            # -----------------------------
+
             result_b64 = base64.b64encode(result_bytes).decode('utf-8')
             desc = LOCATION_INFO.get(location_th, {}).get('desc_60s', "")
             return jsonify({
@@ -372,26 +520,9 @@ def generate_image_route():
         print(f"❌ Critical Error: {e}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/verify', methods=['POST'])
-def verify_image_route():
-    try:
-        location_th = request.form['location']
-        print(f"🚧 Verify Bypass: {location_th}")
-        return jsonify({
-            'status': 'success',
-            'analysis_report': {
-                "status": "success",
-                "detected_place": LOCATION_MAPPING_TH_TO_EN.get(location_th, "Debug Place"),
-                "score": 99.9,
-                "is_valid": True
-            }
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 @app.route('/')
 def home():
-    return "✅ Bangkok EraVision Backend (Ultimate Fix Version) is Running!"
+    return "✅ Bangkok EraVision Backend (Merged with Classifier & Detailed Poster Prompts) is Running!"
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

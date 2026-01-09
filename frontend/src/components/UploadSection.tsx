@@ -1,6 +1,5 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-// Hook สำหรับรับค่าจาก URL (Map Integration)
 import { useSearchParams } from 'next/navigation';
 
 const LOCATIONS_DATA = [
@@ -20,7 +19,7 @@ const UI_TEXT = {
     label_location: "เลือกสถานที่",
     label_upload: "อัปโหลดรูปถ่ายของคุณ",
     dropzone_text: "คลิก หรือ ลากรูปมาวางที่นี่",
-    btn_main: "หวนคืนสู่วันวาน 1960s",
+    btn_main: "หวนคืนสู่ทศวรรษที่ 1960s",
     btn_try_again: "ลองรูปอื่น",
     btn_retry: "ลองใหม่อีกครั้ง",
     btn_download: "ดาวน์โหลดรูปภาพ",
@@ -77,6 +76,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const text = UI_TEXT[currentLang];
+
+  const fontClass = currentLang === 'ENG' ? 'font-merri' : 'font-krub';
 
   // --- Logic Map Integration: รับค่า Location จาก URL ---
   const searchParams = useSearchParams();
@@ -188,7 +189,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         
         <div className="dashed-box-container">
             {/* Location Select */}
-            <div className="flex justify-between items-end py-2 font-bold text-xl md:text-2xl serif-font border-b-2 border-dark">
+            <div className={`flex justify-between items-end py-2 font-bold text-xl md:text-2xl border-b-2 border-dark ${fontClass}`}>
               <label htmlFor="location-select" className="whitespace-nowrap mr-4">
                 {text.label_location}
               </label>
@@ -197,7 +198,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                       id="location-select"
                       value={selectedLocation} 
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-right font-serif font-bold cursor-pointer appearance-none pr-8 truncate text-dark"
+                      className={`w-full bg-transparent border-none outline-none text-right font-bold cursor-pointer appearance-none pr-8 truncate text-dark ${fontClass}`}
                       required
                   >
                       <option value="" disabled></option>
@@ -214,7 +215,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             <div className="h-1"></div>
 
             {/* File Upload */}
-            <div className="flex justify-between items-end pb-2 font-bold text-xl md:text-2xl mb-3 serif-font border-b-2 border-dark relative">
+            <div className={`flex justify-between items-end pb-2 font-bold text-xl md:text-2xl mb-3 border-b-2 border-dark relative ${fontClass}`}>
                 <label htmlFor="file-upload" className="flex-1">{text.label_upload}</label>
 
                 <button type="button" onClick={() => fileInputRef.current?.click()} className="text-3xl hover:scale-110 transition-transform" title="Click to select image">
@@ -239,17 +240,18 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                         <span className="text-6xl mb-1">
                             <img src="/svg/upload-1.svg" alt="Upload Icon" className="w-10 h-10 md:w-20 md:h-20"/>
                         </span>
-                        <span className="text-lg text-center font-mono">{text.dropzone_text}</span>
+                        <span className={`text-lg text-center font-mono ${fontClass}`}>{text.dropzone_text}</span>
                     </div>
                 )}
             </div>
         </div>
 
-        {/* Generate Button (แก้ไขตรงนี้ครับ เปลี่ยนเป็น transition-all) */}
+        {/* Generate Button เครื่องผมมันต้องปรับแบบนี้ ไม่รู้ของคุณมันมีปัญหารึป่าวนะ */}
         <button 
             type="submit" 
             disabled={status !== 'idle' && status !== 'verified_fail' && status !== 'finished'}
-            className="w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl serif-font transition-all disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105"
+            // แก้ไข: เปลี่ยนเป็น transition-all และลบตัวที่ขัดแย้งออก
+            className={`w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105 ${fontClass}`}
         >
             {text.btn_main}
         </button>

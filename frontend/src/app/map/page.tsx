@@ -22,12 +22,12 @@ const Controls = () => {
   const { zoomIn, zoomOut, centerView } = useControls();
   
   return (
-    <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-10">
-      <button onClick={() => zoomIn()} className="w-10 h-10 bg-white/80 text-dark font-bold text-xl shadow-md hover:scale-105 transition-transform">+</button>
-      <button onClick={() => zoomOut()} className="w-10 h-10 bg-white/80 text-dark font-bold text-xl shadow-md hover:scale-105 transition-transform">-</button>
+    <div className={`absolute bottom-4 right-4 flex flex-col gap-2 z-10 font-krub`}>
+      <button onClick={() => zoomIn()} className="w-12 h-12 bg-white/80 text-dark font-bold text-xl shadow-md hover:scale-105 transition-transform">+</button>
+      <button onClick={() => zoomOut()} className="w-12 h-12 bg-white/80 text-dark font-bold text-xl shadow-md hover:scale-105 transition-transform">-</button>
       <button 
         onClick={() => centerView(0.45)} 
-        className="w-10 h-10 bg-white/80 text-dark border-2 border-dark font-bold text-xs shadow-md hover:scale-105 transition-transform"
+        className="w-12 h-12 bg-white/80 text-dark border-2 border-dark font-bold text-xs shadow-md hover:scale-105 transition-transform"
       >
         RESET
       </button>
@@ -70,9 +70,9 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
         <div 
             className={`
                 absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max px-3 py-1 
-                bg-black/90 text-white text-xs md:text-sm font-mono tracking-wide border border-gold
+                bg-black/90 text-white text-xs md:text-sm tracking-wide border border-gold
                 transition-opacity duration-200 pointer-events-none z-50 rounded shadow-lg
-                ${activePin === loc.id ? 'opacity-100' : 'opacity-0'}
+                ${activePin === loc.id ? 'opacity-100' : 'opacity-0'} ${language === 'TH' ? 'font-krub' : 'font-merri'}
             `}
             style={{
                 transform: `scale(${counterScale})`,
@@ -98,7 +98,7 @@ const VideoModal = ({ location, onClose, language }: any) => {
     return (
         <div className="fixed inset-0 z-[100] bg-black/90 flex justify-center items-center p-4 backdrop-blur-sm" onClick={onClose}>
             <div 
-                className="bg-background rounded-3xl w-full max-w-4xl relative flex flex-col"
+                className={`bg-background rounded-3xl w-full max-w-4xl relative flex flex-col ${language === 'TH' ? 'font-krub' : 'font-merri'}`}
                 onClick={e => e.stopPropagation()} 
             >
               <div className="bg-[#F4EDDB] px-8 rounded-3xl overflow-hidden flex flex-col">
@@ -121,7 +121,7 @@ const VideoModal = ({ location, onClose, language }: any) => {
                 </div>
 
                 <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-dark">
-                   <span className="font-mono text-sm opacity-70">
+                   <span className="text-sm opacity-70">
                        {language === 'TH' ? "*วิดีโอจำลองบรรยากาศช่วงทศวรรษที่ 1960" : "*1960s Atmosphere Simulation Video"}
                    </span>
                    <button 
@@ -143,8 +143,21 @@ export default function MapPage() {
 
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
+  const fontClass = language === 'ENG' ? 'font-merri' : 'font-krub';
+
   return (
     <main className="w-full px-4 md:px-6 pb-20 mx-auto">
+      {/* --- Background Texture Layer --- */}
+      <div 
+        className="fixed inset-0 -z-10 pointer-events-none opacity-[0.4]"
+        style={{ 
+          backgroundImage: "url('/images/grunge-paper-background.jpg')", 
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center'
+        }}
+      ></div>
+      
       <Navbar />
       
       {selectedLocation && (
@@ -155,11 +168,11 @@ export default function MapPage() {
           />
       )}
 
-      <h1 className="bg-dark text-white p-3 text-center text-xl md:text-5xl font-bold tracking-[0.2em] mt-10 mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
-          {language === 'TH' ? "แผนที่ประวัติศาสตร์" : "Historical Map"}
+      <h1 className="bg-dark text-white p-3 text-center text-xl md:text-7xl tracking-[0.2em] mt-10 mb-8 py-8 font-prachachon shadow-[6px_6px_0px_#D4B666]">
+          {language === 'TH' ? "แผนที่สถานที่" : "Location Map"}
       </h1>
 
-      <div className="w-full mx-auto border-[4px] border-dark p-2"> 
+      <div className="w-full mx-auto border-[4px] border-dark bg-background p-2"> 
         
         <div className="w-full h-[500px] md:h-[650px] relative overflow-hidden bg-dark cursor-grab active:cursor-grabbing">
              
@@ -196,7 +209,7 @@ export default function MapPage() {
                 </TransformComponent>
              </TransformWrapper>
 
-             <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm p-2 border border-dark text-xs font-mono pointer-events-none z-10">
+             <div className={`absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm p-2 border border-dark text-xs pointer-events-none z-10 ${fontClass}`}>
                 {language === 'TH' ? "🖱️ เลื่อนเมาส์เพื่อซูม / คลิกแล้วลากเพื่อขยับ" : "🖱️ Scroll to Zoom / Drag to Pan"}
              </div>
         </div>
