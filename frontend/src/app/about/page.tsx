@@ -25,13 +25,15 @@ const PAGE_TEXT = {
     member1_name: "Nattapat Chalee",
     member2_name: "Madampong Prueksa",
     advisor_name: "Nuttapong Prasertsang",
-    advisor_position: "Lecturer in CMM KMUTT"
+    advisor_position: "Lecturer at CMM, KMUTT"
   }
 };
 
 export default function AboutPage() {
   const { language } = useLanguage();
   const text = PAGE_TEXT[language];
+
+  const fontClass = language === 'ENG' ? 'font-merri' : 'font-krub';
 
   return (
     <main className="w-full px-6 pb-20 mx-auto">
@@ -49,7 +51,7 @@ export default function AboutPage() {
       <Navbar />
 
       <div className="text-center mb-12 mt-10">
-        <h1 className="text-5xl md:text-7xl serif-font font-bold mb-6 italic tracking-tight text-dark">
+        <h1 className={`text-5xl md:text-7xl font-bold mb-6 italic tracking-tight text-dark ${fontClass}`}>
           {text.header_title}<br/><span className="text-accent">{text.header_subtitle}</span>
         </h1>
         <div className="flex items-center justify-center my-8">
@@ -61,41 +63,41 @@ export default function AboutPage() {
 
       {/* Created By Section */}
       <section className="mb-16 text-center">
-        <h2 className="text-center text-3xl md:text-4xl serif-font font-bold mb-16 italic bg-background inline-block px-4 pr-5 py-2 border-[4px] border-dark shadow-[4px_4px_0px_#D4B666]">
+        <h2 className={`text-center text-3xl md:text-4xl font-bold mb-16 italic bg-background inline-block px-4 pr-5 py-3 pt-4 border-[4px] border-dark shadow-[4px_4px_0px_#D4B666] ${fontClass}`}>
           {text.section_created_by}
         </h2>
         <div className="flex flex-wrap justify-center gap-16 px-4 max-w-5xl mx-auto">
           {/* Creator 1 */}
-          <div className="flex flex-col items-center group w-full sm:w-[45%] md:w-[300px]">
+          <div className={`flex flex-col items-center group w-full sm:w-[45%] md:w-[300px] ${fontClass}`}>
             <img
               src="/images/member1.png"
               alt="Nattapat Chalee"
               className="w-full max-w-[280px] aspect-square mb-4 object-cover border-[3px] border-dark shadow-[inset_0_0_0_4px_#FEF9C3,6px_6px_0px_#2C2C2C] group-hover:translate-y-[-5px] transition-transform"
             />
             <p className="font-bold text-xl md:text-2xl mt-2">{text.member1_name}</p>
-            <p className="text-sm md:text-md font-mono opacity-70">CMM65080500264</p>
+            <p className={`${fontClass} text-sm md:text-md opacity-70`}>CMM65080500264</p>
           </div>
           
           {/* Creator 2 */}
-          <div className="flex flex-col items-center group w-full sm:w-[45%] md:w-[300px]">
+          <div className={`flex flex-col items-center group w-full sm:w-[45%] md:w-[300px] ${fontClass}`}>
             <img
               src="/images/member2.png"
               alt="Madampong Prueksa"
               className="w-full max-w-[280px] aspect-square mb-4 object-cover border-[3px] border-dark shadow-[inset_0_0_0_4px_#FEF9C3,6px_6px_0px_#2C2C2C] group-hover:translate-y-[-5px] transition-transform"
             />
             <p className="font-bold text-xl md:text-2xl mt-2">{text.member2_name}</p>
-            <p className="text-sm md:text-md font-mono opacity-70">CMM65080500275</p>
+            <p className={`${fontClass} text-sm md:text-md opacity-70`}>CMM65080500275</p>
           </div>
         </div>
       </section>
 
       {/* Advisor Section */}
       <section className="flex flex-col items-center">
-        <h2 className="text-center text-3xl md:text-4xl serif-font font-bold mb-10 italic bg-background inline-block px-4 pr-5 py-2 border-[4px] border-dark shadow-[4px_4px_0px_#D4B666]">
+        <h2 className={`text-center text-3xl md:text-4xl font-bold mb-10 italic bg-background inline-block px-4 pr-5 py-3 pt-4 border-[4px] border-dark shadow-[4px_4px_0px_#D4B666] ${fontClass}`}>
           {text.section_advisor}
         </h2>
         {/* ปรับขนาด w-full ใน Mobile และจำกัด max-w ใน Desktop */}
-        <div className="flex flex-col items-center w-full max-w-[320px] group">
+        <div className={`flex flex-col items-center group w-full max-w-[300px] ${fontClass}`}>
           <img
             src="/images/advisor.png"
             alt="Nuttapong Prasertsang"
@@ -104,7 +106,7 @@ export default function AboutPage() {
           <p className="font-bold text-xl md:text-2xl mt-2 text-center">
             {text.advisor_name}
           </p>
-          <p className="text-sm md:text-md text-center font-mono whitespace-pre-line opacity-70">
+          <p className={`${fontClass} text-sm md:text-md text-center font-mono whitespace-pre-line opacity-70`}>
             {text.advisor_position}
           </p>
         </div>

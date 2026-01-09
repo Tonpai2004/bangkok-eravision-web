@@ -10,7 +10,7 @@ const PAGE_TEXT = {
   TH: {
     brand_name: "บางกอกทวิกาล",
     title: "บางกอกทวิกาล คืออะไร?",
-    desc_prefix: "คือนวัตกรรมย้อนเวลาอัจฉริยะ ที่พร้อมพาคุณข้ามศตวรรษกลับไปสัมผัสเสน่ห์แห่ง 'พระนคร' ยุค 2500 อันรุ่งโรจน์ เปิดประสบการณ์ทัศนาจรผ่านมุมมองใหม่ด้วย", 
+    desc_prefix: "คือนวัตกรรมย้อนเวลาอัจฉริยะ ที่พร้อมพาคุณข้ามศตวรรษกลับไปสัมผัสเสน่ห์แห่ง \"พระนคร\" ยุค 2500 อันรุ่งโรจน์ เปิดประสบการณ์ทัศนาจรผ่านมุมมองใหม่ด้วย", 
     desc_highlight: "เทคโนโลยีปัญญาประดิษฐ์จำลองบรรยากาศ", 
     desc_suffix: "ที่จะเนรมิตภาพถ่ายปัจจุบันของคุณ ให้กลายเป็นความทรงจำแสนคลาสสิก เสมือนหลุดยังวันวานแห่งมนต์ขลังของพระนครในอดีต",
     link_dev: "พบกับเจ้าของผลงาน →"
@@ -46,7 +46,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="mt-0 mb-0 md:mt-10 md:mb-7">
-        <h1 className="bg-dark text-white p-3 text-center text-xl md:text-5xl font-bold tracking-[0.2em] mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
+        <h1 className="bg-dark text-white font-prachachon p-3 text-center text-4xl sm:5xl md:text-7xl whitespace-pre-line tracking-[0.2em] mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
           {text.title}
         </h1>
         <div className="flex flex-col md:flex-row gap-8 items-stretch mt-10">
@@ -57,10 +57,10 @@ export default function Home() {
 
           {/* กล่องข้อความ */}
           <div className="w-full md:flex-1 flex flex-col justify-between">
-            <p className="text-base md:text-lg leading-loose mb-6 text-justify">
-              <strong className="text-2xl serif-font italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
+            <p className="text-base font-pimdeed md:text-4xl whitespace-pre-line leading-loose mb-6 text-justify">
+              <strong className="text-4xl font-pimdeed italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
             </p>
-            <Link href="/about" className="self-start font-bold text-xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors">
+            <Link href="/about" className="self-start font-pimdeed font-bold text-4xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors">
               {text.link_dev}
             </Link>
           </div>

@@ -19,6 +19,8 @@ export default function Navbar() {
   const { language, setLanguage } = useLanguage();
   const text = NAV_TEXT[language];
 
+  const fontClass = language === 'ENG' ? 'font-merri' : 'font-krub';
+
   const isActive = (path: string) => 
     pathname === path ? "underline decoration-2 underline-offset-4" : "";
 
@@ -38,9 +40,8 @@ export default function Navbar() {
 
   return (
     <nav className="w-full text-dark font-serif md:mb-7 relative z-50">
-      {/* ... (ส่วนอื่นๆ ของ UI เหมือนเดิมเป๊ะ) ... */}
       
-      <div className="hidden md:flex flex-col items-center w-full">
+      <div className={`hidden md:flex flex-col items-center w-full ${fontClass}`}>
         <div className="py-8"><Logo /></div>
         <div className="w-full border-y-[2px] border-dark flex justify-between items-center px-3 py-3 relative">
           <div className="flex gap-12 font-bold italic text-xl tracking-wide">
@@ -58,13 +59,13 @@ export default function Navbar() {
           <div className="relative">
             <button 
               onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-              className="font-bold italic text-lg cursor-pointer hover:text-gray-600 select-none min-w-[60px] text-right flex items-center gap-2"
+              className={`font-bold italic text-lg cursor-pointer hover:text-gray-600 select-none min-w-[60px] text-right flex items-center gap-2 ${fontClass}`}
             >
-              {language} <span className="text-sm">▼</span>
+              {language} <span className={`text-sm ${fontClass}`}>▼</span>
             </button>
 
             {isLangDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-24 bg-background border-[2px] border-dark shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col z-50">
+              <div className={`absolute right-0 top-full mt-2 w-24 bg-background border-[2px] border-dark shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col z-50 ${fontClass}`}>
                 <button onClick={() => handleSelectLang('ENG')} className={`py-2 px-4 text-left hover:bg-gold hover:text-white transition-colors font-bold ${language === 'ENG' ? 'bg-gray-200' : ''}`}>ENG</button>
                 <button onClick={() => handleSelectLang('TH')} className={`py-2 px-4 text-left hover:bg-gold hover:text-white transition-colors font-bold ${language === 'TH' ? 'bg-gray-200' : ''}`}>TH</button>
               </div>
@@ -74,7 +75,7 @@ export default function Navbar() {
       </div>
 
       <div className="md:hidden">
-        <div className="flex justify-between items-center py-5 border-b-[2px] border-dark relative z-20 bg-background">
+        <div className="flex justify-between items-center py-5 border-b-[2px] border-dark relative z-20">
           <Logo />
           <button title='btn' onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 focus:outline-none">
              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
