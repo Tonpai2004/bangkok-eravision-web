@@ -6,7 +6,7 @@ import random
 import pickle
 import numpy as np
 import tempfile
-import datetime # เพิ่ม datetime เข้ามาสำหรับ timestamp
+import datetime
 from scipy.spatial.distance import cdist
 from sentence_transformers import SentenceTransformer
 from PIL import Image
@@ -27,23 +27,15 @@ CORS(app)
 # ==========================================
 # 💾 AUTO-SAVE SYSTEM (DEV ONLY)
 # ==========================================
-# ส่วนนี้เพิ่มเข้ามาใหม่สำหรับการบันทึกไฟล์อัตโนมัติ
 HISTORY_FOLDER = os.path.join(os.path.dirname(__file__), 'generated_history')
 
 def save_generated_image(image_bytes, location_name_th):
-    """
-    ฟังก์ชันบันทึกรูปผลลัพธ์ลง Local Folder เพื่อการ Debug/Dev
-    """
     try:
-        # 1. สร้างโฟลเดอร์ถ้ายังไม่มี
         if not os.path.exists(HISTORY_FOLDER):
             os.makedirs(HISTORY_FOLDER)
-            print(f"📂 Created history folder at: {HISTORY_FOLDER}")
 
-        # 2. แปลงชื่อสถานที่ให้เป็นภาษาอังกฤษแบบง่าย (สำหรับชื่อไฟล์)
         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
         
-        # ตัดแต่งชื่อให้สั้นลงและปลอดภัยกับชื่อไฟล์
         safe_name = "place"
         if "Democracy" in file_prefix: safe_name = "democracymonument"
         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
@@ -54,12 +46,10 @@ def save_generated_image(image_bytes, location_name_th):
         elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
         elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
         
-        # 3. สร้างชื่อไฟล์: [place]_1960s_[timestamp].png
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{safe_name}_1960s_{timestamp}.png"
         filepath = os.path.join(HISTORY_FOLDER, filename)
 
-        # 4. บันทึกไฟล์
         with open(filepath, "wb") as f:
             f.write(image_bytes)
         
@@ -71,7 +61,7 @@ def save_generated_image(image_bytes, location_name_th):
         return None
 
 # ==========================================
-# 🧠 AI MEMORY LOADING (FROM PROCESSING)
+# 🧠 AI MEMORY LOADING
 # ==========================================
 print("⏳ Initializing System...")
 SEARCH_MODEL = None
@@ -117,7 +107,6 @@ LOCATION_MAPPING_TH_TO_EN = {
     "พิพิธภัณฑสถานแห่งชาติ": "National Museum Bangkok"
 }
 
-# Mapping สำหรับแปลชื่อกลับเป็นไทยตอน Error Message
 LOCATION_MAPPING_EN_TO_TH = {v: k for k, v in LOCATION_MAPPING_TH_TO_EN.items()}
 
 LOCATION_KEY_MAP = {
@@ -141,41 +130,48 @@ LOCATION_INFO = {
     "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
 }
 
-# --- THE MASTER PROMPT DATABASE (REFINED V.4 - USER FEEDBACK FIX) ---
+# --- THE MASTER PROMPT DATABASE (V.7 - ARCHITECTURAL ACCURACY FIX) ---
 LOCATION_PROMPTS = {
+    # 🏛️ แก้ไขละเอียด: โครงสร้าง, สีส้มอิฐ, ตัดดอกไม้, ผิวสัมผัสปูน
     "Democracy Monument": """
-          **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the 1960s Democracy Monument.
-          **STRUCTURAL LOCK:** Maintain original perspective and geometry 100%. Aspect Ratio must match input.
-          
-          **GEOMETRY FIX (IMPORTANT):**
-          - The four wings must look like **SOLID, HEAVY CONCRETE MASS**. They are NOT flat sheets; they have thickness and curve inward.
-          - The surface is **Smooth Plaster/Concrete**, painted Off-white/Cream.
-          
-          **COLOR & DETAIL:**
-          - **The Phan (Top Tray ONLY):** Dark Black/Bronze Metal.
-          - **The Turret (Center):** Cream body with **Red Ochre Doors**.
-          
-          **CONTEXT:**
-          - **Street:** Wide **Asphalt** road. Clean, NOT muddy. NO traffic lines.
-          - **Vehicles:** White 'Nai Lert' Buses (Rounded shape), Austin/Fiat cars.
-          - **Vibe:** Bright tropical daylight, film grain.
+          **TASK:** Create a **HISTORICALLY ACCURATE PHOTOREALISTIC** image of Democracy Monument (Bangkok 1960s).
+          **STRUCTURAL LOCK:** Maintain the perspective and geometry exactly.
+
+          **THE MONUMENT ARCHITECTURE (STRICT):**
+          - **Wings (The 4 Pillars):** They are **CONCRETE** structures with a **CONCAVE CURVE** (curving inward). They look heavy and solid.
+          - **Wing Details:** At the base of each wing, there must be **Bas-Relief Sculptures** (Stucco carvings).
+          - **Material/Color:** **Weathered Stucco/Cement**. The color is **Creamy Off-White or Light Grey** with rain stains. (NOT bright plastic white).
+          - **Center Turret:** A solid central column holding the tray.
+          - **The Phan (Tray):** The constitution tray on top is **Dark Bronze / Blackened Metal**.
+
+          **THE BASE (NO FLOWERS RULE):**
+          - **The Circular Steps:** The tiered base around the monument is **BARE CONCRETE** or **SIMPLE SHORT GRASS**.
+          - **NEGATIVE PROMPT:** **NO FLOWERS**. Remove all yellow marigolds, flower pots, or modern decorative gardens on the steps. It must look austere and solemn.
+
+          **RATCHADAMNOEN BUILDINGS (BACKGROUND):**
+          - **Architecture:** Continuous row buildings in **Neo-Plasticism / Art Deco style** (Clean horizontal lines, flat concrete roofs/awnings).
+          - **Color:** **Aged Terracotta / Brick Orange (ส้มอิฐ)**. The paint must look matte and slightly weathered by the sun.
+
+          **ATMOSPHERE & TRAFFIC:**
+          - **Road:** Wide **Asphalt** road (Grey/Black). No modern lane markings.
+          - **Traffic:** **SPARSE/LIGHT TRAFFIC**. A few vintage cars (Austin/Fiat) and white buses.
+          - **Vibe:** Bright tropical daylight, sharp shadows.
       """,
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
+        **ABSOLUTE STRUCTURE LOCK:**
+        - Keep the building shape and the "ศาลาเฉลิมกรุง" roof sign **100% IDENTICAL**.
 
-        **ABSOLUTE STRUCTURE LOCK (DO NOT CHANGE):**
-        - The main building shape and the wire-frame **"ศาลาเฉลิมกรุง"** sign on the roof MUST remain **100% IDENTICAL** to the original reference image. 
-        - DO NOT transform, warp, or redesign the architecture. Keep it exactly as it appears in the 1960s reference.
-
-        **THE MOVIE POSTER (ADD-ON):**
-        - **Placement:** Overlay a **Hand-painted Cut-out Billboard** ABOVE the entrance marquee. It should look like an added layer, not part of the wall.
-        - **Visuals:** Two men standing back-to-back (One with glasses, one without). White shirts.
+        **THE MOVIE POSTER:**
+        - **Placement:** Overlay a **Hand-painted Billboard** ABOVE the entrance marquee.
+        - **Visuals:** Two men back-to-back (One with glasses). White shirts.
         - **Thai Text:** Title "**บางกอกทวิกาล**", Starring "ม.ร.ว.มาดามพงษ์ และ ณัฐภัทร", Director "ตอตุ้ม".
 
         **CONTEXT:**
-        - **Surroundings:** Keep the surrounding shophouses visible but ensure they look like the 1960s era. Do not leave the sides empty.
-        - **Street:** **Asphalt Road**. Vintage Taxis/Pedestrians. NO TRAMS.
+        - **Surroundings:** Show 1960s shophouses on the sides.
+        - **Traffic:** **LIGHT TRAFFIC.** A few vintage Taxis. NO TRAMS.
+        - **Street:** Asphalt Road.
     """,
 
     "Giant Swing": """
@@ -183,10 +179,10 @@ LOCATION_PROMPTS = {
         **STRUCTURAL LOCK:** Keep exact perspective. Focus on the Red Pillars.
 
         **VISUAL ELEMENTS:**
-        - **Swing:** Vibrant **Red Teak Logs** standing on a **White Stone Plinth**.
-        - **Wat Suthat (Back):** Must look sharp and aged (weathered roof tiles).
-        - **Ground:** **Paved Asphalt or Stone**. CLEAN road. **NOT muddy/dilapidated**.
-        - **Traffic:** Cars drive AROUND the plinth. NO vehicles under the red pillars.
+        - **Swing:** Vibrant **Red Teak Logs** on a **White Stone Plinth**.
+        - **Wat Suthat:** Sharp and aged.
+        - **Ground:** **Paved Asphalt**. Clean road.
+        - **Traffic:** **LIGHT TRAFFIC.** A few cars driving AROUND the plinth. NO vehicles under the red pillars.
     """,
 
     "Yaowarat": """
@@ -196,13 +192,14 @@ LOCATION_PROMPTS = {
         - **The Tram:** A vintage **Yellow & Red Wooden Tram**.
         - **Position:** Running **Close to the sidewalk**.
         
-        **CLEAN UP INSTRUCTION:**
+        **CLEAN UP:**
         - **REDUCE SIGNAGE:** Remove excessive signs. The street should look **OPEN and WIDE**.
-        - **Text Rule:** **THAI SCRIPT ONLY** for the remaining signs. Hand-painted style.
+        - **Text Rule:** **THAI SCRIPT ONLY**.
         
         **ATMOSPHERE:**
         - **Road:** Asphalt.
-        - **Lighting:** Warm "Golden Hour" sunlight. NO LED/Neon glow.
+        - **Traffic:** **SPARSE TRAFFIC.** A few Samlors and Trucks.
+        - **Lighting:** Warm "Golden Hour" sunlight.
     """,
 
     "Khaosan Road": """
@@ -211,23 +208,23 @@ LOCATION_PROMPTS = {
         
         **VISUALS:**
         - **Architecture:** Wooden row houses painted **YELLOWISH WOOD** with **GREEN WINDOWS**.
-        - **Street:** **WIDE ASPHALT ROAD**. Clean and orderly. NOT muddy.
+        - **Street:** **WIDE ASPHALT ROAD**. Clean.
         - **Clean Up:** **REMOVE SIGNS** from the front of the houses. Keep it minimal.
         - **Props:** **White Hemp Rice Sacks** stacked neatly.
-        - **Vibe:** Domestic, sleepy, non-tourist.
+        - **Vibe:** Domestic, sleepy. **NO CROWD.**
     """,
 
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
-        **CONDITION FIX (NOT A RUIN):**
-        - **Status:** The fort is **STRUCTURALLY INTACT**. It should look **AGED** with black mold/stains on white plaster, but NOT crumbled or abandoned like a jungle ruin.
+        **CONDITION:**
+        - **Status:** The fort is **STRUCTURALLY INTACT**. It looks **AGED** with black mold stains on white plaster, but NOT a ruin.
         
-        **SURROUNDINGS (STREET VIEW):**
-        - **Viewpoint:** From the street level.
-        - **Community:** Show **Wooden Residential Houses** built near the fort.
-        - **Environment:** **NO Jungle/Forest.** Minimize the canal view if it distracts.
+        **SURROUNDINGS:**
+        - **Viewpoint:** Street level.
+        - **Community:** **Wooden Residential Houses** built near the fort.
         - **Road:** **Asphalt/Dirt Road**. Not a swamp.
+        - **Traffic:** **VERY LIGHT.** Maybe one bicycle or pedestrian.
     """,
 
     "Sanam Luang": """
@@ -235,9 +232,9 @@ LOCATION_PROMPTS = {
         
         **VISUALS:**
         - **Market:** **Canvas Parasols** (Red, White, Blue stripes) spaced out.
-        - **Sky:** Many **Thai Kites** (Chula/Pakpao) floating.
+        - **Sky:** Many **Thai Kites** floating.
         - **Ground:** **Red Dust/Dirt (Laterite)** mixed with dry grass.
-        - **Road:** Surrounding roads are **Asphalt**.
+        - **Traffic:** **LIGHT TRAFFIC** on the surrounding roads.
     """,
 
     "National Museum": """
@@ -245,10 +242,10 @@ LOCATION_PROMPTS = {
         **FOCUS:** Authentic Thai Architecture.
         
         **DETAILS:**
-        - **Building:** Traditional Thai gable roof (dark tiles). White walls with rain streaks.
-        - **Garden:** Large shade trees.
-        - **Ground:** Gravel/Dirt paths. Clean and swept.
-        - **Fence:** Black iron spearhead fence.
+        - **Building:** Traditional Thai gable roof (dark tiles). White walls.
+        - **Ground:** Gravel/Dirt paths. Clean.
+        - **Vibe:** Quiet, scholarly.
+        - **Traffic:** **NO TRAFFIC** inside the gate.
     """
 }
 
@@ -499,10 +496,9 @@ def generate_image_route():
         if result_bytes:
             print("🎉 Success!")
             
-            # --- AUTO-SAVE LOGIC (NEW) ---
-            # บันทึกไฟล์ลง Folder ทันทีที่ Gen เสร็จ
+            # --- AUTO-SAVE LOGIC ---
             save_generated_image(result_bytes, location_th)
-            # -----------------------------
+            # ---------------------
 
             result_b64 = base64.b64encode(result_bytes).decode('utf-8')
             desc = LOCATION_INFO.get(location_th, {}).get('desc_60s', "")
