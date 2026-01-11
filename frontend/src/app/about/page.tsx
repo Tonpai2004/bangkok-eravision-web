@@ -106,7 +106,7 @@ export default function AboutPage() {
           <p className="font-bold text-xl md:text-2xl mt-2 text-center">
             {text.advisor_name}
           </p>
-          <p className={`${fontClass} text-sm md:text-md text-center font-mono whitespace-pre-line opacity-70`}>
+          <p className={`${fontClass} text-sm md:text-md text-center whitespace-pre-line opacity-70`}>
             {text.advisor_position}
           </p>
         </div>

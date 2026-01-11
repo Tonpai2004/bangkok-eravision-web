@@ -46,27 +46,22 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="mt-0 mb-0 md:mt-10 md:mb-7">
-        <h1 className="bg-dark text-white font-prachachon p-3 text-center text-4xl sm:5xl md:text-7xl whitespace-pre-line tracking-[0.2em] mb-8 py-8 font-mono shadow-[6px_6px_0px_#D4B666]">
+        <h1 className="bg-dark text-white font-prachachon p-3 mb-8 pt-6 pb-4 text-center text-4xl sm:text-6xl md:text-8xl whitespace-pre-line tracking-[0.1em] shadow-[6px_6px_0px_#D4B666]">
           {text.title}
         </h1>
         <div className="flex flex-col md:flex-row gap-8 items-stretch mt-10">
           
           {/* --- [แก้ไข] กล่องรูปภาพ --- */}
-          {/* เอา flex items-center justify-center ออก เพื่อให้รูปขยายเต็มพื้นที่ */}
-          {/* เพิ่ม overflow-hidden เพื่อไม่ให้ภาพส่วนที่ซูมเกินขอบออกมา */}
-          <div className="w-full md:flex-1 md:h-[490px] bg-gold shrink-0 border-[3px] border-dark relative shadow-[6px_6px_0px_rgba(0,0,0,0.2)] overflow-hidden group">
+          <div className="w-full md:flex-1 md:h-[490px] bg-gold shrink-0 border-[3px] border-dark relative overflow-hidden group"> {/* shadow-[6px_6px_0px_rgba(0,0,0,0.2)] เผื่อใส่เงากลับ */}
             
             {/* ใส่ Path รูปภาพของคุณตรงนี้ เช่น /images/hero-bangkok.jpg */}
             <img 
               src="/images/placeholder-hero.png"  
               alt="Vintage Bangkok Atmosphere"
-              // w-full h-full object-cover: สั่งให้ภาพขยายเต็มกรอบโดยไม่เสียสัดส่วน (จะโดน crop บางส่วน)
-              // sepia-[20%]: เพิ่มโทนสีซีเปียเล็กน้อยให้ดูเก่า
-              // transition... group-hover:scale-105: เพิ่มลูกเล่นซูมภาพนิดหน่อยตอนเอาเมาส์ชี้กล่อง
               className="w-full h-full object-cover sepia-[20%] contrast-110 transition-transform duration-700 group-hover:scale-105"
             />
 
-            {/* (Optional) Overlay จางๆ สีเข้มทับภาพเพื่อให้ดูขรึมขึ้น */}
+            {/* Overlay จางๆ สีเข้มทับภาพเพื่อให้ดูขรึมขึ้น */}
             <div className="absolute inset-0 bg-dark/20 pointer-events-none"></div>
           </div>
           {/* --------------------------- */}
@@ -74,10 +69,10 @@ export default function Home() {
 
           {/* กล่องข้อความ */}
           <div className="w-full md:flex-1 flex flex-col justify-between">
-            <p className="text-base font-pimdeed md:text-4xl whitespace-pre-line leading-loose mb-6 text-justify">
-              <strong className="text-4xl font-pimdeed italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
+            <p className="font-pimdeed text-3xl md:text-4xl whitespace-pre-line leading-normal mb-6 text-justify">
+              <strong className="text-3xl md:text-4xl font-pimdeed italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
             </p>
-            <Link href="/about" className="self-start font-pimdeed font-bold text-4xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors">
+            <Link href="/about" className="self-start font-pimdeed font-bold text-3xl md:text-4xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors mb-6 md:mb-0">
               {text.link_dev}
             </Link>
           </div>
