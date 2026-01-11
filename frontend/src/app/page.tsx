@@ -50,10 +50,27 @@ export default function Home() {
           {text.title}
         </h1>
         <div className="flex flex-col md:flex-row gap-8 items-stretch mt-10">
-          {/* กล่องรูปภาพ */}
-          <div className="w-full md:flex-1 md:h-[490px] bg-gold shrink-0 border-[3px] border-dark flex items-center justify-center relative shadow-md">
-            <span className="opacity-30 text-5xl font-serif font-bold rotate-[-15deg]">1960s</span>
+          
+          {/* --- [แก้ไข] กล่องรูปภาพ --- */}
+          {/* เอา flex items-center justify-center ออก เพื่อให้รูปขยายเต็มพื้นที่ */}
+          {/* เพิ่ม overflow-hidden เพื่อไม่ให้ภาพส่วนที่ซูมเกินขอบออกมา */}
+          <div className="w-full md:flex-1 md:h-[490px] bg-gold shrink-0 border-[3px] border-dark relative shadow-[6px_6px_0px_rgba(0,0,0,0.2)] overflow-hidden group">
+            
+            {/* ใส่ Path รูปภาพของคุณตรงนี้ เช่น /images/hero-bangkok.jpg */}
+            <img 
+              src="/images/placeholder-hero.png"  
+              alt="Vintage Bangkok Atmosphere"
+              // w-full h-full object-cover: สั่งให้ภาพขยายเต็มกรอบโดยไม่เสียสัดส่วน (จะโดน crop บางส่วน)
+              // sepia-[20%]: เพิ่มโทนสีซีเปียเล็กน้อยให้ดูเก่า
+              // transition... group-hover:scale-105: เพิ่มลูกเล่นซูมภาพนิดหน่อยตอนเอาเมาส์ชี้กล่อง
+              className="w-full h-full object-cover sepia-[20%] contrast-110 transition-transform duration-700 group-hover:scale-105"
+            />
+
+            {/* (Optional) Overlay จางๆ สีเข้มทับภาพเพื่อให้ดูขรึมขึ้น */}
+            <div className="absolute inset-0 bg-dark/20 pointer-events-none"></div>
           </div>
+          {/* --------------------------- */}
+
 
           {/* กล่องข้อความ */}
           <div className="w-full md:flex-1 flex flex-col justify-between">

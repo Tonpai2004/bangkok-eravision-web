@@ -246,11 +246,12 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             </div>
         </div>
 
-        {/* Generate Button (แก้ไขตรงนี้ครับ เปลี่ยนเป็น transition-all) */}
+        {/* Generate Button เครื่องผมมันต้องปรับแบบนี้ ไม่รู้ของคุณมันมีปัญหารึป่าวนะ */}
         <button 
             type="submit" 
             disabled={status !== 'idle' && status !== 'verified_fail' && status !== 'finished'}
-            className={`w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105 transition-transform ${fontClass}`}
+            // แก้ไข: เปลี่ยนเป็น transition-all และลบตัวที่ขัดแย้งออก
+            className={`w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105 ${fontClass}`}
         >
             {text.btn_main}
         </button>
