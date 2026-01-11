@@ -82,6 +82,21 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   // --- Logic Map Integration: รับค่า Location จาก URL ---
   const searchParams = useSearchParams();
 
+  // --- Drop down แบบคัสต้อม ---
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const dropdownRef = useRef<HTMLDivElement>(null); // สำหรับคลิกข้างนอกแล้วปิด (Optional)
+
+  // เพิ่ม useEffect เพื่อปิด Dropdown เวลาคลิกที่อื่น (Optional แต่ทำให้ UX ดีขึ้น)
+  useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+              setIsDropdownOpen(false);
+          }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const locationParam = searchParams.get('location');
     
@@ -188,28 +203,57 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       <form id="upload-section-start" onSubmit={handleGenerate} className="w-full mx-auto mt-8">
         
         <div className="dashed-box-container">
+
             {/* Location Select */}
-            <div className={`flex justify-between items-end py-2 font-bold text-xl md:text-2xl border-b-2 border-dark ${fontClass}`}>
-              <label htmlFor="location-select" className="whitespace-nowrap mr-4">
-                {text.label_location}
-              </label>
-              <div className="relative w-full flex-1">
-                  <select 
-                      id="location-select"
-                      value={selectedLocation} 
-                      onChange={(e) => setSelectedLocation(e.target.value)}
-                      className={`w-full bg-transparent border-none outline-none text-right font-bold cursor-pointer appearance-none pr-8 truncate text-dark ${fontClass}`}
-                      required
-                  >
-                      <option value="" disabled></option>
-                      {LOCATIONS_DATA.map(loc => (
-                        <option key={loc.id} value={loc.id}>
-                          {currentLang === 'ENG' ? loc.en : loc.th}
-                        </option>
-                      ))}
-                  </select>
-                  <span className="absolute right-0 bottom-2 pointer-events-none text-sm ">▼</span>
-              </div>
+            <div ref={dropdownRef} 
+                className={`flex flex-col md:flex-row md:justify-between md:items-end 
+                py-2 font-bold text-xl md:text-2xl border-b-2 border-dark ${fontClass} relative`}>
+
+                <label className="whitespace-nowrap mb-1 md:mb-0 md:mr-4 cursor-pointer w-full md:w-auto" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                    {text.label_location}
+                </label>
+                
+                <div className="relative w-full md:flex-1">
+                    {/* ส่วนแสดงผลค่าที่เลือก */}
+                    <div 
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full bg-transparent cursor-pointer text-right font-bold pr-12 truncate text-dark select-none">
+                        
+                        {selectedLocation 
+                            ? LOCATIONS_DATA.find(l => l.id === selectedLocation)?.[currentLang === 'ENG' ? 'en' : 'th'] 
+                            : <span className="text-gray-400 opacity-50"></span>
+                        }
+                        <span className={`absolute right-2 pl-1 bottom-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                    
+                    </div>
+
+                    {/* ส่วนรายการตัวเลือก (Dropdown List) */}
+                    {isDropdownOpen && (
+                        <div className="absolute top-full left-0 w-full z-50 mt-1 bg-[#FFF8E7] border-2 border-dark shadow-[4px_4px_0px_#2C2C2C] max-h-60 overflow-y-auto">
+                            {LOCATIONS_DATA.map(loc => {
+                                const isSelected = selectedLocation === loc.id;
+                                return (
+                                    <div
+                                        key={loc.id}
+                                        onClick={() => {
+                                            setSelectedLocation(loc.id);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className={`
+                                            cursor-pointer px-4 py-3 text-right transition-colors truncate
+                                            ${isSelected 
+                                                ? 'bg-dark text-white' 
+                                                : 'text-dark hover:bg-[#F4D03F]'
+                                            }
+                                        `}
+                                    >
+                                        {currentLang === 'ENG' ? loc.en : loc.th}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
             
             <div className="h-1"></div>
@@ -240,7 +284,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                         <span className="text-6xl mb-1">
                             <img src="/svg/upload-1.svg" alt="Upload Icon" className="w-10 h-10 md:w-20 md:h-20"/>
                         </span>
-                        <span className={`text-lg text-center font-mono ${fontClass}`}>{text.dropzone_text}</span>
+                        <span className={`text-lg text-center ${fontClass}`}>{text.dropzone_text}</span>
                     </div>
                 )}
             </div>
