@@ -67,8 +67,9 @@ export default function Navbar() {
 
             {isLangDropdownOpen && (
               <div className={`absolute right-0 top-full mt-2 w-24 bg-background border-[2px] border-dark shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col z-50 ${fontClass}`}>
-                <button onClick={() => handleSelectLang('ENG')} className={`py-2 px-4 text-left hover:bg-gold hover:text-white transition-colors font-bold ${language === 'ENG' ? 'bg-gray-200' : ''}`}>ENG</button>
                 <button onClick={() => handleSelectLang('TH')} className={`py-2 px-4 text-left hover:bg-gold hover:text-white transition-colors font-bold ${language === 'TH' ? 'bg-gray-200' : ''}`}>TH</button>
+                <button onClick={() => handleSelectLang('ENG')} className={`py-2 px-4 text-left hover:bg-gold hover:text-white transition-colors font-bold ${language === 'ENG' ? 'bg-gray-200' : ''}`}>ENG</button>
+                
               </div>
             )}
           </div>
@@ -136,9 +137,9 @@ export default function Navbar() {
                 <div className="w-1/2 h-[2px] bg-dark opacity-30"></div>
                 
                 <div className="flex gap-6">
-                    <button onClick={() => handleSelectLang('ENG')} className={`font-bold text-xl text-dark ${language === 'ENG' ? 'underline decoration-gold decoration-4' : 'opacity-50'}`}>ENG</button>
-                    <span className="text-dark/50 text-xl">|</span>
                     <button onClick={() => handleSelectLang('TH')} className={`font-bold text-xl text-dark ${language === 'TH' ? 'underline decoration-gold decoration-4' : 'opacity-50'}`}>TH</button>
+                    <span className="text-dark/50 text-xl">|</span>
+                    <button onClick={() => handleSelectLang('ENG')} className={`font-bold text-xl text-dark ${language === 'ENG' ? 'underline decoration-gold decoration-4' : 'opacity-50'}`}>ENG</button>
                 </div>
               </div>
           </div>

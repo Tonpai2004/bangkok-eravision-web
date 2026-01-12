@@ -33,7 +33,12 @@ const UI_TEXT = {
     sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ",
     sub_reconstructing: "อยู่ระหว่างดำเนินการ...",
     
-    error_desc_prefix: "ระบบขัดข้อง: "
+    error_desc_prefix: "ระบบขัดข้อง: ",
+
+    // --- เพิ่มข้อความสำหรับ Modal แจ้งเตือน ---
+    warning_title: "ข้อมูลไม่ครบถ้วน",
+    warning_msg: "กรุณาเลือกสถานที่และอัปโหลดรูปภาพก่อนเริ่มดำเนินการ",
+    btn_acknowledge: "รับทราบ"
   },
   ENG: {
     label_location: "Choose a location",
@@ -53,7 +58,12 @@ const UI_TEXT = {
     sub_analyzing: "Verifying photo compatibility...",
     sub_reconstructing: "In process...",
 
-    error_desc_prefix: "System Failure: "
+    error_desc_prefix: "System Failure: ",
+
+    // --- Added text for Warning Modal ---
+    warning_title: "Missing Information",
+    warning_msg: "Please select a location and upload an image to proceed.",
+    btn_acknowledge: "OKay"
   }
 };
 
@@ -75,8 +85,10 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const [result, setResult] = useState<{image: string, desc: string, location: string} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const text = UI_TEXT[currentLang];
+  // --- State สำหรับ Modal แจ้งเตือน (Input Warning) ---
+  const [showInputWarning, setShowInputWarning] = useState(false);
 
+  const text = UI_TEXT[currentLang];
   const fontClass = currentLang === 'ENG' ? 'font-merri' : 'font-krub';
 
   // --- Logic Map Integration: รับค่า Location จาก URL ---
@@ -84,9 +96,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   // --- Drop down แบบคัสต้อม ---
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
-  const dropdownRef = useRef<HTMLDivElement>(null); // สำหรับคลิกข้างนอกแล้วปิด (Optional)
+  const dropdownRef = useRef<HTMLDivElement>(null); 
 
-  // เพิ่ม useEffect เพื่อปิด Dropdown เวลาคลิกที่อื่น (Optional แต่ทำให้ UX ดีขึ้น)
   useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
           if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -105,7 +116,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
        
        if (isValidLocation) {
          setSelectedLocation(locationParam);
-         // Auto Scroll
          const element = document.getElementById('upload-section-start');
          if (element) element.scrollIntoView({ behavior: 'smooth' });
        }
@@ -127,7 +137,12 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !selectedLocation) return alert(currentLang === 'ENG' ? "Please select location and image." : "กรุณาเลือกสถานที่และรูปภาพ");
+    
+    // --- เปลี่ยนจาก alert() เป็นการเปิด Modal ---
+    if (!file || !selectedLocation) {
+        setShowInputWarning(true);
+        return;
+    }
 
     let currentStep = 'verifying'; 
 
@@ -139,7 +154,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     formData.append('language', currentLang); 
 
     try {
-      // --- STEP 1: Verify (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
+      // --- STEP 1: Verify ---
       const verifyRes = await fetch('http://127.0.0.1:5000/verify', {
         method: 'POST',
         body: formData,
@@ -168,7 +183,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      // --- STEP 3: Generate (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
+      // --- STEP 3: Generate ---
       const genRes = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
           body: genFormData,
@@ -290,18 +305,38 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             </div>
         </div>
 
-        {/* Generate Button เครื่องผมมันต้องปรับแบบนี้ ไม่รู้ของคุณมันมีปัญหารึป่าวนะ */}
+        {/* Generate Button */}
         <button 
             type="submit" 
             disabled={status !== 'idle' && status !== 'verified_fail' && status !== 'finished'}
-            // แก้ไข: เปลี่ยนเป็น transition-all และลบตัวที่ขัดแย้งออก
             className={`w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105 ${fontClass}`}
         >
             {text.btn_main}
         </button>
       </form>
 
-      {/* --- OVERLAY & MODALS --- */}
+      {/* --- WARNING MODAL (NEW) --- */}
+      {showInputWarning && (
+        <div className="fixed inset-0 bg-black/80 z-[60] flex justify-center items-center p-4">
+            <div className="border-2 border-white bg-black p-8 max-w-md w-full text-center shadow-[0_0_30px_rgba(255,255,255,0.2)] animate-fade-in-up">
+                <div className="text-5xl mb-4 text-yellow-400">!</div>
+                <div className="text-2xl md:text-3xl font-bold mb-4 serif-font text-white uppercase tracking-wider">
+                    {text.warning_title}
+                </div>
+                <p className="font-mono text-base md:text-lg text-gray-300 mb-8 leading-relaxed">
+                    {text.warning_msg}
+                </p>
+                <button 
+                    onClick={() => setShowInputWarning(false)}
+                    className="w-full border border-white px-6 py-3 bg-transparent text-white hover:bg-white hover:text-black font-mono tracking-widest transition-colors uppercase"
+                >
+                    {text.btn_acknowledge}
+                </button>
+            </div>
+        </div>
+      )}
+
+      {/* --- PROCESS STATUS & RESULT MODALS --- */}
       {status !== 'idle' && status !== 'finished' && (
         <div className="fixed inset-0 bg-black/95 z-50 flex flex-col justify-center items-center text-white px-4 text-center">
             
