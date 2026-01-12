@@ -6,19 +6,19 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const PAGE_TEXT = {
   TH: {
-    header_title: "บางกอก",
-    header_subtitle: "ทวิกาล",
+    // เปลี่ยนจาก Text เป็น Path รูปภาพแทน
+    logo_img: "/images/logo-th.png", 
     section_created_by: "สร้างสรรค์โดย",
     section_advisor: "อาจารย์ที่ปรึกษา",
     
     member1_name: "ณัฐภัทร ชาลี",
     member2_name: "มาดามพงษ์ พฤกษา",
     advisor_name: "อ.ณัฐพงศ์ ประเสริฐสังข์",
-    advisor_position: "อาจารย์ประจำภาควิชา\nวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย \n มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี" // Lecturer in CMM KMUTT
+    advisor_position: "อาจารย์ประจำภาควิชา\nวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย \n มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี"
   },
   ENG: {
-    header_title: "Bangkok",
-    header_subtitle: "EraVision",
+    // เปลี่ยนจาก Text เป็น Path รูปภาพแทน
+    logo_img: "/images/logo-en.png",
     section_created_by: "Created By",
     section_advisor: "Advisor",
     
@@ -50,14 +50,28 @@ export default function AboutPage() {
 
       <Navbar />
 
-      <div className="text-center mb-12 mt-10">
-        <h1 className={`text-5xl md:text-7xl font-bold mb-6 italic tracking-tight text-dark ${fontClass}`}>
-          {text.header_title}<br/><span className="text-accent">{text.header_subtitle}</span>
-        </h1>
-        <div className="flex items-center justify-center my-8">
-            <div className="h-[2px] bg-dark w-1/3"></div>
-            <span className="mx-6 text-3xl font-serif">⚜</span>
-            <div className="h-[2px] bg-dark w-1/3"></div>
+      {/* --- Header Logo Section (Edited) --- */}
+      <div className="flex flex-col items-center mb-12 mt-10">
+        
+        {/* Logo Image Container */}
+        <div className="relative w-full flex justify-center px-4">
+          <img 
+            src={text.logo_img} 
+            alt="Bangkok EraVision Logo" 
+            // Responsive Classes: 
+            // w-[80%] สำหรับมือถือ (ไม่ใหญ่เกินไป)
+            // sm:w-[60%] สำหรับแท็บเล็ต
+            // md:max-w-[500px] สำหรับจอคอม (จำกัดขนาดไม่ให้ใหญ่เบิ้ม)
+            // drop-shadow เพิ่มมิติให้ลอยเด่นขึ้นมาจากพื้นหลัง
+            className="w-[85%] sm:w-[60%] md:w-[500px] h-auto object-contain drop-shadow-xl transition-all duration-500 ease-in-out hover:scale-105"
+          />
+        </div>
+
+        {/* Decorative Separator */}
+        <div className="flex items-center justify-center w-full mt-8 mb-8">
+            <div className="h-[2px] bg-dark w-1/4 md:w-1/3 opacity-70"></div>
+            <span className="mx-6 text-2xl md:text-3xl font-serif text-dark">⚜</span>
+            <div className="h-[2px] bg-dark w-1/4 md:w-1/3 opacity-70"></div>
         </div>
       </div>
 

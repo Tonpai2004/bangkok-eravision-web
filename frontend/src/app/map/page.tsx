@@ -168,7 +168,7 @@ export default function MapPage() {
           />
       )}
 
-      <h1 className="bg-dark text-white font-prachachon p-3 mt-10 mb-10 pt-6 pb-4 text-center text-4xl sm:text-6xl md:text-8xl whitespace-pre-line tracking-[0.1em] shadow-[6px_6px_0px_#D4B666]">
+      <h1 className="bg-dark text-white font-prachachon p-3 mt-10 mb-10 pt-6 pb-4 text-center text-4xl sm:text-6xl md:text-8xl whitespace-pre-line tracking-[0.1em]">
           {language === 'TH' ? "แผนที่สถานที่" : "Location Map"}
       </h1>
 
