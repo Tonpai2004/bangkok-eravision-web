@@ -17,6 +17,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // 1. ฟอนต์พาดหัวข่าว (TS-Prachachon)
+        prachachon: ["var(--font-prachachon)", "serif"],
+        
+        // 2. ฟอนต์พิมพ์ดีด (PS Pimdeed)
+        pimdeed: ["var(--font-pimdeed)", "monospace"],
+        
+        // 3. ฟอนต์อังกฤษ (Merriweather)
+        merri: ["var(--font-merriweather)", "serif"],
+        
+        // 4. ฟอนต์ไทย (Krub)
+        krub: ["var(--font-krub)", "sans-serif"],
+      },
       colors: {
         background: "#F0EAD6",
         dark: "#2C2C2C",

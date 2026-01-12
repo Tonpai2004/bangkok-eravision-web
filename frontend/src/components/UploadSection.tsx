@@ -1,7 +1,7 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-// 1. ข้อมูลสถานที่
 const LOCATIONS_DATA = [
   { id: "อนุสาวรีย์ประชาธิปไตย", th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument" },
   { id: "ศาลาเฉลิมกรุง", th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung" },
@@ -13,13 +13,13 @@ const LOCATIONS_DATA = [
   { id: "พิพิธภัณฑสถานแห่งชาติ", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
 ];
 
-// 2. ปรับข้อความ UI 
+// ใช้ข้อความ UI แบบ Processing (เน้นความคลาสสิก/Time Travel)
 const UI_TEXT = {
   TH: {
     label_location: "เลือกสถานที่",
     label_upload: "อัปโหลดรูปถ่ายของคุณ",
     dropzone_text: "คลิก หรือ ลากรูปมาวางที่นี่",
-    btn_main: "เริ่มย้อนเวลา",
+    btn_main: "หวนคืนสู่ทศวรรษที่ 1960s",
     btn_try_again: "ลองรูปอื่น",
     btn_retry: "ลองใหม่อีกครั้ง",
     btn_download: "ดาวน์โหลดรูปภาพ",
@@ -29,10 +29,9 @@ const UI_TEXT = {
     status_verify_fail: "การตรวจสอบไม่ผ่าน",
     status_tech_error: "เกิดข้อผิดพลาดทางเทคนิค",
     
-    status_reconstructing: "กำลังจำลองภาพอดีต...",
-    sub_analyzing: "ตรวจสอบความถูกต้องทางประวัติศาสตร์",
+    status_reconstructing: "เตรียมหวนสู่ความวิจิตรในวันวานแห่ง 1960s",
+    sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ",
     sub_reconstructing: "อยู่ระหว่างดำเนินการ...",
-    auto_proceed: "กำลังเริ่มกระบวนการย้อนเวลา...",
     
     error_desc_prefix: "ระบบขัดข้อง: "
   },
@@ -40,7 +39,7 @@ const UI_TEXT = {
     label_location: "Choose a location",
     label_upload: "Upload your Photo",
     dropzone_text: "Click or Drag photo here",
-    btn_main: "GENERATE",
+    btn_main: "Transform to 1960s",
     btn_try_again: "Try Another Photo",
     btn_retry: "Retry again",
     btn_download: "Download Image",
@@ -50,10 +49,9 @@ const UI_TEXT = {
     status_verify_fail: "VERIFICATION REJECTED",
     status_tech_error: "TECHNICAL ERROR",
     
-    status_reconstructing: "RECONSTRUCTING",
-    sub_analyzing: "Verifying historical compatibility...",
+    status_reconstructing: "Let's Back to 1960s",
+    sub_analyzing: "Verifying photo compatibility...",
     sub_reconstructing: "In process...",
-    auto_proceed: "Initializing Time Travel Sequence...",
 
     error_desc_prefix: "System Failure: "
   }
@@ -79,6 +77,42 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   const text = UI_TEXT[currentLang];
 
+  const fontClass = currentLang === 'ENG' ? 'font-merri' : 'font-krub';
+
+  // --- Logic Map Integration: รับค่า Location จาก URL ---
+  const searchParams = useSearchParams();
+
+  // --- Drop down แบบคัสต้อม ---
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const dropdownRef = useRef<HTMLDivElement>(null); // สำหรับคลิกข้างนอกแล้วปิด (Optional)
+
+  // เพิ่ม useEffect เพื่อปิด Dropdown เวลาคลิกที่อื่น (Optional แต่ทำให้ UX ดีขึ้น)
+  useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+              setIsDropdownOpen(false);
+          }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const locationParam = searchParams.get('location');
+    
+    if (locationParam) {
+       const isValidLocation = LOCATIONS_DATA.some(loc => loc.id === locationParam);
+       
+       if (isValidLocation) {
+         setSelectedLocation(locationParam);
+         // Auto Scroll
+         const element = document.getElementById('upload-section-start');
+         if (element) element.scrollIntoView({ behavior: 'smooth' });
+       }
+    }
+  }, [searchParams]);
+  // ----------------------------------------------------
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) {
@@ -91,12 +125,10 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     }
   };
 
-  // --- ฟังก์ชันเดียวจบ (One Click Flow) ---
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !selectedLocation) return alert(currentLang === 'ENG' ? "Please select location and image." : "กรุณาเลือกสถานที่และรูปภาพ");
 
-    // 1. สร้างตัวแปรมาคอยจำว่าตอนนี้อยู่ขั้นตอนไหน
     let currentStep = 'verifying'; 
 
     setStatus('verifying'); 
@@ -107,9 +139,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     formData.append('language', currentLang); 
 
     try {
-      // ------------------------------------------------
-      // STEP 1: Verify (เปลี่ยน URL เป็น 127.0.0.1)
-      // ------------------------------------------------
+      // --- STEP 1: Verify (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
       const verifyRes = await fetch('http://127.0.0.1:5000/verify', {
         method: 'POST',
         body: formData,
@@ -122,16 +152,13 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         return; 
       }
 
-      // ------------------------------------------------
-      // STEP 2: Passed Verify -> Wait -> Generate
-      // ------------------------------------------------
+      // --- STEP 2: Verify Passed ---
       setPassDetails({
         score: verifyData.analysis_report?.score || 0,
         place: verifyData.analysis_report?.detected_place || "Confirmed"
       });
       setStatus('verified_pass');
 
-      // หน่วงเวลา 2 วิ ให้ User ดีใจว่าผ่าน
       await new Promise(r => setTimeout(r, 2000));
 
       currentStep = 'generating';
@@ -141,7 +168,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      // (เปลี่ยน URL เป็น 127.0.0.1)
+      // --- STEP 3: Generate (ชี้ไปที่ 127.0.0.1 ตาม Processing Branch) ---
       const genRes = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
           body: genFormData,
@@ -160,13 +187,12 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       }
 
     } catch (err: any) {
-        console.error("Fetch Error Details:", err); // เพิ่ม Log ให้ดูง่ายขึ้น
+        console.error("Fetch Error Details:", err);
         setFailReason(err.message);
         
         if (currentStep === 'generating') {
             setStatus('error'); 
         } else {
-            // ถ้า Error ตั้งแต่ Verify (เช่น Failed to fetch) จะมาตกตรงนี้
             setStatus('verified_fail'); 
         }
     }
@@ -174,46 +200,72 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
   return (
     <>
-      <form onSubmit={handleGenerate} className="w-full mx-auto mt-8">
+      <form id="upload-section-start" onSubmit={handleGenerate} className="w-full mx-auto mt-8">
         
         <div className="dashed-box-container">
+
             {/* Location Select */}
-            <div className="flex justify-between items-end py-2 font-bold text-xl md:text-2xl serif-font border-b-2 border-dark">
-              <label htmlFor="location-select" className="whitespace-nowrap mr-4">
-                {text.label_location}
-              </label>
-              <div className="relative w-full flex-1">
-                  <select 
-                      id="location-select"
-                      value={selectedLocation} 
-                      onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-right font-serif font-bold cursor-pointer appearance-none pr-8 truncate text-dark"
-                      required
-                  >
-                      <option value="" disabled></option>
-                      {LOCATIONS_DATA.map(loc => (
-                        <option key={loc.id} value={loc.id}>
-                          {currentLang === 'ENG' ? loc.en : loc.th}
-                        </option>
-                      ))}
-                  </select>
-                  <span className="absolute right-0 bottom-2 pointer-events-none text-sm ">▼</span>
-              </div>
+            <div ref={dropdownRef} 
+                className={`flex flex-col md:flex-row md:justify-between md:items-end 
+                py-2 font-bold text-xl md:text-2xl border-b-2 border-dark ${fontClass} relative`}>
+
+                <label className="whitespace-nowrap mb-1 md:mb-0 md:mr-4 cursor-pointer w-full md:w-auto" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                    {text.label_location}
+                </label>
+                
+                <div className="relative w-full md:flex-1">
+                    {/* ส่วนแสดงผลค่าที่เลือก */}
+                    <div 
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full bg-transparent cursor-pointer text-right font-bold pr-12 truncate text-dark select-none">
+                        
+                        {selectedLocation 
+                            ? LOCATIONS_DATA.find(l => l.id === selectedLocation)?.[currentLang === 'ENG' ? 'en' : 'th'] 
+                            : <span className="text-gray-400 opacity-50"></span>
+                        }
+                        <span className={`absolute right-2 pl-1 bottom-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                    
+                    </div>
+
+                    {/* ส่วนรายการตัวเลือก (Dropdown List) */}
+                    {isDropdownOpen && (
+                        <div className="absolute top-full left-0 w-full z-50 mt-1 bg-[#FFF8E7] border-2 border-dark shadow-[4px_4px_0px_#2C2C2C] max-h-60 overflow-y-auto">
+                            {LOCATIONS_DATA.map(loc => {
+                                const isSelected = selectedLocation === loc.id;
+                                return (
+                                    <div
+                                        key={loc.id}
+                                        onClick={() => {
+                                            setSelectedLocation(loc.id);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className={`
+                                            cursor-pointer px-4 py-3 text-right transition-colors truncate
+                                            ${isSelected 
+                                                ? 'bg-dark text-white' 
+                                                : 'text-dark hover:bg-[#F4D03F]'
+                                            }
+                                        `}
+                                    >
+                                        {currentLang === 'ENG' ? loc.en : loc.th}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
             
             <div className="h-1"></div>
 
             {/* File Upload */}
-            <div className="flex justify-between items-end pb-2 font-bold text-xl md:text-2xl mb-3 serif-font border-b-2 border-dark relative">
+            <div className={`flex justify-between items-end pb-2 font-bold text-xl md:text-2xl mb-3 border-b-2 border-dark relative ${fontClass}`}>
                 <label htmlFor="file-upload" className="flex-1">{text.label_upload}</label>
-                <button 
-                    type="button" 
-                    onClick={() => fileInputRef.current?.click()} 
-                    className="text-3xl hover:scale-110 transition-transform"
-                    title="Click to select image"
-                >
-                    📷
+
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-3xl hover:scale-110 transition-transform" title="Click to select image">
+                    <img src="/svg/photo-camera.svg" alt="Camera Icon" className="w-8 h-8 md:w-10 md:h-10"/>
                 </button>
+
                 <input 
                     id="file-upload" type="file" ref={fileInputRef} onChange={handleFileChange} 
                     accept="image/*" className="hidden"
@@ -228,29 +280,31 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 {preview ? (
                     <img src={preview} alt="Preview" className="max-h-[300px] w-auto object-contain border-2 border-dark shadow-md" />
                 ) : (
-                    <div className="flex flex-col items-center opacity-50 hover:opacity-80 transition-opacity">
-                        <span className="text-6xl mb-2">⬆</span>
-                        <span className="text-sm font-mono">{text.dropzone_text}</span>
+                    <div className="flex flex-col items-center text-dark  hover:scale-105 transition-transform">
+                        <span className="text-6xl mb-1">
+                            <img src="/svg/upload-1.svg" alt="Upload Icon" className="w-10 h-10 md:w-20 md:h-20"/>
+                        </span>
+                        <span className={`text-lg text-center ${fontClass}`}>{text.dropzone_text}</span>
                     </div>
                 )}
             </div>
         </div>
 
-        {/* ปุ่มเดียวจบ: GENERATE */}
+        {/* Generate Button เครื่องผมมันต้องปรับแบบนี้ ไม่รู้ของคุณมันมีปัญหารึป่าวนะ */}
         <button 
             type="submit" 
             disabled={status !== 'idle' && status !== 'verified_fail' && status !== 'finished'}
-            className="w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl serif-font transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C]"
+            // แก้ไข: เปลี่ยนเป็น transition-all และลบตัวที่ขัดแย้งออก
+            className={`w-full mt-8 bg-dark text-white text-bold py-4 text-2xl md:text-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-[2px] active:shadow-[2px_2px_0px_#2C2C2C] hover:scale-105 ${fontClass}`}
         >
             {text.btn_main}
         </button>
       </form>
 
-      {/* --- OVERLAY --- */}
+      {/* --- OVERLAY & MODALS --- */}
       {status !== 'idle' && status !== 'finished' && (
         <div className="fixed inset-0 bg-black/95 z-50 flex flex-col justify-center items-center text-white px-4 text-center">
             
-            {/* 1. STATE: VERIFYING */}
             {status === 'verifying' && (
                 <>
                     <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold">
@@ -262,7 +316,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </>
             )}
 
-            {/* 2. STATE: VERIFIED PASS */}
             {status === 'verified_pass' && (
                 <>
                     <div className="text-6xl mb-4 text-green-500">✓</div>
@@ -278,7 +331,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </>
             )}
 
-            {/* 3. STATE: VERIFIED FAIL (User Error) */}
             {status === 'verified_fail' && (
                 <div className="border-2 border-accent p-8 max-w-2xl bg-black">
                     <div className="text-6xl mb-4 text-accent">✕</div>
@@ -297,7 +349,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </div>
             )}
 
-            {/* 4. STATE: TECHNICAL ERROR (System Error) */}
             {status === 'error' && (
                 <div className="border-2 border-accent p-8 max-w-2xl bg-black shadow-[0_0_50px_rgba(255,255,255,0.1)]">
                     <div className="text-6xl mb-4 text-red-500">✕</div>
@@ -316,7 +367,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </div>
             )}
 
-            {/* 5. STATE: GENERATING */}
             {status === 'generating' && (
                 <>
                     <div className="text-4xl md:text-6xl font-bold mb-6 animate-blink serif-font tracking-widest text-gold">
@@ -330,7 +380,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         </div>
       )}
 
-      {/* --- RESULT MODAL --- */}
       {result && (
         <div className="fixed inset-0 bg-black/85 z-50 flex justify-center items-center p-4" onClick={() => setResult(null)}>
             <div className="bg-background p-6 md:p-8 max-w-3xl w-full border-[3px] border-dark shadow-[15px_15px_0px_rgba(0,0,0,0.5)] relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>

@@ -3,20 +3,99 @@ import os
 import base64
 import time
 import random
+import pickle
+import numpy as np
+import tempfile
+import datetime
+from scipy.spatial.distance import cdist
+from sentence_transformers import SentenceTransformer
+from PIL import Image
+import io
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from flask_cors import CORS
 
-# Import Classifier (คอมเม้นต์ไว้ก่อน เพื่อ Bypass)
-# from classifier import classify_image 
+# Import Classifier Logic
+from classifier import classify_image
 
 # --- 1. Setup ---
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# --- 2. Historical Data Configuration ---
+# ==========================================
+# 💾 AUTO-SAVE SYSTEM (DEV ONLY)
+# ==========================================
+HISTORY_FOLDER = os.path.join(os.path.dirname(__file__), 'generated_history')
+
+def save_generated_image(image_bytes, location_name_th):
+    try:
+        if not os.path.exists(HISTORY_FOLDER):
+            os.makedirs(HISTORY_FOLDER)
+
+        file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
+        
+        safe_name = "place"
+        if "Democracy" in file_prefix: safe_name = "democracymonument"
+        elif "Sala" in file_prefix: safe_name = "salachalermkrung"
+        elif "Swing" in file_prefix: safe_name = "giantswing"
+        elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
+        elif "Khao San" in file_prefix: safe_name = "khaosan"
+        elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
+        elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
+        elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{safe_name}_1960s_{timestamp}.png"
+        filepath = os.path.join(HISTORY_FOLDER, filename)
+
+        with open(filepath, "wb") as f:
+            f.write(image_bytes)
+        
+        print(f"💾 Auto-saved result to: {filename}")
+        return filepath
+
+    except Exception as e:
+        print(f"⚠️ Failed to auto-save image: {e}")
+        return None
+
+# ==========================================
+# 🧠 AI MEMORY LOADING
+# ==========================================
+print("⏳ Initializing System...")
+SEARCH_MODEL = None
+LOCATION_INDICES = {}
+
+def load_ai_memory():
+    global SEARCH_MODEL, LOCATION_INDICES
+    try:
+        print("👁️  Loading CLIP Vision Model...")
+        SEARCH_MODEL = SentenceTransformer('clip-ViT-B-32')
+        
+        indices_path = os.path.join(os.path.dirname(__file__), 'indices')
+        if os.path.exists(indices_path):
+            print("🧠 Loading Location Indices...")
+            for filename in os.listdir(indices_path):
+                if filename.endswith('.pkl'):
+                    location_key = filename.replace('.pkl', '')
+                    with open(os.path.join(indices_path, filename), 'rb') as f:
+                        LOCATION_INDICES[location_key] = pickle.load(f)
+                    print(f"  - Loaded Memory: {location_key}")
+            print("✅ AI System Ready: Smart Match Enabled!")
+        else:
+            print("⚠️ 'indices' folder not found. ML features will be disabled.")
+            
+    except Exception as e:
+        print(f"⚠️ Warning: AI System Failed. ({e})")
+        SEARCH_MODEL = None
+
+load_ai_memory()
+
+# ==========================================
+# 📍 MAPPINGS & DATA
+# ==========================================
+
 LOCATION_MAPPING_TH_TO_EN = {
     "อนุสาวรีย์ประชาธิปไตย": "Ratchadamnoen Avenue – Democracy Monument",
     "ศาลาเฉลิมกรุง": "Sala Chalermkrung Royal Theatre",
@@ -28,191 +107,201 @@ LOCATION_MAPPING_TH_TO_EN = {
     "พิพิธภัณฑสถานแห่งชาติ": "National Museum Bangkok"
 }
 
-LOCATION_INFO = {
-    "อนุสาวรีย์ประชาธิปไตย": {
-        "prompt_key": "Democracy Monument",
-        "desc_60s": "ตัวอนุสาวรีย์สีครีมปูนชัดเจน พานรัฐธรรมนูญสีโลหะรมดำ ประตูสีแดงชาด อาคารราชดำเนินสีส้มอิฐ ถนนกว้างไร้เส้นจราจร"
-    },
-    "ศาลาเฉลิมกรุง": {
-        "prompt_key": "Sala Chalermkrung",
-        "desc_60s": "โรงมหรสพหลวงยุคโก๋หลังวัง อาคารสีขาวครีมที่มีคราบฝน โดดเด่นด้วย 'คัตเอาท์ยักษ์วาดมือ' เรื่อง 'บางกอกทวิกาล' หน้าโรง พร้อมดารานำชายสองสไตล์ บรรยากาศรอบข้างคึกคักด้วยวัยรุ่นยุค 60s รถแท็กซี่เฟียต และรถรางวิ่งผ่านหน้าโรง"
-    },
-    "เสาชิงช้า & วัดสุทัศน์": {
-        "prompt_key": "Giant Swing",
-        "desc_60s": "เสาชิงช้ามีฐานปูนชัดเจน รถวิ่งอ้อมฐานห้ามลอดผ่าน ไม่มีรถราง ถนนลูกรัง วัดสุทัศน์ดูเก่าแก่ตามกาลเวลา"
-    },
-    "เยาวราช": {
-        "prompt_key": "Yaowarat",
-        "desc_60s": "รถรางโปร่งแบบเปิดข้างวิ่งชิดขอบทาง ป้ายร้านค้าแนบตึกไม่ยื่นรกตา ตึกแถวเก่าแก่ บรรยากาศการค้าขายแบบดั้งเดิม"
-    },
-    "ถนนข้าวสาร": {
-        "prompt_key": "Khaosan Road",
-        "desc_60s": "ชุมชนบางลำพูย่านค้าข้าวสาร ห้องแถวไม้ประตูบานเฟี้ยม มีกระสอบข้าววางหน้าร้าน บรรยากาศเงียบสงบแบบย่านพักอาศัย ไม่ใช่ย่านท่องเที่ยว"
-    },
-    "ป้อมพระสุเมรุ": {
-        "prompt_key": "Phra Sumen Fort",
-        "desc_60s": "ป้อมสีขาวขุ่นทรุดโทรมมีคราบตะไคร่ บ้านเรือนไม้สังกะสีสร้างเบียดเสียดติดตัวป้อม ไม่เห็นมุมคลองมากนัก ไม่มีสวนสาธารณะ"
-    },
-    "สนามหลวง": {
-        "prompt_key": "Sanam Luang",
-        "desc_60s": "ตลาดนัดสนามหลวง พื้นดินแดงปนหญ้าแห้ง ร่มผ้าใบสีขาวสลับแดง/น้ำเงิน รถเข็นขายน้ำอ้อยสีฟ้า ว่าวไทยลอยเต็มฟ้า ฉากหลังวัดพระแก้ว"
-    },
-    "พิพิธภัณฑสถานแห่งชาติ": {
-        "prompt_key": "National Museum",
-        "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร"
-    }
+LOCATION_MAPPING_EN_TO_TH = {v: k for k, v in LOCATION_MAPPING_TH_TO_EN.items()}
+
+LOCATION_KEY_MAP = {
+    "อนุสาวรีย์ประชาธิปไตย": "Democracy Monument",
+    "ศาลาเฉลิมกรุง": "Sala Chalermkrung Royal Theatre",
+    "เสาชิงช้า & วัดสุทัศน์": "Giant Swing – Wat Suthat",
+    "เยาวราช": "Yaowarat (Chinatown)",
+    "ป้อมพระสุเมรุ": "Phra Sumen Fort – Santichaiprakarn Park",
+    "สนามหลวง": "Sanam Luang (Royal Field)",
+    "พิพิธภัณฑสถานแห่งชาติ": "Phra Nakhon National Museum"
 }
 
-# --- The Master Prompt Database (UPDATED PROMPTS) ---
+LOCATION_INFO = {
+    "อนุสาวรีย์ประชาธิปไตย": { "prompt_key": "Democracy Monument", "desc_60s": "ตัวอนุสาวรีย์สีครีมปูนชัดเจน พานรัฐธรรมนูญสีโลหะรมดำ ประตูสีแดงชาด อาคารราชดำเนินสีส้มอิฐ ถนนกว้างไร้เส้นจราจร" },
+    "ศาลาเฉลิมกรุง": { "prompt_key": "Sala Chalermkrung", "desc_60s": "โรงมหรสพหลวงยุคโก๋หลังวัง อาคารสีขาวครีมที่มีคราบฝน โดดเด่นด้วย 'คัตเอาท์ยักษ์วาดมือ' เรื่อง 'บางกอกทวิกาล' หน้าโรง พร้อมดารานำชายสองสไตล์ บรรยากาศรอบข้างคึกคักด้วยวัยรุ่นยุค 60s รถแท็กซี่เฟียต และรถรางวิ่งผ่านหน้าโรง" },
+    "เสาชิงช้า & วัดสุทัศน์": { "prompt_key": "Giant Swing", "desc_60s": "เสาชิงช้ามีฐานปูนชัดเจน รถวิ่งอ้อมฐานห้ามลอดผ่าน ไม่มีรถราง ถนนลูกรัง วัดสุทัศน์ดูเก่าแก่ตามกาลเวลา" },
+    "เยาวราช": { "prompt_key": "Yaowarat", "desc_60s": "รถรางโปร่งแบบเปิดข้างวิ่งชิดขอบทาง ป้ายร้านค้าแนบตึกไม่ยื่นรกตา ตึกแถวเก่าแก่ บรรยากาศการค้าขายแบบดั้งเดิม" },
+    "ถนนข้าวสาร": { "prompt_key": "Khaosan Road", "desc_60s": "ชุมชนบางลำพูย่านค้าข้าวสาร ห้องแถวไม้ประตูบานเฟี้ยม มีกระสอบข้าววางหน้าร้าน บรรยากาศเงียบสงบแบบย่านพักอาศัย ไม่ใช่ย่านท่องเที่ยว" },
+    "ป้อมพระสุเมรุ": { "prompt_key": "Phra Sumen Fort", "desc_60s": "ป้อมสีขาวขุ่นทรุดโทรมมีคราบตะไคร่ บ้านเรือนไม้สังกะสีสร้างเบียดเสียดติดตัวป้อม ไม่เห็นมุมคลองมากนัก ไม่มีสวนสาธารณะ" },
+    "สนามหลวง": { "prompt_key": "Sanam Luang", "desc_60s": "ตลาดนัดสนามหลวง พื้นดินแดงปนหญ้าแห้ง ร่มผ้าใบสีขาวสลับแดง/น้ำเงิน รถเข็นขายน้ำอ้อยสีฟ้า ว่าวไทยลอยเต็มฟ้า ฉากหลังวัดพระแก้ว" },
+    "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
+}
+
+# --- THE MASTER PROMPT DATABASE (V.10 - FINE-TUNED REALISM & SPECIFIC FIXES) ---
 LOCATION_PROMPTS = {
     "Democracy Monument": """
-          **TASK:** Photorealistic Reconstruction of 1960s Democracy Monument.
-          **STRUCTURAL LOCK:** Maintain the original perspective and monument geometry 100%.
-          **VISUAL ELEMENTS:**
-          - **Main Concrete Structure:** The four wing structures and the central turret column are **Matte Cement / Off-White Cream color**. **DO NOT** make the concrete wings look black, smoked, or dirty.
-          - **The Pedestal Tray (Phan):** **ONLY** the central tray carrying the constitution at the very top is **Dark Black Oxidized Metal / Bronze**.
-          - **The Doors:** The specific doors at the base of the central turret are **Red Ochre / Deep Red**.
-          - **Sculptures:** The bas-relief sculptures at the base of the wings are **Cement Color** (same as the wings).
-          - **Surroundings:** Flanking buildings along Ratchadamnoen Avenue are **Terracotta Brick Orange / Burnt Orange**.
-          - **Street:** Wide asphalt, coarse texture. **NO traffic lines**. 
-          - **Vehicles:** **White 'Nai Lert' Buses** (Rounded body). Vintage cars.
-          - **Atmosphere:** Bright daylight, clear visibility, historical film grain.
+          **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
+          **STRUCTURAL LOCK:** Maintain perspective. Concrete wings with concave curves and bas-reliefs. Dark bronze central tray.
+
+          **FINE DETAILS FOR REALISM:**
+          - **Weathering:** The cream concrete must show realistic signs of age: subtle rain streaks, slight discoloration in crevices. It is not pristine new paint.
+          - **The Base:** The circular concrete steps are **COMPLETELY BARE and CLEAN**. NO grass, NO weeds, NO flowers.
+          - **Atmosphere:** Bright tropical sun creating sharp shadows. A slight heat haze in the distance.
+
+          **SURROUNDINGS:**
+          - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings.
+          - **Road & Traffic:** Wide Asphalt. Sparse vintage cars (e.g., Morris Minor, Datsun Bluebird) and public buses.
       """,
 
-    # 1. ศาลาเฉลิมกรุง: ลบตึกรอบข้าง เน้นโรงหนัง รักษาป้ายชื่อเดิม
     "Sala Chalermkrung": """
-        **TASK:** Create a photorealistic color photograph of Sala Chalermkrung Theatre in Bangkok, circa 1967.
-        
-        **STRUCTURE LOCK (EXTREME PRIORITY):** - **THE ROOF SIGN:** The wire-frame metal structure reading "ศาลาเฉลิมกรุง" MUST remain 100% IDENTICAL to the input. DO NOT change, warp, or translate the text.
-        - **THEATER SHAPE:** Keep the original architectural form of the theater.
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
+        **ABSOLUTE STRUCTURE LOCK:** Keep building shape and "ศาลาเฉลิมกรุง" roof sign identical. Poster: "**บางกอกทวิกาล**".
 
-        **ISOLATION INSTRUCTION (CRITICAL):**
-        - **REMOVE SIDE BUILDINGS:** Any buildings visible to the immediate left or right of the theater must be removed, lowered significantly, or blurred out. The theater must be the undisputed dominant structure.
-        - **CLEAR SKY:** Remove all utility poles, electrical wires, and cables crossing the sky.
-        - **NO TALL NEIGHBORS:** Do not allow any modern skyscrapers or tall structures to peek from behind.
-
-        **THE MOVIE POSTER INJECTION:**
-        - **Action:** Overlay a massive, hand-painted oil cut-out billboard on the front facade.
-        - **Poster Content:** A Thai movie titled "**บางกอกทวิกาล**".
-        - **Visuals:** 1. Muscular man in suit with glasses. 2. Slim man with middle-part hair. 3. Text "Tor-Tum".
-        - **Style:** Hand-painted Thai cinema art.
-
-        **STREET CONTEXT:**
-        - **Road:** Asphalt road. **NO TRAMS. NO TRACKS.** - **Vehicles:** 2-3 Vintage Taxis (Fiat/Austin). 
-        - **Crowd:** Thai teenagers in 60s fashion walking.
+        **CONTEXT REFINEMENT (WIDE ROAD & REDUCED SURROUNDINGS):**
+        - **Street:** The asphalt road in front must appear **VERY WIDE and SPACIOUS**.
+        - **Surroundings:** The shophouses on the far left and right should appear **receding and less prominent**, emphasizing the width of the avenue and the theatre itself. They are low-rise 1960s style.
+        - **Traffic & Life:** Light vintage traffic, pedestrians on wide sidewalks. No Trams.
     """,
 
-    # 2. เสาชิงช้า: ปรับบ้านเรือนรอบข้างเป็นวิถีชุมชน
     "Giant Swing": """
-        **TASK:** Photorealistic Reconstruction of The Giant Swing (1965).
-        **STRUCTURAL LOCK:** Keep the exact perspective of the Swing and Wat Suthat.
+        **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
+        **STRUCTURAL LOCK:** Red Teak Pillars on White Stone Plinth.
 
-        **VISUAL ELEMENTS:**
-        - **The Swing:** Vibrant Red Teak Logs on a **Raised Stone Plinth**.
-        - **Traffic Rule:** Traffic goes AROUND the plinth. **NO vehicles under the swing.**
-        - **Vehicles:** Vintage cars, Samlors (Three-wheeled bikes). **NO TRAMS.**
-
-        **SURROUNDING COMMUNITY (CONTEXT):**
-        - **Architecture:** The surrounding shop houses must be strictly **1960s Bangkok Style** (Sino-Portuguese shophouses mixed with wooden row houses). 
-        - **Condition:** Weathered, lived-in, earthy tones (cream, light yellow, wood). 
-        - **Roofing:** Clay tiles or rusted corrugated iron. 
-        - **Road:** Rough asphalt or paved stone, dusty.
+        **SURROUNDING REALISM (LIVED-IN, NOT RUINED):**
+        - **Wat Suthat & Shophouses:** The surrounding Sino-Portuguese shophouses and temple walls must look **realistically aged and lived-in**. The stucco paint is faded but intact; roof tiles are weathered. They are **NOT dilapidated or ruined**, just historically accurate for a bustling 1960s district.
+        - **Ground:** Clean paved asphalt.
+        - **Traffic:** Light vintage traffic driving AROUND the plinth.
     """,
 
-    # 3. เยาวราช: รถรางชิดขอบ ป้ายเขียนมือภาษาไทย ไม่ฉูดฉาด
     "Yaowarat": """
-        **TASK:** Photorealistic Reconstruction of Yaowarat Road (1968).
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
-        **VISUAL ELEMENTS:**
-        - **TRAM SYSTEM:** - **Position:** The Tram MUST run **CLOSE TO THE SIDEWALK/CURB**, NOT in the middle of the road.
-            - **Type:** Open-sided 1960s Bangkok Tram.
-        
-        **SIGNAGE & ATMOSPHERE (STRICT):**
-        - **Sign Style:** **Hand-painted wooden or metal signs**. Cloth banners hanging vertically.
-        - **Lighting:** **NO NEON GLOW.** NO LED. Muted colors (Red, Gold, Black).
-        - **Density:** Signs should not be overly dense or cluttered like modern times.
-        - **TEXT RULE:** All visible text must be **THAI SCRIPT** (ภาษาไทย) or Chinese characters. NO English.
-        
-        **ARCHITECTURE:**
-        - Old Sino-Thai shophouses. 2-3 stories high. 
-        - Weathered concrete.
-        - **Traffic:** Vintage trucks, rickshaws.
+        **SPECIFIC TEXT & SIGNAGE FIX:**
+        - **No Glowing Signs:** All signs are painted wood or metal. **ABSOLUTELY NO NEON GLOW or internal lighting** (it is daytime).
+        - **Legible Text:** Signs must have clear, hand-painted Chinese and Thai characters.
+        - **Mandatory Sign Examples (Use these styles):** "ห้างทอง ฮั่วเซ่งเฮง (和成興大金行)", "ภัตตาคาร หูฉลาม", "ขายยาจีน".
+
+        **TRAM & ATMOSPHERE:**
+        - **The Tram:** A single vintage Yellow & Red wooden tram, looking **weathered and used**, running on rails **hugging the RIGHT-HAND curb** of the road.
+        - **Street:** Wide asphalt. Sparse Samlors and trucks. Warm sunlight.
     """,
 
-    # 4. ข้าวสาร: ย่านค้าข้าว เงียบสงบ ไม่ใช่ถนนท่องเที่ยว
     "Khaosan Road": """
-        **TASK:** Photorealistic Reconstruction of Bang Lamphu / Khaosan Road (1962).
-        **CONTEXT:** A quiet **Rice Trading Residential Community**. 
-        **NEGATIVE PROMPT:** Tourist, Backpacker, Bar, Club, Beer, English Sign, Neon, Party.
-
-        **VISUAL ELEMENTS:**
-        - **Architecture:** **Wooden Row Houses** (2 stories) with "Baan Fiam" (folding wooden doors). 
-        - **Trade:** Piles of **Hemp Rice Sacks** (White/Brown) stacked in front of shops. 
-        - **Ground:** Dusty street, traces of white rice dust. 
-        - **Signs:** Simple wooden signs in **THAI LANGUAGE** (e.g., "หจก. ข้าวสาร").
-        - **Vibe:** Domestic, quiet, bicycle tires, children playing, old men sitting.
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
+        
+        **VIBRANT COMMUNITY LIFE:**
+        - **People:** The scene is alive with **local residents** sitting on stools chatting in front of houses, children playing on the street, vendors with carrying poles.
+        - **Rice Trade:** **White Hemp Rice Sacks** are visible stacked at only **2 or 3 specific houses**, NOT everywhere.
+        
+        **VISUALS:**
+        - **House Facades:** Wooden row houses. **CRITICAL: NO COMMERCIAL SIGNS or text on the house fronts.** They are residential.
+        - **Street:** Wide, clean asphalt road.
     """,
 
-    # 5. ป้อมพระสุเมรุ: เก่า ทรุดโทรม เปลี่ยนสนามหญ้าเป็นคลอง/ดิน
     "Phra Sumen Fort": """
-        **TASK:** Photorealistic Reconstruction of Phra Sumen Fort (1960).
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
-        **THE FORT CONDITION:**
-        - **Texture:** The white plaster must look **aged, stained with black mold, and green moss**. 
-        - **Structure:** The top battlements may look slightly crumbled or imperfect (not pristine renovation).
-
-        **SURROUNDINGS (CRITICAL REPLACEMENT):**
-        - **IF GRASS IS DETECTED:** Replace all green manicured lawns/parks with **DIRT GROUND** or **CANAL WATER**.
-        - **Road side:** Rough asphalt/dirt road.
-        - **Community:** Ramshackle wooden houses built close to the fort wall. Lived-in but not completely slum-like.
-        - **River side:** Muddy banks, traditional boats.
+        **CRITICAL HISTORICAL ACCURACY: COMPLETELY HEADLESS:**
+        - **Status:** The main white octagonal fort tower is **SEVERED**. The entire upper wooden roof structure and spire are **COMPLETELY MISSING**. The top is a flat, broken, weathered stump exposing the thick walls.
+        - **Condition:** Aged, mold-stained white plaster.
+        
+        **SURROUNDINGS:**
+        - Street level view. Wooden houses nearby. Asphalt/dirt road. Very light traffic.
     """,
 
-    # 6. สนามหลวง: ตลาดไม่อัดแน่น ว่าวน้อยลง วังเก่า
     "Sanam Luang": """
-        **TASK:** Photorealistic Reconstruction of Sanam Luang (Weekend Market 1968).
-
-        **VISUAL ELEMENTS:**
-        - **Market Layout:** Stalls are **spaced out**, not jammed together. 
-        - **Stall Type:** Simple canvas parasols (Red/White/Blue) and wooden tables.
-        - **Merchandise:** Old books, amulets, sugarcane juice, traditional food.
-        - **The Sky:** A **FEW** Thai Kites (Chula/Pakpao) flying (do not fill the whole sky).
-        - **Backdrop (Grand Palace):** The walls must look aged (Off-white/Yellowish), gold spires slightly dulled by time. **NO SCAFFOLDING.**
-        - **Ground:** Red dirt (Sanarm Chai) mixed with patches of dry grass.
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
+        
+        **MARKET REALISM (ORAL HISTORY BASED):**
+        - **Ground & Stalls:** The ground is dusty red laterite. Vendors sit on woven mats under simple bamboo-pole canvas parasols (not modern tents). Goods are laid out on the ground.
+        - **Atmosphere:** Bustling with ordinary people in 60s clothing walking and browsing.
+        - **Kites:** Only **A VERY FEW SCATTERED** traditional Thai kites in the pale sky.
     """,
 
-    # 7. พิพิธภัณฑ์: เน้นหน้าอาคาร ไม่โทรมเกินไป แต่เก่าสมจริง
     "National Museum": """
-        **TASK:** Photorealistic Reconstruction of National Museum Bangkok (1960).
+        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
         
-        **VISUAL ELEMENTS:**
-        - **Viewpoint:** Focus on the **Front Facade** and the immediate courtyard.
-        - **Building Condition:** Dignified but aged. 
-            - Walls: Off-white with natural weathering/rain stains (not dirty, just old).
-            - Roof: Darkened tiles.
-        - **Context:** Large trees providing shade (Temple in forest vibe).
-        - **Ground:** Gravel paths, well-swept but unpaved.
-        - **Fence:** Black iron spearhead fence (slightly rusted).
-        - **Atmosphere:** Quiet, scholarly, ancient.
+        **FRONT ATMOSPHERE: PEACEFUL & DIGNIFIED:**
+        - **Vibe:** Serene, scholarly, and very shady.
+        - **Front Grounds:** Focus on the area inside the main gate. It is **well-maintained**. Swept gravel driveways, manicured grass verges (not overgrown), and large mature trees casting deep shade. It looks dignified, not abandoned.
+        - **Building:** The traditional Thai facade is aged but clean.
     """
 }
 
-# --- 3. Helper Functions (Retry Logic Included) ---
+# ==========================================
+# 🛠️ HELPER FUNCTIONS
+# ==========================================
 
 def get_client():
     api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY not found")
+    if not api_key: raise ValueError("GEMINI_API_KEY not found")
     return genai.Client(api_key=api_key)
 
-def step1_analyze(client, img_bytes):
-    prompt = """
-    Analyze the precise geometry, camera angle, and structural layout of this image.
-    Identify the main building outlines, the vanishing point, and the horizon line.
-    We need to preserve this exact composition for a strict image-to-image transformation.
-    """
+# --- Friendly Error Message (From Classifier Branch) ---
+def get_friendly_error_message(raw_reason, lang='TH'):
+    raw_reason = raw_reason.lower()
+    is_eng = (lang == 'ENG')
+
+    if any(x in raw_reason for x in ['night', 'dark', 'sunset', 'evening']):
+        return "The image is too dark or taken at night." if is_eng else "ภาพมืดหรือเป็นเวลากลางคืน (AI ต้องการแสงธรรมชาติ)"
+    if any(x in raw_reason for x in ['person', 'selfie', 'face', 'crowd', 'body']):
+        return "People are obstructing the view." if is_eng else "ตรวจพบบุคคลหรือฝูงชนบดบังทัศนียภาพ"
+    if any(x in raw_reason for x in ['close-up', 'detail', 'macro', 'texture', 'wall']):
+        return "The shot is too close or detailed." if is_eng else "ภาพถ่ายระยะใกล้เกินไป กรุณาถ่ายมุมกว้าง"
+    if any(x in raw_reason for x in ['vehicle', 'bus', 'truck', 'car', 'traffic']):
+        return "Vehicles are blocking the architecture." if is_eng else "มียานพาหนะบดบังตัวอาคารมากเกินไป"
+    if any(x in raw_reason for x in ['text', 'screenshot', 'map', 'drawing']):
+        return "This image does not appear to be a real photo." if is_eng else "ภาพนี้ไม่ใช่ภาพถ่ายสถานที่จริง"
+    if "other" in raw_reason:
+        guess = raw_reason.replace("other", "").replace("(", "").replace(")", "").strip()
+        if guess:
+            return f"System identifies this as: {guess}" if is_eng else f"ระบบระบุว่าเป็น: {guess} ซึ่งไม่ตรงกับที่เลือก"
+        return "System could not identify the location." if is_eng else "ระบบไม่สามารถระบุสถานที่ในภาพได้"
     
-    # --- Retry Logic (3 Attempts) ---
+    return "Image composition is unclear." if is_eng else "องค์ประกอบภาพยังไม่ชัดเจน"
+
+# --- CLIP Logic (From Processing Branch) ---
+def get_best_match_reference(location_th, user_img_bytes):
+    if location_th == "ถนนข้าวสาร":
+        print(f"🌾 Khaosan Road: Using Prompt Only.")
+        return None
+
+    mapped_key = LOCATION_KEY_MAP.get(location_th)
+    if not mapped_key: return None 
+
+    if not SEARCH_MODEL or mapped_key not in LOCATION_INDICES:
+        print(f"⚠️ No AI Index for '{mapped_key}'. Fallback to Random.")
+        return get_random_reference(mapped_key)
+    
+    try:
+        data = LOCATION_INDICES[mapped_key]
+        user_img = Image.open(io.BytesIO(user_img_bytes))
+        user_vector = SEARCH_MODEL.encode(user_img)
+        
+        distances = cdist([user_vector], data['vectors'], metric='cosine')[0]
+        best_idx = np.argmin(distances)
+        best_filename = data['filenames'][best_idx]
+        
+        print(f"🎯 Smart Match ({mapped_key}): Matches -> {best_filename}")
+        file_path = os.path.join(os.path.dirname(__file__), "reference_images", mapped_key, best_filename)
+        with open(file_path, "rb") as f:
+            return f.read()
+            
+    except Exception as e:
+        print(f"❌ Smart Match Error: {e}. Fallback to random.")
+        return get_random_reference(mapped_key)
+
+def get_random_reference(folder_name):
+    base_path = os.path.join(os.path.dirname(__file__), "reference_images", folder_name)
+    if not os.path.exists(base_path): return None
+    
+    images = []
+    for ext in ['*.jpg', '*.jpeg', '*.png']:
+        import glob
+        images.extend(glob.glob(os.path.join(base_path, ext)))
+        
+    if not images: return None
+    selected = random.choice(images)
+    print(f"🎲 Random Ref ({folder_name}): {os.path.basename(selected)}")
+    with open(selected, "rb") as f:
+        return f.read()
+
+# --- Gemini Generation Logic (From Processing Branch) ---
+def step1_analyze(client, img_bytes):
+    prompt = "Analyze the precise geometry, camera angle, and structural layout..."
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -221,143 +310,188 @@ def step1_analyze(client, img_bytes):
                 contents=[prompt, types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg")]
             )
             return response.text
-            
         except Exception as e:
-            error_msg = str(e)
-            if "429" in error_msg or "503" in error_msg:
-                wait_time = (2 ** attempt) + random.uniform(0, 1)
-                print(f"⚠️ Analysis Busy (Attempt {attempt+1}/{max_retries}): {error_msg} -> Waiting {wait_time:.1f}s")
-                time.sleep(wait_time)
+            if "429" in str(e) or "503" in str(e):
+                time.sleep((2 ** attempt) + random.uniform(0, 1))
             else:
-                print(f"Analysis Error: {e}")
                 break
-    
     return "Keep original perspective rigid."
 
-def step2_generate(client, structure_desc, location_key, original_img_bytes):
+def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    final_prompt = f"""
-    {specific_prompt}
-    
-    **GEOMETRY & COMPOSITION CONSTRAINT:**
-    - Reference Image Analysis: {structure_desc}
-    - **DO NOT** change the camera angle, lens distortion, or the position of main buildings.
-    - The output must layer perfectly over the original image geometry.
-
-    **VISUAL AESTHETICS (KODACHROME ERA):**
-    - **Film Stock:** Imitate **Kodachrome 64** or **Ektachrome** slide film.
-    - **Color Grading:** Warm, slightly yellow-red cast, rich greens, high contrast shadows (Tropical Hard Light).
-    - **Texture:** Add subtle **film grain**, slight softness (no digital sharpening).
-    - **Realism:** Avoid "AI smoothness" or "plastic skin". Surfaces should look dusty, weathered, and lived-in.
+    global_style = """
+    **GLOBAL STYLE INSTRUCTION (MUST FOLLOW):**
+    - **OUTPUT MUST BE A PHOTOREALISTIC COLOR PHOTOGRAPH.** Do not generate black and white images.
+    - **FILM LOOK:** Imitate 1960s Kodachrome slide film aesthetic (rich colors, warm cast, natural grain).
+    - **ASPECT RATIO:** The output image must maintain the same aspect ratio and framing as the input image.
+    - **GLOBAL NEGATIVE PROMPT:** post-1970 elements, modern cars (sedans post-1970), motorcycles, modern streetlights, LED signs, satellite dishes, air conditioning units, modern clothing (jeans, t-shirts with logos), skyscrapers, concrete barriers.
     """
     
-    # --- Retry Logic (3 Attempts) ---
+    parts = []
+    if ref_img_bytes:
+        style_instruction = """
+        **STYLE TRANSFER INSTRUCTION (IP-ADAPTER MODE):**
+        - The second image is the **STYLE REFERENCE** (Ground Truth).
+        - **COPY the color palette, lighting, and historical atmosphere** from the Reference Image.
+        - **CRITICAL:** Use the Reference mainly for COLOR/VIBE. Use the Prompt for STRUCTURAL details.
+        """
+        parts = [
+            f"{specific_prompt}\n{global_style}\n{style_instruction}\n**GEOMETRY CONSTRAINT:**\nReference Analysis: {structure_desc}",
+            types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"),
+            types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg") 
+        ]
+    else:
+        parts = [
+            f"{specific_prompt}\n{global_style}\n**GEOMETRY CONSTRAINT:**\nReference Analysis: {structure_desc}",
+            types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg")
+        ]
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
                 model="nano-banana-pro-preview", 
-                contents=[
-                    final_prompt, 
-                    types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg")
-                ],
+                contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
                     temperature=0.4
                 )
             )
-            
             for part in response.candidates[0].content.parts:
-                if part.inline_data:
-                    return part.inline_data.data
-            
+                if part.inline_data: return part.inline_data.data
             print(f"⚠️ Warning: Model returned no image (Attempt {attempt+1})")
-            
         except Exception as e:
-            error_msg = str(e)
-            if "429" in error_msg or "503" in error_msg:
-                wait_time = (2 ** attempt) + random.uniform(0, 1)
-                print(f"⚠️ Generation Busy (Attempt {attempt+1}/{max_retries}): {error_msg} -> Waiting {wait_time:.1f}s")
-                time.sleep(wait_time)
+            if "429" in str(e) or "503" in str(e):
+                t = (2 ** attempt) + random.uniform(0, 1)
+                print(f"⚠️ Busy ({e}) -> Waiting {t:.1f}s")
+                time.sleep(t)
             else:
-                print(f"Generation Error: {e}")
                 return None
-                
     return None
 
-LOCATION_MAPPING_EN_TO_TH = {v: k for k, v in LOCATION_MAPPING_TH_TO_EN.items()}
+# ==========================================
+# 🚀 ROUTES
+# ==========================================
 
-# --- 4. Routes ---
-
+# 1. VERIFY (Logic from Classifier Branch)
 @app.route('/verify', methods=['POST'])
 def verify_image_route():
+    temp_path = None
     try:
         if 'image' not in request.files or 'location' not in request.form:
             return jsonify({'error': 'Missing data'}), 400
         
         file = request.files['image']
         location_th = request.form['location']
+        lang = request.form.get('language', 'TH').upper() # รับค่าภาษามาด้วย
         
-        print(f"🚧 DEBUG MODE: Skipping classification for {location_th}. Assuming valid.")
+        # ตรวจสอบชื่อสถานที่
+        if location_th not in LOCATION_MAPPING_TH_TO_EN:
+             return jsonify({'error': 'Invalid location selection'}), 400
+
+        # Save Temp File for Google Vision
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
+            file.save(temp_file.name)
+            temp_path = temp_file.name
+
+        print(f"🕵️‍♂️ Verifying: {location_th} (Lang: {lang})...")
         
-        detected_place = LOCATION_MAPPING_TH_TO_EN.get(location_th, "Debug Place")
-        score = 0.99
-        is_valid = True
+        # CALL CLASSIFIER LOGIC
+        detected_place, score, is_valid = classify_image(temp_path)
+        expected_place_en = LOCATION_MAPPING_TH_TO_EN.get(location_th)
         
         analysis_report = {
-            "status": "success",
+            "status": "success" if is_valid else "rejected",
             "detected_place": detected_place,
             "score": round(score * 100, 2),
             "is_valid": is_valid
         }
+
+        # --- CASE 1: Rejected by Rules ---
+        if not is_valid:
+            friendly_message = get_friendly_error_message(detected_place, lang)
+            return jsonify({
+                'status': 'rejected', 
+                'details': friendly_message, 
+                'analysis_report': analysis_report
+            }), 200
         
+        # --- CASE 2: Location Mismatch ---
+        if detected_place != expected_place_en:
+             if lang == 'ENG':
+                 detected_name = detected_place
+                 selected_name = LOCATION_MAPPING_TH_TO_EN.get(location_th, location_th)
+                 msg = f"AI detected: '{detected_name}'\nwhich does not match your selection ({selected_name})"
+             else:
+                 detected_name = LOCATION_MAPPING_EN_TO_TH.get(detected_place, detected_place)
+                 msg = f"AI ตรวจพบ: '{detected_name}'\nซึ่งไม่ตรงกับที่คุณเลือก ({location_th})"
+             
+             return jsonify({
+                'status': 'rejected', 
+                'details': msg,
+                'analysis_report': analysis_report
+            }), 200
+
+        # --- CASE 3: Success ---
         return jsonify({
             'status': 'success',
             'analysis_report': analysis_report
         })
 
     except Exception as e:
+        print(f"Verify Error: {e}")
         return jsonify({'error': str(e)}), 500
+    finally:
+        if temp_path and os.path.exists(temp_path): os.remove(temp_path)
 
+# 2. GENERATE (Logic from Processing Branch)
 @app.route('/generate', methods=['POST'])
 def generate_image_route():
     try:
         print("🚀 Starting Generation Process...")
         file = request.files['image']
         location_th = request.form['location']
-        
         img_bytes = file.read()
-        prompt_key = LOCATION_INFO[location_th]['prompt_key']
+        
+        print(f"🔍 Searching for best reference for: {location_th}")
+        ref_bytes = get_best_match_reference(location_th, img_bytes)
+        
         client = get_client()
         
-        print(f"📸 1. Analyzing Structure for: {location_th}...")
+        print(f"📸 1. Analyzing Structure...")
         structure = step1_analyze(client, img_bytes)
-        print("✅ Structure Analysis Complete.")
         
-        print(f"🎨 2. Generating Image with {prompt_key} prompt...")
-        result_bytes = step2_generate(client, structure, prompt_key, img_bytes)
+        print(f"🎨 2. Generating Image...")
+        prompt_key = LOCATION_INFO.get(location_th, {}).get('prompt_key', "Democracy Monument")
+        result_bytes = step2_generate(client, structure, prompt_key, img_bytes, ref_bytes)
         
         if result_bytes:
-            print("🎉 Generation Success! Sending image back to frontend.")
+            print("🎉 Success!")
+            
+            # --- AUTO-SAVE LOGIC ---
+            save_generated_image(result_bytes, location_th)
+            # ---------------------
+
             result_b64 = base64.b64encode(result_bytes).decode('utf-8')
+            desc = LOCATION_INFO.get(location_th, {}).get('desc_60s', "")
             return jsonify({
                 'status': 'success',
                 'image': f"data:image/png;base64,{result_b64}",
                 'location_name': location_th,
-                'description': LOCATION_INFO[location_th]['desc_60s']
+                'description': desc
             })
         else:
-            print("❌ Generation Failed: No image returned (Exhausted retries).")
-            return jsonify({'error': 'AI Model Overloaded. Please try again in 1 minute.'}), 503
+            print("❌ Generation Failed (Retries exhausted)")
+            return jsonify({'error': 'AI Model Overloaded. Please try again.'}), 503
             
     except Exception as e:
-        print(f"❌ Gen Error: {e}")
+        print(f"❌ Critical Error: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/')
 def home():
-    return "✅ Backend Server is Running! Ready to accept /verify and /generate requests."
+    return "✅ Bangkok EraVision Backend (Merged with Classifier & Detailed Poster Prompts) is Running!"
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
