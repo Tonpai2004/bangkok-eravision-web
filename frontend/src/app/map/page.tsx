@@ -2,9 +2,9 @@
 
 import Navbar from "@/components/Navbar";
 import { useLanguage } from "@/context/LanguageContext";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-import { TransformWrapper, TransformComponent, useControls, useTransformContext } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, useControls, useTransformContext, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 import { useRouter } from "next/navigation";
 
 const MAP_LOCATIONS = [
@@ -143,6 +143,8 @@ export default function MapPage() {
 
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
+
   const fontClass = language === 'ENG' ? 'font-merri' : 'font-krub';
 
   return (
@@ -177,6 +179,7 @@ export default function MapPage() {
         <div className="w-full h-[500px] md:h-[650px] relative overflow-hidden bg-dark cursor-grab active:cursor-grabbing">
              
              <TransformWrapper
+                ref={transformRef}
                 initialScale={0.45}
                 minScale={0.45}
                 maxScale={8}
@@ -194,6 +197,11 @@ export default function MapPage() {
                             alt="Phra Nakhon Map"
                             className="block max-w-none h-auto object-contain"
                             draggable={false}
+                            onLoad={() => {
+                                if (transformRef.current) {
+                                    transformRef.current.centerView(0.45);
+                                }
+                            }}
                         />
                         {MAP_LOCATIONS.map((loc) => (
                             <MapPin 
