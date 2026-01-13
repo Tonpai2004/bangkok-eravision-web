@@ -130,94 +130,101 @@ LOCATION_INFO = {
     "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
 }
 
-# --- THE MASTER PROMPT DATABASE (V.10 - FINE-TUNED REALISM & SPECIFIC FIXES) ---
+# --- THE MASTER PROMPT DATABASE (V.11 - ULTIMATE REALISM & STRICT PERSPECTIVE) ---
 LOCATION_PROMPTS = {
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
-          **STRUCTURAL LOCK:** Maintain perspective. Concrete wings with concave curves and bas-reliefs. Dark bronze central tray.
-
-          **FINE DETAILS FOR REALISM:**
-          - **Weathering:** The cream concrete must show realistic signs of age: subtle rain streaks, slight discoloration in crevices. It is not pristine new paint.
-          - **The Base:** The circular concrete steps are **COMPLETELY BARE and CLEAN**. NO grass, NO weeds, NO flowers.
-          - **Atmosphere:** Bright tropical sun creating sharp shadows. A slight heat haze in the distance.
+          
+          **PERSPECTIVE LOCK (CRITICAL):**
+          - Use the Uploaded Image as the **Absolute Layout Blueprint**.
+          - DO NOT change the camera angle. DO NOT add elements that were not visible in the original frame.
+          
+          **ARCHITECTURAL ACCURACY:**
+          - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco (Not white plastic).
+          - **Center:** Solid turret with **Dark Bronze/Black Metal Tray**.
+          - **Base:** The circular steps are **BARE CONCRETE**. NO FLOWERS. NO GRASS. NO WEEDS.
 
           **SURROUNDINGS:**
           - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings.
-          - **Road & Traffic:** Wide Asphalt. Sparse vintage cars (e.g., Morris Minor, Datsun Bluebird) and public buses.
+          - **Road:** Wide Asphalt. NO modern lane markings.
       """,
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
-        **ABSOLUTE STRUCTURE LOCK:** Keep building shape and "ศาลาเฉลิมกรุง" roof sign identical. Poster: "**บางกอกทวิกาล**".
-
-        **CONTEXT REFINEMENT (WIDE ROAD & REDUCED SURROUNDINGS):**
-        - **Street:** The asphalt road in front must appear **VERY WIDE and SPACIOUS**.
-        - **Surroundings:** The shophouses on the far left and right should appear **receding and less prominent**, emphasizing the width of the avenue and the theatre itself. They are low-rise 1960s style.
-        - **Traffic & Life:** Light vintage traffic, pedestrians on wide sidewalks. No Trams.
+        
+        **PERSPECTIVE LOCK:** Maintain exact camera angle from input image.
+        
+        **THE MOVIE POSTER (SPECIFIC):**
+        - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
+        - **Text (THAI ONLY):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Director "**ตอตุ้ม**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        
+        **CONTEXT:**
+        - **Street:** Wide asphalt avenue.
+        - **Surroundings:** Authentic 1960s shophouses (weathered wood/concrete). Realistic atmosphere.
     """,
 
     "Giant Swing": """
         **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
-        **STRUCTURAL LOCK:** Red Teak Pillars on White Stone Plinth.
-
-        **SURROUNDING REALISM (LIVED-IN, NOT RUINED):**
-        - **Wat Suthat & Shophouses:** The surrounding Sino-Portuguese shophouses and temple walls must look **realistically aged and lived-in**. The stucco paint is faded but intact; roof tiles are weathered. They are **NOT dilapidated or ruined**, just historically accurate for a bustling 1960s district.
-        - **Ground:** Clean paved asphalt.
-        - **Traffic:** Light vintage traffic driving AROUND the plinth.
+        
+        **PERSPECTIVE & VISIBILITY RULE:**
+        - If the original image shows Wat Suthat, render it as aged/weathered.
+        - **IF THE ORIGINAL IMAGE DOES NOT SHOW THE TEMPLE, DO NOT ADD IT.** Respect the input frame.
+        
+        **DETAILS:**
+        - **Swing:** Red Teak Pillars on White Stone Plinth.
+        - **Surroundings:** Shophouses must look lived-in and realistic for the era (not ruined, not new).
+        - **Traffic:** Cars drive AROUND the plinth.
     """,
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
-        **SPECIFIC TEXT & SIGNAGE FIX:**
-        - **No Glowing Signs:** All signs are painted wood or metal. **ABSOLUTELY NO NEON GLOW or internal lighting** (it is daytime).
-        - **Legible Text:** Signs must have clear, hand-painted Chinese and Thai characters.
-        - **Mandatory Sign Examples (Use these styles):** "ห้างทอง ฮั่วเซ่งเฮง (和成興大金行)", "ภัตตาคาร หูฉลาม", "ขายยาจีน".
-
-        **TRAM & ATMOSPHERE:**
-        - **The Tram:** A single vintage Yellow & Red wooden tram, looking **weathered and used**, running on rails **hugging the RIGHT-HAND curb** of the road.
-        - **Street:** Wide asphalt. Sparse Samlors and trucks. Warm sunlight.
+        **STRICT TEXT & SIGNS:**
+        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**.
+        - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง (和成興大金行)**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
+        - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
+        
+        **TRAM REALISM:**
+        - **Tram:** Weathered Yellow/Red wooden tram.
+        - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
     """,
 
     "Khaosan Road": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
         
-        **VIBRANT COMMUNITY LIFE:**
-        - **People:** The scene is alive with **local residents** sitting on stools chatting in front of houses, children playing on the street, vendors with carrying poles.
-        - **Rice Trade:** **White Hemp Rice Sacks** are visible stacked at only **2 or 3 specific houses**, NOT everywhere.
+        **VISUALS & COLORS:**
+        - **Houses:** Wooden row houses painted **YELLOW WOOD** with **GREEN WINDOWS**.
+        - **Signage:** **NO SIGNS** on the house fronts. Residential look only.
         
-        **VISUALS:**
-        - **House Facades:** Wooden row houses. **CRITICAL: NO COMMERCIAL SIGNS or text on the house fronts.** They are residential.
-        - **Street:** Wide, clean asphalt road.
+        **LIFE:**
+        - **Atmosphere:** Vibrant community. Locals chatting, kids playing.
+        - **Props:** Rice sacks stacked at **ONLY 2-3 HOUSES**. Not everywhere.
     """,
 
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
-        **CRITICAL HISTORICAL ACCURACY: COMPLETELY HEADLESS:**
-        - **Status:** The main white octagonal fort tower is **SEVERED**. The entire upper wooden roof structure and spire are **COMPLETELY MISSING**. The top is a flat, broken, weathered stump exposing the thick walls.
-        - **Condition:** Aged, mold-stained white plaster.
-        
-        **SURROUNDINGS:**
-        - Street level view. Wooden houses nearby. Asphalt/dirt road. Very light traffic.
+        **CRITICAL ACCURACY: HEADLESS FORT:**
+        - **Status:** The top wooden roof spire is **COMPLETELY MISSING**. The white tower is truncated/severed. It is a flat, weathered stump.
+        - **Structure:** Hexagonal white plaster fort, stained with black mold.
     """,
 
     "Sanam Luang": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
         
-        **MARKET REALISM (ORAL HISTORY BASED):**
-        - **Ground & Stalls:** The ground is dusty red laterite. Vendors sit on woven mats under simple bamboo-pole canvas parasols (not modern tents). Goods are laid out on the ground.
-        - **Atmosphere:** Bustling with ordinary people in 60s clothing walking and browsing.
-        - **Kites:** Only **A VERY FEW SCATTERED** traditional Thai kites in the pale sky.
+        **MARKET REALISM:**
+        - **Stalls:** Vendors sitting on **WOVEN MATS** on the red dust ground. Bamboo parasols.
+        - **Density:** Lively but not overcrowded. Open spaces visible.
+        - **Sky:** Only **A FEW** scattered kites.
     """,
 
     "National Museum": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
         
-        **FRONT ATMOSPHERE: PEACEFUL & DIGNIFIED:**
-        - **Vibe:** Serene, scholarly, and very shady.
-        - **Front Grounds:** Focus on the area inside the main gate. It is **well-maintained**. Swept gravel driveways, manicured grass verges (not overgrown), and large mature trees casting deep shade. It looks dignified, not abandoned.
-        - **Building:** The traditional Thai facade is aged but clean.
+        **FRONT ATMOSPHERE:**
+        - **Vibe:** Serene, shady, well-maintained.
+        - **Grounds:** Swept gravel, manicured grass, large trees. NOT overgrown.
+        - **Perspective:** Keep the exact view of the front facade from the input image.
     """
 }
 
@@ -306,7 +313,7 @@ def step1_analyze(client, img_bytes):
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-2.0-flash", 
+                model="gemini-1.5-flash", # Stable model
                 contents=[prompt, types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg")]
             )
             return response.text
@@ -323,9 +330,9 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     global_style = """
     **GLOBAL STYLE INSTRUCTION (MUST FOLLOW):**
     - **OUTPUT MUST BE A PHOTOREALISTIC COLOR PHOTOGRAPH.** Do not generate black and white images.
-    - **FILM LOOK:** Imitate 1960s Kodachrome slide film aesthetic (rich colors, warm cast, natural grain).
-    - **ASPECT RATIO:** The output image must maintain the same aspect ratio and framing as the input image.
-    - **GLOBAL NEGATIVE PROMPT:** post-1970 elements, modern cars (sedans post-1970), motorcycles, modern streetlights, LED signs, satellite dishes, air conditioning units, modern clothing (jeans, t-shirts with logos), skyscrapers, concrete barriers.
+    - **FILM LOOK:** Imitate 1960s Kodachrome slide film aesthetic.
+    - **ASPECT RATIO & PERSPECTIVE:** The output image must maintain the same aspect ratio, framing, and camera angle as the input image. DO NOT ROTATE. DO NOT ZOOM.
+    - **GLOBAL NEGATIVE PROMPT:** modern logos (7-Eleven, Starbucks, Apple, etc.), brand names, QR codes, CCTV cameras, satellite dishes, air conditioning units, modern cars (post-1970), motorcycles, LED signs, concrete barriers, plastic chairs.
     """
     
     parts = []
@@ -351,7 +358,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="nano-banana-pro-preview", 
+                model="gemini-1.5-pro", # Stronger model for image gen (or change to imagen-3.0-generate-001 if available)
                 contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],

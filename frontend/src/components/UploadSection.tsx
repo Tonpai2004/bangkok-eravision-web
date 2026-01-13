@@ -88,6 +88,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   // --- State สำหรับ Modal แจ้งเตือน (Input Warning) ---
   const [showInputWarning, setShowInputWarning] = useState(false);
 
+  const [isDragging, setIsDragging] = useState(false);
+
   const text = UI_TEXT[currentLang];
   const fontClass = currentLang === 'ENG' ? 'font-merri' : 'font-krub';
 
@@ -121,7 +123,44 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
        }
     }
   }, [searchParams]);
-  // ----------------------------------------------------
+  
+  const processFile = (f: File | undefined) => {
+    if (f) {
+      // เช็คว่าเป็นรูปภาพหรือไม่ (Optional)
+      if (!f.type.startsWith('image/')) {
+        alert(currentLang === 'ENG' ? "Please upload an image file." : "กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น");
+        return;
+      }
+      
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+      // Reset สถานะถ้าเคยทำรายการไปแล้ว
+      if (status === 'verified_fail' || status === 'finished') {
+        setStatus('idle');
+        setResult(null);
+      }
+    }
+  };
+
+  // ✅ 3. เพิ่ม Event Handlers สำหรับ Drag & Drop
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // สำคัญ! ต้องกัน Default เพื่อให้ Drop ได้
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    // ดึงไฟล์จากการลาก
+    const f = e.dataTransfer.files?.[0];
+    processFile(f);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -221,14 +260,17 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
             {/* Location Select */}
             <div ref={dropdownRef} 
-                className={`flex flex-col md:flex-row md:justify-between md:items-end 
+                className={`flex flex-row md:flex-row md:justify-between md:items-end 
                 py-2 font-bold text-xl md:text-2xl border-b-2 border-dark ${fontClass} relative`}>
 
-                <label className="whitespace-nowrap mb-1 md:mb-0 md:mr-4 cursor-pointer w-full md:w-auto" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                <label 
+                    className="whitespace-nowrap mr-4 cursor-pointer flex-shrink-0" 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
                     {text.label_location}
                 </label>
                 
-                <div className="relative w-full md:flex-1">
+                <div className="relative flex-1 min-w-0">
                     {/* ส่วนแสดงผลค่าที่เลือก */}
                     <div 
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -255,7 +297,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                                             setIsDropdownOpen(false);
                                         }}
                                         className={`
-                                            cursor-pointer px-4 py-3 text-right transition-colors truncate
+                                            cursor-pointer px-4 py-3 text-left sm:text-right transition-colors truncate
                                             ${isSelected 
                                                 ? 'bg-dark text-white' 
                                                 : 'text-dark hover:bg-[#F4D03F]'
@@ -289,13 +331,26 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
             {/* Drop Zone */}
             <div 
-                className="min-h-[250px] flex justify-center items-center cursor-pointer transition-colors border-2 border-transparent p-4"
+                className={`
+                    min-h-[250px] flex justify-center items-center cursor-pointer transition-all duration-200 
+                    border-2 p-4 relative overflow-hidden
+                    ${isDragging 
+                        ? 'border-transparent bg-gold/20'
+                        : 'border-transparent'  
+                    }
+                `}
                 onClick={() => fileInputRef.current?.click()}
+                // ใส่ Event Handlers ที่เตรียมไว้
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
             >
+                {/* ถ้ากำลังลาก ให้ขึ้นข้อความ "ปล่อยรูปเลย!" */}
+
                 {preview ? (
-                    <img src={preview} alt="Preview" className="max-h-[300px] w-auto object-contain border-2 border-dark shadow-md" />
+                    <img src={preview} alt="Preview" className="max-h-[300px] w-auto object-contain border-2 border-dark shadow-md z-0" />
                 ) : (
-                    <div className="flex flex-col items-center text-dark  hover:scale-105 transition-transform">
+                    <div className="flex flex-col items-center text-dark hover:scale-105 transition-transform z-0">
                         <span className="text-6xl mb-1">
                             <img src="/svg/upload-1.svg" alt="Upload Icon" className="w-10 h-10 md:w-20 md:h-20"/>
                         </span>
