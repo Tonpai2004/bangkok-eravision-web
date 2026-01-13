@@ -9,8 +9,12 @@ import { useLanguage } from "@/context/LanguageContext";
 const PAGE_TEXT = {
   TH: {
     brand_name: "บางกอกทวิกาล",
-    title: "บางกอกทวิกาล คืออะไร?",
-    desc_prefix: "คือนวัตกรรมทางเทคโนโลยีถ่ายที่เชื่อมโยงคุณเข้ากับความงามสง่าของ \"พระนคร\" ในช่วงคริสต์ทศวรรษที่ 1960s อีกครั้ง เชิญสัมผัสประสบการณ์ย้อนเวลาด้วย",
+    title: (
+      <>
+        บางกอกทวิกาล <span className="whitespace-nowrap">คืออะไร?</span>
+      </>
+    ),
+    desc_prefix: "คือนวัตกรรมทางเทคโนโลยีถ่ายที่เชื่อมโยงคุณเข้ากับความงามสง่าของ \'พระนคร\' ในช่วงคริสต์ทศวรรษที่ 1960s อีกครั้ง เชิญสัมผัสประสบการณ์ย้อนเวลาด้วย",
     desc_highlight: "เทคโนโลยีปัญญาประดิษฐ์ผสานศาสตร์ศิลป์และประวัติศาสตร์",
     desc_suffix: "ที่จะเนรมิตภาพถ่ายปัจจุบันของคุณ ให้กลายเป็นภาพบันทึกความทรงจำแสนคลาสสิก เปี่ยมด้วยเสน่ห์และกลิ่นอายที่แท้จริงของยุคสมัย ที่แม้จะย้อนกลับไปไม่ได้ แต่ก็ได้สัมผัสประสบการณ์แห่งกาลเวลาจากเทคโนโลยีของเรา",
     link_dev: "คณะผู้รังสรรค์ผลงาน →"
@@ -18,6 +22,7 @@ const PAGE_TEXT = {
   ENG: {
     brand_name: "Bangkok EraVision",
     title: "WHAT IS BANGKOK ERAVISION?",
+    
     desc_prefix: "is an innovative imaging platform reconnecting you with the elegance of 1960s 'Phra Nakhon'. Experience a journey through time via",
     desc_highlight: "AI technology infused with artistry and history",
     desc_suffix: "that transforms your modern photos into classic mementos, capturing the era's authentic charm. Though the past cannot be reclaimed, our technology allows you to touch its very essence once more.",
@@ -46,15 +51,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="mt-0 mb-0 md:mt-10 md:mb-7">
-        <h1 className="bg-dark text-white font-prachachon p-3 mb-8 pt-6 pb-4 text-center text-4xl sm:text-6xl md:text-8xl whitespace-pre-line tracking-[0.1em]">
+        <h1 className="bg-dark text-white font-prachachon p-3 mb-8 pt-4 pb-3 sm:pt-6 sm:pb-4 text-center break-word text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-pre-line tracking-[0.1em]">
           {text.title}
         </h1>
-        <div className="flex flex-col md:flex-row gap-8 items-stretch mt-10">
+        <div className="flex flex-col md:flex-row gap-4 sm:gap-8 items-stretch sm:mt-10">
           
-          {/* --- [แก้ไข] กล่องรูปภาพ --- */}
-          <div className="w-full md:flex-1 md:h-[490px] bg-gold shrink-0 border-[3px] border-dark relative overflow-hidden group"> {/* shadow-[6px_6px_0px_rgba(0,0,0,0.2)] เผื่อใส่เงากลับ */}
+          {/* --- กล่องรูปภาพ --- */}
+          <div className="w-full md:flex-1 h-[300px] md:h-auto bg-gold shrink-0 border-[3px] border-dark relative overflow-hidden group"> {/* shadow-[6px_6px_0px_rgba(0,0,0,0.2)] เผื่อใส่เงากลับ */}
             
-            {/* ใส่ Path รูปภาพของคุณตรงนี้ เช่น /images/hero-bangkok.jpg */}
+            {/* ใส่ Path รูปภาพ */}
             <img 
               src="/images/placeholder-hero.png"  
               alt="Vintage Bangkok Atmosphere"
@@ -69,10 +74,10 @@ export default function Home() {
 
           {/* กล่องข้อความ */}
           <div className="w-full md:flex-1 flex flex-col justify-between">
-            <p className="font-pimdeed text-3xl md:text-4xl whitespace-pre-line leading-normal mb-6 text-justify">
-              <strong className="text-3xl md:text-4xl font-pimdeed italic">{text.brand_name}</strong> {text.desc_prefix} "{text.desc_highlight}" {text.desc_suffix}
+            <p className="font-pimdeed text-3xl lg:text-4xl whitespace-pre-line leading-normal text-justify">
+              <strong className="font-pimdeed italic">{text.brand_name}</strong> {text.desc_prefix} '{text.desc_highlight}' {text.desc_suffix}
             </p>
-            <Link href="/about" className="self-start font-pimdeed font-bold text-3xl md:text-4xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors mb-6 md:mb-0">
+            <Link href="/about" className="self-center md:self-start font-pimdeed font-bold text-3xl lg:text-4xl underline decoration-2 underline-offset-4 hover:opacity-80 transition-colors mt-6 mb-6 md:mb-0">
               {text.link_dev}
             </Link>
           </div>

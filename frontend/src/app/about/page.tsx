@@ -54,7 +54,7 @@ export default function AboutPage() {
       <div className="flex flex-col items-center mb-12 mt-10">
         
         {/* Logo Image Container */}
-        <div className="relative w-full flex justify-center px-4">
+        <div className="relative w-full flex justify-center px-4 mt-3">
           <img 
             src={text.logo_img} 
             alt="Bangkok EraVision Logo" 
