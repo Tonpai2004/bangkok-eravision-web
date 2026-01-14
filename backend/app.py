@@ -132,23 +132,32 @@ LOCATION_INFO = {
 
 # --- THE MASTER PROMPT DATABASE (V.11 - ULTIMATE REALISM & STRICT PERSPECTIVE) ---
 LOCATION_PROMPTS = {
+    # ========================================= Prompt อนุสาวรีย์ประชาธิปไตย (ใช้งานจริง) ========================================= #
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
           
           **PERSPECTIVE LOCK (CRITICAL):**
           - Use the Uploaded Image as the **Absolute Layout Blueprint**.
-          - DO NOT change the camera angle. DO NOT add elements that were not visible in the original frame.
+          - Keep the exact camera angle and composition.
           
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco (Not white plastic).
           - **Center:** Solid turret with **Dark Bronze/Black Metal Tray**.
           - **Base:** The circular steps are **BARE CONCRETE**. NO FLOWERS. NO GRASS. NO WEEDS.
 
+          **LOGIC & SAFETY RULES (CRITICAL):**
+          - **PEDESTRIANS:** Pedestrians must be strictly on the **far sidewalks** only. **ABSOLUTELY NO PEOPLE walking in the middle of the road or standing on the monument's island.** The road is for cars only.
+          
           **SURROUNDINGS:**
-          - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings.
+          - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings and Low-rise Art Deco buildings along Ratchadamnoen Avenue.
           - **Road:** Wide Asphalt. NO modern lane markings.
-      """,
 
+          **Negative Prompt (CRITICAL):**}
+          - **Negative Prompt:** Tram, tram rails, tramway, skytrain, modern billboards, LED screens, plastic barriers, motorcycles, tuk-tuks, people on road, tourists taking selfies.
+      """,
+      # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่ม Logic เข้ามาเพื่อพยายามล๊อคคนไม่ให้ไปเดินเล่นที่อนุสาวรีย์, เพิ่มรายละเอียดตึกรอบๆเข้าไปนิดหน่อย(Low-rise Art Deco buildings) === #
+
+    # ========================================= Prompt เฉลิมกรุง (ใช้งานจริง) ========================================= #
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
         
@@ -163,19 +172,53 @@ LOCATION_PROMPTS = {
         - **Surroundings:** Authentic 1960s shophouses (weathered wood/concrete). Realistic atmosphere.
     """,
 
+    # ========================================= Prompt เฉลิมกรุง (เผื่อเลือกใช้) ========================================= #
+    # "Sala Chalermkrung": """
+    #     **SUBJECT:** A historically accurate 1960s exterior shot of Sala Chalermkrung Royal Theatre (Bangkok).
+
+    #     **ARCHITECTURAL ACCURACY:**
+    #     - **Building Style:** Early Modernist architecture, painted in **Clean Cream/Off-White**. It looks grand and solid.
+    #     - **Condition:** Well-maintained but showing slight texture of age (1967 era).
+
+    #     **THE GIANT CUTOUT (CRITICAL FOCUS):**
+    #     - **Type:** A **MASSIVE Hand-Painted Cinema Cutout** (Billboard size) mounted on the front facade. It looks like a vibrant oil painting.
+    #     - **Visual:** Two Thai gentlemen standing back-to-back. One wears glasses, the other does not. Both dressed in smart 1960s white shirts/suits.
+    #     - **Text Content:** "บางกอกทวิกาล" (Main Title), "มาดามพงษ์ และ ณัฐภัทร" (Stars), "กำกับโดย ตอตุ้ม" (Director).
+
+    #     **ATMOSPHERE - RELAXED & COOL (NOT CROWDED):**
+    #     - **People:** **SPARSE.** Only a few stylish teenagers (Ko Lang Wang style) standing in small, distinct groups or walking casually. **ABSOLUTELY NO LARGE CROWDS.**
+    #     - **Fashion:** Men in grease-styled hair (Elvis look). Women in Mod dresses.
+    #     - **Traffic:** A few vintage taxis passing by. Road is open and clear.
+    #     - **Vibe:** Chill, cinematic, high-fashion 60s street photography.
+
+    #     **NEGATIVE PROMPT:**
+    #     - Crowds, traffic jam, busy street, modern LED signs, air conditioning units, modern cars, backpackers, rundown slums.
+    # """,
+    # === หลักๆเน้นเพิ่มรายละเอียดของตึกและบรรยากาศรอบๆ, เน้นล๊อคมุมกล้อง, เน้นล๊อคคนไม่ให้เยอะเกินไป === #
+
+    # ========================================= Prompt เสาชิงช้า (ใช้งานจริง) ========================================= #
     "Giant Swing": """
+
         **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
-        
+
         **PERSPECTIVE & VISIBILITY RULE:**
         - If the original image shows Wat Suthat, render it as aged/weathered.
         - **IF THE ORIGINAL IMAGE DOES NOT SHOW THE TEMPLE, DO NOT ADD IT.** Respect the input frame.
-        
-        **DETAILS:**
-        - **Swing:** Red Teak Pillars on White Stone Plinth.
-        - **Surroundings:** Shophouses must look lived-in and realistic for the era (not ruined, not new).
-        - **Traffic:** Cars drive AROUND the plinth.
-    """,
 
+        **DETAILS:**
+        - **The Swing:** Two towering **Vibrant Red Teak Pillars** standing on a clean White Stone Plinth.
+        - **Structure:** intricate carved crossbar at the top. **NO SWINGING CEREMONY**.
+        - **Surroundings:** Shophouses must look lived-in and realistic for the era (not ruined, not new).
+        - **Road Layout:** The Giant Swing acts as a long roundabout. Vintage cars and Samlors drive **AROUND** the plinth.
+        - **Traffic:** Vintage 1960s sedans (Fiat 1100, Austin), Samlors (Tricycles), and round-nose trucks.
+
+        **NEGATIVE PROMPT:**
+        - Men swinging on the swing (Historical inaccuracy), modern traffic lights, 7-Eleven, air conditioning units, plastic awnings, tourists in shorts.
+    """,
+    # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่มรายละเอียดร้านค้า/บ้านรอบๆ === # 
+    # === อาจจะต้องปรับเพิ่ม ดูไม่ค่อยแม่นเท่าไหร่ตัวนี้ === #
+    
+    # ========================================= Prompt เยาวราช (ใช้งานจริง) ========================================= #
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
@@ -189,8 +232,42 @@ LOCATION_PROMPTS = {
         - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
     """,
 
+    # ========================================= Prompt เยาวราช (เผื่อเลือกใช้) ========================================= #
+    # "Yaowarat": """
+    #     **SUBJECT:** A historically accurate 1960s photograph of Yaowarat Road (Bangkok Chinatown) during the day.
+
+    #     **THE "FOREST OF SIGNS" (CRITICAL VISUAL):**
+    #     - **Density:** The street is densely packed with **HUNDREDS of Vertical Signs hanging over the road** from both sides, creating a tunnel-like perspective.
+    #     - **Color Palette:** Dominant **RED backgrounds with GOLD lettering**.
+    #     - **Text Accuracy:** Hand-painted signs in **Chinese Characters (Large)** and **Thai (Smaller)**.
+    #     - **Key Signs:** "**ห้างทอง ฮั่วเซ่งเฮง (和成興大金行)**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
+    #     - **Material:** Painted wood and metal boxes. **NO LED. NO GLOWING NEON (Daytime).**
+
+    #     **1968 TRAFFIC REVOLUTION:**
+    #     - **Tuk-Tuks:** MUST include **"Daihatsu Midget" (Frog-faced Tuk-Tuks)** which replaced pedicabs in this era.
+    #     - **Cars:** Vintage 1960s sedans and delivery trucks.
+    #     - **NO SAMLORS:** (Pedicabs were banned on main roads in the 60s).
+
+    #     **THE LAST TRAM:**
+    #     - **Vehicle:** A weathered, dusty **Yellow & Red Wooden Tram** (The final year of operation).
+    #     - **Position:** Running on tracks embedded in the asphalt, sharing the road with cars.
+
+    #     **ATMOSPHERE:**
+    #     - **Vibe:** Extremely busy, chaotic, commercial energy. Hazy tropical sunlight filtering through the signs.
+    #     - **Road:** Asphalt road, slightly wet/oily texture.
+
+    #     **NEGATIVE PROMPT:**
+    #     - LED screens, digital billboards, modern Toyota/Honda cars, BTS skytrain, pedestrians wearing modern fashion, English signs, empty street.
+    # """,
+
+    # ========================================= Prompt ถนนข้าวสาร (ใช้งานจริง) ========================================= #
     "Khaosan Road": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
+
+        **PERSPECTIVE LOCK (CRITICAL):**
+        - **Blueprint:** Use the Uploaded Image as the **ABSOLUTE LAYOUT REFERENCE**.
+        - **Camera Angle:** Maintain the **EXACT** camera angle, perspective, and depth of the original image.
+        - **Composition:** Do not add new buildings or change the street width. Keep the structural geometry 100% identical to the input.
         
         **VISUALS & COLORS:**
         - **Houses:** Wooden row houses painted **YELLOW WOOD** with **GREEN WINDOWS**.
@@ -199,8 +276,13 @@ LOCATION_PROMPTS = {
         **LIFE:**
         - **Atmosphere:** Vibrant community. Locals chatting, kids playing.
         - **Props:** Rice sacks stacked at **ONLY 2-3 HOUSES**. Not everywhere.
-    """,
 
+        **NEGATIVE PROMPT:**
+        - Backpackers, foreigners in shorts, neon signs, bars, alcohol advertisements, modern hostels, tattoos, dreadlocks, electronic music vibes, changing camera angle, wide angle lens distortion.
+    """,
+    # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่มการล๊อคมุมภาพ === # 
+
+    # ========================================= Prompt ป้อมพระสุเมรุ (ใช้งานจริง) ========================================= #
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
@@ -209,6 +291,7 @@ LOCATION_PROMPTS = {
         - **Structure:** Hexagonal white plaster fort, stained with black mold.
     """,
 
+    # ========================================= Prompt สนามหลวง (ใช้งานจริง) ========================================= #
     "Sanam Luang": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
         
@@ -218,6 +301,28 @@ LOCATION_PROMPTS = {
         - **Sky:** Only **A FEW** scattered kites.
     """,
 
+    # ========================================= Prompt สนามหลวง (เผื่อเลือกใข้) ========================================= #
+    # "Sanam Luang": """
+    #     **SUBJECT:** A historically accurate 1960s photograph of Sanam Luang (The Sunday Weekend Market).
+
+    #     **THE GROUND (GREEN GRASS VER.):**
+    #     - **Ground Surface:** **Green Grass Field (Sanam Luang Lawns)**. Although it was a market, render it with **Green Grass** to maintain the iconic look of the Royal Ground.
+    #     - **Condition:** The grass can have some worn patches (dirt paths) for realism, but the overall tone must be **GREEN**, not red dirt.
+
+    #     **THE MARKET ATMOSPHERE:**
+    #     - **The Setup:** Vendors sitting on **Woven Mats** spread directly on the grass.
+    #     - **The Umbrellas:** A sea of **Canvas Parasols (Rom Pha Bai)**. Colors: Striped Red/White, Blue/White, or dirty White.
+    #     - **Goods:** Second-hand Books (piles of old paper), Antiques, Amulets, and Potted Plants.
+
+    #     **LANDMARKS:**
+    #     - **Framing:** Large, shady **Tamarind Trees (Ton Makam)**.
+    #     - **Background:** **Wat Phra Kaew (Grand Palace)** spires visible in the distance.
+
+    #     **NEGATIVE PROMPT:**
+    #     - Red laterite, red dust, muddy ground, large concrete plaza, modern tents, plastic chairs, skyscrapers.
+    # """,
+
+    # ========================================= Prompt พิพิธภัณฑสถานแห่งชาติ (ใช้งานจริง) ========================================= #
     "National Museum": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
         
@@ -358,7 +463,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-1.5-pro", # Stronger model for image gen (or change to imagen-3.0-generate-001 if available)
+                model="nano-banana-pro-preview", # Stronger model for image gen (or change to imagen-3.0-generate-001 if available)
                 contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
