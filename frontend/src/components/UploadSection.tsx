@@ -22,7 +22,7 @@ const UI_TEXT = {
     btn_main: "หวนคืนสู่ทศวรรษที่ 1960s",
     btn_try_again: "ลองรูปอื่น",
     btn_retry: "ลองใหม่อีกครั้ง",
-    btn_download: "ดาวน์โหลดรูปภาพ",
+    btn_download: "ดาวน์โหลดผลลัพธ์",
     
     status_analyzing: "กำลังวิเคราะห์โครงสร้าง...",
     status_verify_pass: "ผ่านการตรวจสอบ",
@@ -31,7 +31,7 @@ const UI_TEXT = {
     
     status_reconstructing: "เตรียมหวนสู่ความวิจิตรในวันวานแห่ง 1960s",
     sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ",
-    sub_reconstructing: "อยู่ระหว่างดำเนินการ...",
+    sub_reconstructing: "กำลังสร้างภาพและวิดีโอ (อาจใช้เวลาสักครู่)...", // ปรับข้อความ
     
     error_desc_prefix: "ระบบขัดข้อง: ",
 
@@ -47,7 +47,7 @@ const UI_TEXT = {
     btn_main: "Transform to 1960s",
     btn_try_again: "Try Another Photo",
     btn_retry: "Retry again",
-    btn_download: "Download Image",
+    btn_download: "Download Result",
     
     status_analyzing: "ANALYZING SCENE",
     status_verify_pass: "VERIFICATION PASSED",
@@ -56,7 +56,7 @@ const UI_TEXT = {
     
     status_reconstructing: "Let's Back to 1960s",
     sub_analyzing: "Verifying photo compatibility...",
-    sub_reconstructing: "In process...",
+    sub_reconstructing: "Generating image & video (Please wait)...", // ปรับข้อความ
 
     error_desc_prefix: "System Failure: ",
 
@@ -82,7 +82,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const [failReason, setFailReason] = useState<string>("");
   const [passDetails, setPassDetails] = useState<{score: number, place: string} | null>(null);
 
-  const [result, setResult] = useState<{image: string, desc: string, location: string} | null>(null);
+  // เพิ่ม field video ใน type
+  const [result, setResult] = useState<{image: string, video?: string, desc: string, location: string} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // --- State สำหรับ Modal แจ้งเตือน (Input Warning) ---
@@ -126,7 +127,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   
   const processFile = (f: File | undefined) => {
     if (f) {
-      // เช็คว่าเป็นรูปภาพหรือไม่ (Optional)
       if (!f.type.startsWith('image/')) {
         alert(currentLang === 'ENG' ? "Please upload an image file." : "กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น");
         return;
@@ -134,7 +134,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       
       setFile(f);
       setPreview(URL.createObjectURL(f));
-      // Reset สถานะถ้าเคยทำรายการไปแล้ว
       if (status === 'verified_fail' || status === 'finished') {
         setStatus('idle');
         setResult(null);
@@ -142,9 +141,8 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     }
   };
 
-  // ✅ 3. เพิ่ม Event Handlers สำหรับ Drag & Drop
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); // สำคัญ! ต้องกัน Default เพื่อให้ Drop ได้
+    e.preventDefault(); 
     setIsDragging(true);
   };
 
@@ -156,8 +154,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    
-    // ดึงไฟล์จากการลาก
     const f = e.dataTransfer.files?.[0];
     processFile(f);
   };
@@ -177,7 +173,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // --- เปลี่ยนจาก alert() เป็นการเปิด Modal ---
     if (!file || !selectedLocation) {
         setShowInputWarning(true);
         return;
@@ -222,7 +217,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      // --- STEP 3: Generate ---
+      // --- STEP 3: Generate (Image + Video) ---
       const genRes = await fetch('http://127.0.0.1:5000/generate', {
           method: 'POST',
           body: genFormData,
@@ -232,6 +227,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
       if (genData.image) {
           setResult({
             image: genData.image,
+            video: genData.video, // รับค่า video มาด้วย
             desc: genData.description,
             location: genData.location_name
           });
@@ -271,7 +267,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                 </label>
                 
                 <div className="relative flex-1 min-w-0">
-                    {/* ส่วนแสดงผลค่าที่เลือก */}
                     <div 
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className="w-full bg-transparent cursor-pointer text-right font-bold pr-12 truncate text-dark select-none">
@@ -284,7 +279,6 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                     
                     </div>
 
-                    {/* ส่วนรายการตัวเลือก (Dropdown List) */}
                     {isDropdownOpen && (
                         <div className="absolute top-full left-0 w-full z-50 mt-1 bg-[#FFF8E7] border-2 border-dark shadow-[4px_4px_0px_#2C2C2C] max-h-60 overflow-y-auto">
                             {LOCATIONS_DATA.map(loc => {
@@ -340,13 +334,10 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                     }
                 `}
                 onClick={() => fileInputRef.current?.click()}
-                // ใส่ Event Handlers ที่เตรียมไว้
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
             >
-                {/* ถ้ากำลังลาก ให้ขึ้นข้อความ "ปล่อยรูปเลย!" */}
-
                 {preview ? (
                     <img src={preview} alt="Preview" className="max-h-[300px] w-auto object-contain border-2 border-dark shadow-md z-0" />
                 ) : (
@@ -370,7 +361,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         </button>
       </form>
 
-      {/* --- WARNING MODAL (NEW) --- */}
+      {/* --- WARNING MODAL --- */}
       {showInputWarning && (
         <div className="fixed inset-0 bg-black/80 z-[60] flex justify-center items-center p-4">
             <div className="border-2 border-white bg-black p-8 max-w-md w-full text-center shadow-[0_0_30px_rgba(255,255,255,0.2)] animate-fade-in-up">
@@ -475,20 +466,41 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
             <div className="bg-background p-6 md:p-8 max-w-3xl w-full border-[3px] border-dark shadow-[15px_15px_0px_rgba(0,0,0,0.5)] relative max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setResult(null)} className="absolute top-4 right-4 text-4xl font-bold leading-none hover:text-accent">&times;</button>
                 <h3 className="serif-font text-2xl md:text-4xl font-bold mb-6 mt-2 text-center italic">{result.location}</h3>
-                <div className="border-[3px] border-dark mb-6 bg-black">
-                    <img src={result.image} alt="Generated" className="w-full h-auto block" />
+                
+                {/* --- ส่วนแสดงผลวิดีโอ (ถ้ามี) หรือภาพ --- */}
+                <div className="border-[3px] border-dark mb-6 bg-black relative">
+                    {result.video ? (
+                        <>
+                            <video 
+                                src={result.video} 
+                                className="w-full h-auto block" 
+                                controls 
+                                autoPlay 
+                                loop 
+                                playsInline
+                            />
+                            {/* ป้ายบอกว่าเป็น Video AI */}
+                            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 font-bold rounded">
+                                AI GENERATED VIDEO
+                            </div>
+                        </>
+                    ) : (
+                        <img src={result.image} alt="Generated" className="w-full h-auto block" />
+                    )}
                 </div>
                 
+                {/* ปุ่มดาวน์โหลด (โหลดวิดีโอถ้ามี) */}
                 <button 
                     onClick={() => {
                         const link = document.createElement('a');
-                        link.href = result.image;
-                        link.download = `bangkok-1960s-${Date.now()}.png`;
+                        // ถ้ามีวิดีโอ ให้โหลดวิดีโอ, ถ้าไม่มีให้โหลดภาพ
+                        link.href = result.video || result.image;
+                        link.download = `bangkok-1960s-${Date.now()}.${result.video ? 'mp4' : 'png'}`;
                         link.click();
                     }}
                     className="w-full mt-6 border-2 border-dark py-3 font-bold hover:bg-dark hover:text-white transition-colors uppercase tracking-widest"
                 >
-                    {text.btn_download}
+                    {text.btn_download} {result.video ? "(MP4)" : "(PNG)"}
                 </button>
             </div>
         </div>

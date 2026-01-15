@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import os
 import base64
 import time
@@ -7,6 +7,7 @@ import pickle
 import numpy as np
 import tempfile
 import datetime
+import requests # เพิ่มเข้ามา
 from scipy.spatial.distance import cdist
 from sentence_transformers import SentenceTransformer
 from PIL import Image
@@ -28,6 +29,11 @@ CORS(app)
 # 💾 AUTO-SAVE SYSTEM (DEV ONLY)
 # ==========================================
 HISTORY_FOLDER = os.path.join(os.path.dirname(__file__), 'generated_history')
+VIDEO_FOLDER = os.path.join(os.path.dirname(__file__), 'generated_videos') # เพิ่มโฟลเดอร์วิดีโอ
+
+# สร้างโฟลเดอร์วิดีโอถ้ายังไม่มี
+if not os.path.exists(VIDEO_FOLDER):
+    os.makedirs(VIDEO_FOLDER)
 
 def save_generated_image(image_bytes, location_name_th):
     try:
@@ -59,6 +65,40 @@ def save_generated_image(image_bytes, location_name_th):
     except Exception as e:
         print(f"⚠️ Failed to auto-save image: {e}")
         return None
+
+def save_generated_video(video_url, location_name_th):
+    """
+    ดาวน์โหลดและบันทึกวิดีโอจาก Runway
+    """
+    try:
+        response = requests.get(video_url, stream=True)
+        if response.status_code == 200:
+            file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
+            safe_name = "place"
+            # (ใช้ logic ตั้งชื่อเดิม)
+            if "Democracy" in file_prefix: safe_name = "democracymonument"
+            elif "Sala" in file_prefix: safe_name = "salachalermkrung"
+            elif "Swing" in file_prefix: safe_name = "giantswing"
+            elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
+            elif "Khao San" in file_prefix: safe_name = "khaosan"
+            elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
+            elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
+            elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
+
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{safe_name}_1960s_{timestamp}.mp4"
+            filepath = os.path.join(VIDEO_FOLDER, filename)
+
+            with open(filepath, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+            
+            print(f"🎥 Auto-saved video to: {filename}")
+            return filename, filepath # Return filename, fullpath
+    except Exception as e:
+        print(f"⚠️ Failed to save video: {e}")
+    return None, None
 
 # ==========================================
 # 🧠 AI MEMORY LOADING
@@ -130,9 +170,9 @@ LOCATION_INFO = {
     "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
 }
 
-# --- THE MASTER PROMPT DATABASE (V.11 - ULTIMATE REALISM & STRICT PERSPECTIVE) ---
+# --- THE MASTER PROMPT DATABASE (V.11) ---
+# ... (คงเดิมตามที่คุณส่งมาล่าสุด ไม่ต้องแก้ส่วนนี้) ...
 LOCATION_PROMPTS = {
-    # ========================================= Prompt อนุสาวรีย์ประชาธิปไตย (ใช้งานจริง) ========================================= #
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
           
@@ -155,9 +195,7 @@ LOCATION_PROMPTS = {
           **Negative Prompt (CRITICAL):**}
           - **Negative Prompt:** Tram, tram rails, tramway, skytrain, modern billboards, LED screens, plastic barriers, motorcycles, tuk-tuks, people on road, tourists taking selfies.
       """,
-      # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่ม Logic เข้ามาเพื่อพยายามล๊อคคนไม่ให้ไปเดินเล่นที่อนุสาวรีย์, เพิ่มรายละเอียดตึกรอบๆเข้าไปนิดหน่อย(Low-rise Art Deco buildings) === #
 
-    # ========================================= Prompt เฉลิมกรุง (ใช้งานจริง) ========================================= #
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
         
@@ -172,31 +210,6 @@ LOCATION_PROMPTS = {
         - **Surroundings:** Authentic 1960s shophouses (weathered wood/concrete). Realistic atmosphere.
     """,
 
-    # ========================================= Prompt เฉลิมกรุง (เผื่อเลือกใช้) ========================================= #
-    # "Sala Chalermkrung": """
-    #     **SUBJECT:** A historically accurate 1960s exterior shot of Sala Chalermkrung Royal Theatre (Bangkok).
-
-    #     **ARCHITECTURAL ACCURACY:**
-    #     - **Building Style:** Early Modernist architecture, painted in **Clean Cream/Off-White**. It looks grand and solid.
-    #     - **Condition:** Well-maintained but showing slight texture of age (1967 era).
-
-    #     **THE GIANT CUTOUT (CRITICAL FOCUS):**
-    #     - **Type:** A **MASSIVE Hand-Painted Cinema Cutout** (Billboard size) mounted on the front facade. It looks like a vibrant oil painting.
-    #     - **Visual:** Two Thai gentlemen standing back-to-back. One wears glasses, the other does not. Both dressed in smart 1960s white shirts/suits.
-    #     - **Text Content:** "บางกอกทวิกาล" (Main Title), "มาดามพงษ์ และ ณัฐภัทร" (Stars), "กำกับโดย ตอตุ้ม" (Director).
-
-    #     **ATMOSPHERE - RELAXED & COOL (NOT CROWDED):**
-    #     - **People:** **SPARSE.** Only a few stylish teenagers (Ko Lang Wang style) standing in small, distinct groups or walking casually. **ABSOLUTELY NO LARGE CROWDS.**
-    #     - **Fashion:** Men in grease-styled hair (Elvis look). Women in Mod dresses.
-    #     - **Traffic:** A few vintage taxis passing by. Road is open and clear.
-    #     - **Vibe:** Chill, cinematic, high-fashion 60s street photography.
-
-    #     **NEGATIVE PROMPT:**
-    #     - Crowds, traffic jam, busy street, modern LED signs, air conditioning units, modern cars, backpackers, rundown slums.
-    # """,
-    # === หลักๆเน้นเพิ่มรายละเอียดของตึกและบรรยากาศรอบๆ, เน้นล๊อคมุมกล้อง, เน้นล๊อคคนไม่ให้เยอะเกินไป === #
-
-    # ========================================= Prompt เสาชิงช้า (ใช้งานจริง) ========================================= #
     "Giant Swing": """
 
         **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
@@ -215,10 +228,7 @@ LOCATION_PROMPTS = {
         **NEGATIVE PROMPT:**
         - Men swinging on the swing (Historical inaccuracy), modern traffic lights, 7-Eleven, air conditioning units, plastic awnings, tourists in shorts.
     """,
-    # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่มรายละเอียดร้านค้า/บ้านรอบๆ === # 
-    # === อาจจะต้องปรับเพิ่ม ดูไม่ค่อยแม่นเท่าไหร่ตัวนี้ === #
     
-    # ========================================= Prompt เยาวราช (ใช้งานจริง) ========================================= #
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
@@ -232,35 +242,6 @@ LOCATION_PROMPTS = {
         - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
     """,
 
-    # ========================================= Prompt เยาวราช (เผื่อเลือกใช้) ========================================= #
-    # "Yaowarat": """
-    #     **SUBJECT:** A historically accurate 1960s photograph of Yaowarat Road (Bangkok Chinatown) during the day.
-
-    #     **THE "FOREST OF SIGNS" (CRITICAL VISUAL):**
-    #     - **Density:** The street is densely packed with **HUNDREDS of Vertical Signs hanging over the road** from both sides, creating a tunnel-like perspective.
-    #     - **Color Palette:** Dominant **RED backgrounds with GOLD lettering**.
-    #     - **Text Accuracy:** Hand-painted signs in **Chinese Characters (Large)** and **Thai (Smaller)**.
-    #     - **Key Signs:** "**ห้างทอง ฮั่วเซ่งเฮง (和成興大金行)**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
-    #     - **Material:** Painted wood and metal boxes. **NO LED. NO GLOWING NEON (Daytime).**
-
-    #     **1968 TRAFFIC REVOLUTION:**
-    #     - **Tuk-Tuks:** MUST include **"Daihatsu Midget" (Frog-faced Tuk-Tuks)** which replaced pedicabs in this era.
-    #     - **Cars:** Vintage 1960s sedans and delivery trucks.
-    #     - **NO SAMLORS:** (Pedicabs were banned on main roads in the 60s).
-
-    #     **THE LAST TRAM:**
-    #     - **Vehicle:** A weathered, dusty **Yellow & Red Wooden Tram** (The final year of operation).
-    #     - **Position:** Running on tracks embedded in the asphalt, sharing the road with cars.
-
-    #     **ATMOSPHERE:**
-    #     - **Vibe:** Extremely busy, chaotic, commercial energy. Hazy tropical sunlight filtering through the signs.
-    #     - **Road:** Asphalt road, slightly wet/oily texture.
-
-    #     **NEGATIVE PROMPT:**
-    #     - LED screens, digital billboards, modern Toyota/Honda cars, BTS skytrain, pedestrians wearing modern fashion, English signs, empty street.
-    # """,
-
-    # ========================================= Prompt ถนนข้าวสาร (ใช้งานจริง) ========================================= #
     "Khaosan Road": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
 
@@ -280,9 +261,7 @@ LOCATION_PROMPTS = {
         **NEGATIVE PROMPT:**
         - Backpackers, foreigners in shorts, neon signs, bars, alcohol advertisements, modern hostels, tattoos, dreadlocks, electronic music vibes, changing camera angle, wide angle lens distortion.
     """,
-    # === เพิ่ม Negative Prompt เข้ามาเพื่อลดการเกิดสิ่งที่ไม่ต้องการ, เพิ่มการล๊อคมุมภาพ === # 
 
-    # ========================================= Prompt ป้อมพระสุเมรุ (ใช้งานจริง) ========================================= #
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
@@ -291,7 +270,6 @@ LOCATION_PROMPTS = {
         - **Structure:** Hexagonal white plaster fort, stained with black mold.
     """,
 
-    # ========================================= Prompt สนามหลวง (ใช้งานจริง) ========================================= #
     "Sanam Luang": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
         
@@ -301,28 +279,6 @@ LOCATION_PROMPTS = {
         - **Sky:** Only **A FEW** scattered kites.
     """,
 
-    # ========================================= Prompt สนามหลวง (เผื่อเลือกใข้) ========================================= #
-    # "Sanam Luang": """
-    #     **SUBJECT:** A historically accurate 1960s photograph of Sanam Luang (The Sunday Weekend Market).
-
-    #     **THE GROUND (GREEN GRASS VER.):**
-    #     - **Ground Surface:** **Green Grass Field (Sanam Luang Lawns)**. Although it was a market, render it with **Green Grass** to maintain the iconic look of the Royal Ground.
-    #     - **Condition:** The grass can have some worn patches (dirt paths) for realism, but the overall tone must be **GREEN**, not red dirt.
-
-    #     **THE MARKET ATMOSPHERE:**
-    #     - **The Setup:** Vendors sitting on **Woven Mats** spread directly on the grass.
-    #     - **The Umbrellas:** A sea of **Canvas Parasols (Rom Pha Bai)**. Colors: Striped Red/White, Blue/White, or dirty White.
-    #     - **Goods:** Second-hand Books (piles of old paper), Antiques, Amulets, and Potted Plants.
-
-    #     **LANDMARKS:**
-    #     - **Framing:** Large, shady **Tamarind Trees (Ton Makam)**.
-    #     - **Background:** **Wat Phra Kaew (Grand Palace)** spires visible in the distance.
-
-    #     **NEGATIVE PROMPT:**
-    #     - Red laterite, red dust, muddy ground, large concrete plaza, modern tents, plastic chairs, skyscrapers.
-    # """,
-
-    # ========================================= Prompt พิพิธภัณฑสถานแห่งชาติ (ใช้งานจริง) ========================================= #
     "National Museum": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
         
@@ -459,11 +415,11 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg")
         ]
 
-    max_retries = 3
+    max_retries = 5
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="nano-banana-pro-preview", # Stronger model for image gen (or change to imagen-3.0-generate-001 if available)
+                model="gemini-1.5-flash", 
                 contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
@@ -475,11 +431,111 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             print(f"⚠️ Warning: Model returned no image (Attempt {attempt+1})")
         except Exception as e:
             if "429" in str(e) or "503" in str(e):
-                t = (2 ** attempt) + random.uniform(0, 1)
-                print(f"⚠️ Busy ({e}) -> Waiting {t:.1f}s")
-                time.sleep(t)
+                # 👈 สูตรคำนวณเวลารอแบบ Exponential Backoff (รอทวีคูณ: 2วิ, 4วิ, 8วิ, ...)
+                wait_time = (2 ** attempt) + random.uniform(1, 3) 
+                print(f"⚠️ Server Busy (Attempt {attempt+1}/{max_retries}). Waiting {wait_time:.1f}s...")
+                time.sleep(wait_time)
             else:
                 return None
+    return None
+
+# ==========================================
+# 🎬 RUNWAY ML INTEGRATION (NEW)
+# ==========================================
+def generate_video_runway(image_bytes, location_key):
+    """
+    ฟังก์ชันส่งภาพไปยัง RunwayML เพื่อสร้างวิดีโอ
+    """
+    runway_key = os.getenv("RUNWAYML_API_KEY")
+    if not runway_key:
+        print("⚠️ Runway API Key not found. Skipping video generation.")
+        return None
+
+    try:
+        print("🎬 Starting Runway Video Generation...")
+        
+        # 1. แปลง Image Bytes เป็น Base64 String (Data URI)
+        base64_str = base64.b64encode(image_bytes).decode('utf-8')
+        mime_type = "image/png" # Gemini usually returns PNG
+        data_uri = f"data:{mime_type};base64,{base64_str}"
+
+        # 2. ตั้งค่า Prompt การเคลื่อนไหวเบาๆ ให้สมจริงตามสถานที่
+        # Motion Prompt Engineering: Subtle movement to bring it to life.
+        motion_prompt = "Cinematic slow motion, subtle camera push in, realistic movement of people and vehicles, atmospheric lighting, 1960s film grain."
+        if location_key == "Yaowarat":
+            motion_prompt += " Tram moving slowly, flags waving."
+        elif location_key == "Giant Swing":
+            motion_prompt += " Cars driving around the swing."
+        elif location_key == "Democracy Monument":
+            motion_prompt += " Clouds moving, birds flying."
+
+        url = "https://api.runwayml.com/v1/image_to_video"
+        
+        payload = {
+            "promptImage": data_uri,
+            "model": "gen3a_turbo", # ใช้รุ่น Turbo เพื่อความเร็วและราคาประหยัด (5 วิ)
+            "promptText": motion_prompt,
+            "duration": 5, # บังคับ 5 วินาที
+            "ratio": "1280:768" # หรือปรับตาม Aspect Ratio เดิม (Runway อาจบังคับบาง ratio) -> แนะนำปล่อย auto หรือระบุถ้าจำเป็น
+        }
+        
+        headers = {
+            "Authorization": f"Bearer {runway_key}",
+            "X-Runway-Version": "2024-09-26",
+            "Content-Type": "application/json"
+        }
+
+        # 3. ส่ง Request (POST)
+        response = requests.post(url, json=payload, headers=headers)
+        
+        if response.status_code != 200:
+            print(f"❌ Runway Request Failed: {response.text}")
+            return None
+            
+        task_id = response.json().get('id')
+        print(f"⏳ Runway Task Submitted ID: {task_id}")
+
+        # 4. Polling รอผลลัพธ์ (Check status)
+        status = "PENDING"
+        video_url = None
+        
+        # รอสูงสุดประมาณ 60-90 วินาที (Turbo เร็วแต่เผื่อไว้)
+        max_wait_time = 90 
+        start_time = time.time()
+
+        while status not in ["SUCCEEDED", "FAILED"]:
+            if time.time() - start_time > max_wait_time:
+                print("❌ Runway Timeout")
+                return None
+            
+            time.sleep(3) # รอ 3 วินาทีแล้วเช็คใหม่
+            
+            status_url = f"https://api.runwayml.com/v1/tasks/{task_id}"
+            status_res = requests.get(status_url, headers=headers)
+            
+            if status_res.status_code == 200:
+                data = status_res.json()
+                status = data.get('status')
+                print(f"   ...Status: {status}")
+                
+                if status == "SUCCEEDED":
+                    video_url = data.get('output', [None])[0]
+                elif status == "FAILED":
+                    print(f"❌ Runway Task Failed: {data.get('failure')}")
+                    return None
+            else:
+                print(f"⚠️ Check Status Failed: {status_res.text}")
+                return None
+
+        # 5. ได้ URL มาแล้ว (เป็น URL ชั่วคราวของ Runway)
+        if video_url:
+            print(f"✅ Video Generated: {video_url}")
+            return video_url
+            
+    except Exception as e:
+        print(f"❌ Critical Runway Error: {e}")
+        return None
+    
     return None
 
 # ==========================================
@@ -557,7 +613,7 @@ def verify_image_route():
     finally:
         if temp_path and os.path.exists(temp_path): os.remove(temp_path)
 
-# 2. GENERATE (Logic from Processing Branch)
+# 2. GENERATE (Logic from Processing Branch) -> Modified for Video
 @app.route('/generate', methods=['POST'])
 def generate_image_route():
     try:
@@ -574,25 +630,48 @@ def generate_image_route():
         print(f"📸 1. Analyzing Structure...")
         structure = step1_analyze(client, img_bytes)
         
-        print(f"🎨 2. Generating Image...")
+        print(f"🎨 2. Generating Image (Gemini)...")
         prompt_key = LOCATION_INFO.get(location_th, {}).get('prompt_key', "Democracy Monument")
         result_bytes = step2_generate(client, structure, prompt_key, img_bytes, ref_bytes)
         
         if result_bytes:
-            print("🎉 Success!")
+            print("🎉 Image Generated Success!")
             
-            # --- AUTO-SAVE LOGIC ---
+            # --- AUTO-SAVE IMAGE ---
             save_generated_image(result_bytes, location_th)
             # ---------------------
 
-            result_b64 = base64.b64encode(result_bytes).decode('utf-8')
+            # --- STEP 3: GENERATE VIDEO (NEW) ---
+            video_url = generate_video_runway(result_bytes, prompt_key)
+            
+            video_b64 = None
+            if video_url:
+                # Save video locally
+                vid_filename, vid_path = save_generated_video(video_url, location_th)
+                if vid_path:
+                    # Convert to Base64 to send to Frontend (Or send URL if serving static files)
+                    # For simplicity/prototype: sending base64 (Note: Video base64 is large)
+                    with open(vid_path, "rb") as vid_file:
+                        video_b64 = base64.b64encode(vid_file.read()).decode('utf-8')
+
+            # Prepare Response
+            result_img_b64 = base64.b64encode(result_bytes).decode('utf-8')
             desc = LOCATION_INFO.get(location_th, {}).get('desc_60s', "")
-            return jsonify({
+            
+            response_data = {
                 'status': 'success',
-                'image': f"data:image/png;base64,{result_b64}",
+                'image': f"data:image/png;base64,{result_img_b64}",
                 'location_name': location_th,
                 'description': desc
-            })
+            }
+
+            if video_b64:
+                response_data['video'] = f"data:video/mp4;base64,{video_b64}" # Add video to response
+                print("🎥 Video included in response.")
+            else:
+                print("⚠️ No video generated (Runway error or disabled). Returning image only.")
+
+            return jsonify(response_data)
         else:
             print("❌ Generation Failed (Retries exhausted)")
             return jsonify({'error': 'AI Model Overloaded. Please try again.'}), 503
@@ -600,6 +679,11 @@ def generate_image_route():
     except Exception as e:
         print(f"❌ Critical Error: {e}")
         return jsonify({'error': str(e)}), 500
+
+# Route สำหรับเสิร์ฟไฟล์วิดีโอ (เผื่ออยากใช้ URL แทน Base64 ในอนาคต)
+@app.route('/videos/<path:filename>')
+def serve_video(filename):
+    return send_from_directory(VIDEO_FOLDER, filename)
 
 @app.route('/')
 def home():
