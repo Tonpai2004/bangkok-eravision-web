@@ -16,8 +16,6 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from flask_cors import CORS
-
-# Import Classifier Logic
 from classifier import classify_image
 
 # --- 1. Setup ---
@@ -104,28 +102,30 @@ LOCATION_INFO = {
     "พิพิธภัณฑสถานแห่งชาติ": { "prompt_key": "National Museum", "desc_60s": "อาคารทรงไทยสีขาวหมองมีคราบตะไคร่ดำ สภาพรกรั้วด้วยต้นไม้ใหญ่เหมือนวัดป่า ถนนหน้าพระธาตุลาดยางเงียบสงบ รั้วเหล็กดัดหัวลูกศร" }
 }
 
-# --- THE MASTER PROMPT DATABASE ---
+# --- THE MASTER PROMPT DATABASE (V.17 - FLAWLESS & HISTORICAL) ---
 LOCATION_PROMPTS = {
+    # 🏛️ อนุสาวรีย์ประชาธิปไตย: ปืนใหญ่ 75 กระบอก (ฝังดินรอบนอก) + รถวิ่งวนซ้าย (ไทยขับชิดซ้าย)
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
           
           **PERSPECTIVE LOCK (CRITICAL):**
           - Use the Uploaded Image as the **Absolute Layout Blueprint**.
-          - Keep the exact camera angle and composition.
+          - Keep the exact camera angle and composition. DO NOT ROTATE.
           
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco.
           - **Center:** Solid turret with **Dark Bronze/Black Metal Tray**.
-          - **Base:** The circular steps are **BARE CONCRETE**. NO FLOWERS. NO GRASS.
+          - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are **75 SMALL BLACK CANNONS** buried muzzle-up in the ground, connected by **HEAVY IRON CHAINS**.
+          - **NEGATIVE PROMPT:** No cannons on the steps, no flowers, no grass on the monument.
 
-          **LOGIC & SAFETY RULES:**
-          - **PEDESTRIANS:** Pedestrians must be strictly on the **far sidewalks** only.
+          **TRAFFIC RULES (CRITICAL):**
+          - **One-Way Circle:** Cars drive **CLOCKWISE** around the circle (Thai left-hand traffic rule means roundabout flow is clockwise).
+          - **Vehicle Models:** **Fiat 1100, Austin Cambridge, Morris Minor**. NO MODERN CARS.
+          - **Safety:** **NO CARS ON THE MONUMENT BASE.** Keep them on the asphalt road.
           
           **SURROUNDINGS:**
           - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings.
           - **Road:** Wide Asphalt. NO modern lane markings.
-
-          **Negative Prompt:** Tram, tram rails, skytrain, modern billboards, LED screens, motorcycles, tuk-tuks, people on road.
       """,
 
     "Sala Chalermkrung": """
@@ -133,42 +133,50 @@ LOCATION_PROMPTS = {
         
         **PERSPECTIVE LOCK:** Maintain exact camera angle from input image.
         
+        **CLEAN FOREGROUND:**
+        - **REMOVE** any wooden shophouses or obstructing buildings in the immediate foreground/opposite side. Keep the view of the theater open and grand.
+        
         **THE MOVIE POSTER (SPECIFIC):**
-        - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back.
-        - **Text (THAI ONLY):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**".
+        - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
+        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Director "**ตอตุ้ม**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
         
         **CONTEXT:**
         - **Street:** Wide asphalt avenue.
-        - **Surroundings:** Authentic 1960s shophouses.
+        - **Traffic:** Vintage **Datsun Bluebird taxis** and classic sedans. No Trams.
     """,
 
     "Giant Swing": """
         **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
 
-        **PERSPECTIVE & VISIBILITY RULE:**
-        - If the original image shows Wat Suthat, render it as aged/weathered.
-        - **IF THE ORIGINAL IMAGE DOES NOT SHOW THE TEMPLE, DO NOT ADD IT.**
+        **PERSPECTIVE & VISIBILITY RULE (CRITICAL):**
+        - **IF the original image shows Wat Suthat:** Render it clearly with aged, weathered roof tiles and white walls.
+        - **IF the original image DOES NOT show the temple:** **DO NOT ADD IT.** Focus solely on transforming the surrounding shophouses to be historically accurate (1960s style, aged wood/concrete, tile roofs).
 
         **DETAILS:**
         - **The Swing:** Two towering **Vibrant Red Teak Pillars** standing on a clean White Stone Plinth.
-        - **Structure:** intricate carved crossbar at the top. **NO SWINGING CEREMONY**.
-        - **Road Layout:** The Giant Swing acts as a long roundabout.
-        - **Traffic:** Vintage 1960s sedans, Samlors, and round-nose trucks.
+        - **Structure:** Intricate carved crossbar at the top. **NO ROPES HANGING DOWN**. It is empty.
+        
+        **TRAFFIC REALISM:**
+        - **Cars:** **Fiat 1100 and Austin Cambridge**. Driving straight on the road alongside the swing.
+        - **Clean Image:** **NO SPEED LINES, NO MOTION BLUR LINES, NO GLITCHES** following the cars. The air must be clear.
 
-        **NEGATIVE PROMPT:** Men swinging, modern traffic lights, 7-Eleven, tourists in shorts.
+        **NEGATIVE PROMPT:** Ropes hanging from swing, men swinging, modern traffic lights, 7-Eleven, tourists in shorts, speed lines, motion trails.
     """,
     
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
         
         **STRICT TEXT & SIGNS:**
-        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**.
+        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish.
         - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
         - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
         
         **TRAM REALISM:**
         - **Tram:** Weathered Yellow/Red wooden tram.
-        - **Position:** Running on rails **HUGGING THE RIGHT CURB**.
+        - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
+        
+        **TRAFFIC:**
+        - **Vehicles:** **Samlors (Tricycles)** and **Round-nose Trucks (Isuzu TX)**. No modern sedans.
     """,
 
     "Khaosan Road": """
@@ -181,28 +189,37 @@ LOCATION_PROMPTS = {
         - **Houses:** Wooden row houses painted **YELLOW WOOD** with **GREEN WINDOWS**.
         - **Signage:** **NO SIGNS** on the house fronts. Residential look only.
         
+        **PEOPLE (THAI LOCALS):**
+        - **Faces:** Authentic **THAI FACES** (South East Asian features, tan skin, black hair).
+        - **Clothing:** White shirts, simple trousers/sarongs. **NO FOREIGNERS/BACKPACKERS**.
+        
         **LIFE:**
         - **Atmosphere:** Vibrant community. Locals chatting.
         - **Props:** Rice sacks stacked at **ONLY 2-3 HOUSES**.
 
-        **NEGATIVE PROMPT:** Backpackers, foreigners in shorts, neon signs, bars, hostels.
+        **NEGATIVE PROMPT:** Backpackers, foreigners in shorts, neon signs, bars, hostels, Caucasian faces.
     """,
 
     "Phra Sumen Fort": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
         
-        **CRITICAL ACCURACY: HEADLESS FORT:**
-        - **Status:** The top wooden roof spire is **COMPLETELY MISSING**. The white tower is truncated/severed.
-        - **Structure:** Hexagonal white plaster fort, stained with black mold.
+        **CRITICAL ACCURACY: TRUNCATED HALF-FORT:**
+        - **Status:** The main white fort tower is **DESTROYED / TRUNCATED**. The entire upper half (roof and spire) is **GONE**. It looks like a large, white, hexagonal stump or base only.
+        - **Condition:** Aged white plaster, heavily stained with black mold and humidity. Do not alter the remaining base structure.
+        
+        **TRAFFIC:**
+        - **Cars:** A few **Austin/Morris Minor** cars driving in **ONE DIRECTION ONLY**. No traffic jams.
     """,
 
     "Sanam Luang": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
         
-        **MARKET REALISM:**
-        - **Stalls:** Vendors sitting on **WOVEN MATS** on the red dust ground. Bamboo parasols.
-        - **Density:** Lively but not overcrowded.
+        **MARKET DYNAMICS:**
+        - **Stalls:** A mix of vendors **SQUATTING on woven mats** and vendors **STANDING behind simple wooden tables**.
+        - **Goods:** Amulets, books, plants, antiques.
+        - **Atmosphere:** Lively but breathable (not overcrowded).
         - **Sky:** Only **A FEW** scattered kites.
+        - **Props:** **NO modern plastic chairs**, **NO blue tents**. Use Canvas/Bamboo parasols.
     """,
 
     "National Museum": """
@@ -300,7 +317,7 @@ def step1_analyze(client, img_bytes):
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-1.5-flash", # Stable model for analysis
+                model="gemini-1.5-flash", 
                 contents=[prompt, types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg")]
             )
             return response.text
@@ -311,6 +328,7 @@ def step1_analyze(client, img_bytes):
                 break
     return "Keep original perspective rigid."
 
+# 🔴 FIX: ใช้ gemini-2.0-flash-exp-image-generation หรือ nano-banana-pro-preview
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
@@ -319,7 +337,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **OUTPUT MUST BE A PHOTOREALISTIC COLOR PHOTOGRAPH.** Do not generate black and white images.
     - **FILM LOOK:** Imitate 1960s Kodachrome slide film aesthetic.
     - **ASPECT RATIO & PERSPECTIVE:** The output image must maintain the same aspect ratio, framing, and camera angle as the input image. DO NOT ROTATE. DO NOT ZOOM.
-    - **GLOBAL NEGATIVE PROMPT:** modern logos (7-Eleven, Starbucks, Apple, etc.), brand names, QR codes, CCTV cameras, satellite dishes, air conditioning units, modern cars (post-1970), motorcycles, LED signs, concrete barriers, plastic chairs.
+    - **GLOBAL NEGATIVE PROMPT:** modern logos (7-Eleven, Starbucks, Apple, etc.), brand names, QR codes, CCTV cameras, satellite dishes, air conditioning units, modern cars (Toyota, Honda, Tesla), motorcycles, LED signs, concrete barriers, plastic chairs, watermarks, text overlay, glitch text, distorted letters.
     """
     
     parts = []
@@ -341,12 +359,17 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg")
         ]
 
-    max_retries = 3
+    max_retries = 5
+    
+    # 🔴 เลือกโมเดลที่มีในบัญชีจริง
+    model_name = "gemini-2.0-flash-exp-image-generation" 
+
     for attempt in range(max_retries):
         try:
-            print(f"🎨 Generating Image (Attempt {attempt+1})...")
+            print(f"🎨 Generating Image (Attempt {attempt+1}/{max_retries}) using {model_name}...")
+            
             response = client.models.generate_content(
-                model="nano-banana-pro-preview",
+                model=model_name, 
                 contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
@@ -355,19 +378,31 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             )
             for part in response.candidates[0].content.parts:
                 if part.inline_data: return part.inline_data.data
+            
             print(f"⚠️ Warning: Model returned no image (Attempt {attempt+1})")
+            
         except Exception as e:
+            if "not found" in str(e).lower() and model_name == "gemini-2.0-flash-exp-image-generation":
+                print("⚠️ Switching model to nano-banana-pro-preview...")
+                model_name = "nano-banana-pro-preview"
+                time.sleep(1)
+                continue
+
             if "429" in str(e) or "503" in str(e):
-                t = (2 ** attempt) + random.uniform(0, 1)
-                print(f"⚠️ Busy ({e}) -> Waiting {t:.1f}s")
+                t = (2 ** attempt) + random.uniform(1, 3)
+                print(f"⚠️ Server Busy ({model_name}) -> Waiting {t:.1f}s...")
                 time.sleep(t)
             else:
                 print(f"❌ Critical Gen Error: {e}")
+                if model_name != "nano-banana-pro-preview":
+                     model_name = "nano-banana-pro-preview"
+                     continue
                 return None
+                
     return None
 
 # ==========================================
-# 🎬 RUNWAY ML INTEGRATION (NEW)
+# 🎬 RUNWAY ML INTEGRATION (STRICT & REALISTIC)
 # ==========================================
 def generate_video_runway(image_bytes, location_key):
     runway_key = os.getenv("RUNWAYML_API_KEY")
@@ -376,66 +411,64 @@ def generate_video_runway(image_bytes, location_key):
         return None
 
     try:
-        print("🎬 Starting Runway Video Generation...")
+        print("🎬 Starting Runway Video Generation (V.17 - Ultimate Polishing)...")
         
-        # PRE-PROCESS: แก้ Aspect Ratio อัตโนมัติ
+        # 1. Image Pre-processing
         try:
             img = Image.open(io.BytesIO(image_bytes))
             width, height = img.size
             ratio = width / height
-            
-            # ถ้าภาพกว้างเกิน 1.8 (ใกล้เคียง 16:9 คือ 1.77) ให้ตัดขอบออก
-            # Runway รับได้สูงสุด 2.0 แต่เอา 1.77 (16:9) เพื่อความปลอดภัยและสวยงาม
             MAX_RATIO = 1.78 
             
             if ratio > MAX_RATIO:
                 print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
-                
                 new_width = int(height * MAX_RATIO)
                 left = (width - new_width) / 2
                 top = 0
                 right = (width + new_width) / 2
                 bottom = height
-                
                 img = img.crop((left, top, right, bottom))
-                
-                # แปลงกลับเป็น Bytes เพื่อส่งต่อ
                 buffered = io.BytesIO()
                 img.save(buffered, format="PNG")
                 image_bytes = buffered.getvalue()
-                print(f"✅ Cropped to {img.size} (Ratio: {img.size[0]/img.size[1]:.2f})")
+                print(f"✅ Cropped to {img.size}")
                 
         except Exception as crop_err:
             print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
-        # ==========================================
 
         base64_str = base64.b64encode(image_bytes).decode('utf-8')
         
-        base_prompt = "Photorealistic 8k video, sharp focus. static camera with a gentle smooth zoom-in. Coherent motion, object permanence, physics-abiding. 1960s vintage atmosphere. No floating objects, no glitch."
+        # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
+        # Goal: Static camera, realistic physics, no filters, no glitches.
+        base_prompt = """
+        Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation. 
+        Hyper-realistic 8k video, high fidelity, sharp focus. 
+        Clear daylight, natural colors (NO vintage filter, NO sepia, NO grain). 
+        Physics-based motion: cars driving straight in lanes, people walking naturally (no sliding).
+        Stable structures, no morphing buildings. No visual glitches.
+        """
 
-        # 2. SPECIFIC PROMPT (แก้บั๊กของแต่ละที่):
         location_prompts = {
-            "Democracy Monument": "Clouds moving slowly in the sky. Vintage cars driving smoothly in lanes in the distance.",
+            "Democracy Monument": "Clouds moving slowly. Birds flying high. Vintage cars (Fiat, Austin) moving smoothly in a ONE-WAY CLOCKWISE circle on the asphalt road. No cars touching the monument.",
             
-            "Sala Chalermkrung": "People standing naturally in front of the theater, subtle movements. Vintage cars passing by smoothly.",
+            "Sala Chalermkrung": "Subtle street life. People standing or walking naturally near the theater entrance. A vintage Datsun taxi driving past smoothly. Flags waving. No camera movement.",
             
-            "Giant Swing": "Vintage cars driving slowly around the giant swing in a smooth curve, maintaining distance. Clear weather.",
+            "Giant Swing": "Vintage Fiat 1100 driving slowly STRAIGHT past the swing. No weaving. Clear blue sky. NO swinging motion on the red pillars. No ropes.",
             
-            "Yaowarat": "A yellow tram moving slowly on fixed rails. Pedestrians walking on sidewalks only. Vibrant street atmosphere.",
+            "Yaowarat": "A yellow tram moving slowly and heavily on rails on the right side. Pedestrians walking on sidewalks. Flags waving gently. No neon flickering.",
             
-            "Khaosan Road": "Locals sitting and chatting in front of wooden houses. Trees swaying gently in the wind. Peaceful vibe.",
+            "Khaosan Road": "Thai locals sitting and talking (subtle head/hand movements). A dog walking. Trees swaying gently. Peaceful residential vibe. No foreigners.",
             
-            "Phra Sumen Fort": "Trees swaying gently near the white fort. Sunlight shifting naturally. Realistic shadows.",
+            "Phra Sumen Fort": "Trees rustling in the breeze near the white fort ruins. Sunlight and shadows shifting naturally. A vintage Austin car driving straight past.",
             
-            "Sanam Luang": "Canvas umbrellas swaying slightly in the breeze. People walking slowly in the market.",
+            "Sanam Luang": "Canvas umbrellas fluttering in the wind. People squatting and walking in the market (natural gait, no sliding feet). A few kites floating in the sky.",
             
-            "National Museum": "Sunlight filtering through tamarind trees. Leaves rustling gently. Serene atmosphere."
+            "National Museum": "Dappled sunlight filtering through tree leaves. Shadows moving on the ground. Very calm and still atmosphere. No people running."
         }
 
         specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
-        
         final_prompt = f"{base_prompt} {specific_action}"
-        print(f"📝 Prompt Used: {final_prompt}")
+        print(f"📝 Video Prompt: {final_prompt}")
 
         url = "https://api.dev.runwayml.com/v1/image_to_video"
         
@@ -453,6 +486,7 @@ def generate_video_runway(image_bytes, location_key):
             "Content-Type": "application/json"
         }
         
+        # 3. Send Request
         response = requests.post(url, json=payload, headers=headers)
         
         if response.status_code != 200:
@@ -460,9 +494,9 @@ def generate_video_runway(image_bytes, location_key):
             return None
             
         task_id = response.json().get('id')
-        print(f"⏳ Runway Task ID: {task_id} (Waiting for result...)")
+        print(f"⏳ Runway Task ID: {task_id}")
         
-        # Polling Loop
+        # 4. Polling
         for i in range(30):
             time.sleep(3)
             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
@@ -522,10 +556,8 @@ def save_generated_image(image_bytes, location_name_th):
 
 def save_generated_video(video_url, location_key):
     try:
-        # ตรวจสอบและสร้างโฟลเดอร์ให้ชัวร์
         if not os.path.exists(VIDEO_FOLDER):
             os.makedirs(VIDEO_FOLDER)
-            print(f"📁 Created video folder at: {VIDEO_FOLDER}")
 
         print(f"⬇️ Downloading video from: {video_url}")
         response = requests.get(video_url, stream=True)

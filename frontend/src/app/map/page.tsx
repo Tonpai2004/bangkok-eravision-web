@@ -8,14 +8,78 @@ import { TransformWrapper, TransformComponent, useControls, useTransformContext,
 import { useRouter } from "next/navigation";
 
 const MAP_LOCATIONS = [
-  { id: 1, th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument", top: "28.5%", left: "41%", videoUrl: "/videos/demo1.mp4" },
-  { id: 2, th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung", top: "62.5%", left: "44.5%", videoUrl: "/videos/demo2.mp4" },
-  { id: 3, th: "เสาชิงช้า & วัดสุทัศน์", en: "Giant Swing & Wat Suthat", top: "45%", left: "43.5%", videoUrl: "/videos/demo3.mp4" },
-  { id: 4, th: "ถนนข้าวสาร", en: "Khaosan Road", top: "26%", left: "28%", videoUrl: "/videos/demo4.mp4" },
-  { id: 5, th: "ป้อมพระสุเมรุ", en: "Phra Sumen Fort", top: "10.8%", left: "20%", videoUrl: "/videos/demo5.mp4" },
-  { id: 6, th: "พิพิธภัณฑสถานแห่งชาติ", en: "National Museum", top: "34.5%", left: "17.25%", videoUrl: "/videos/demo6.mp4" },
-  { id: 7, th: "ถนนเยาวราช", en: "Yaowarat (Chinatown)", top: "72.5%", left: "70%", videoUrl: "/videos/demo7.mp4" },
-  { id: 8, th: "สนามหลวง", en: "Sanam Luang", top: "45%", left: "21%", videoUrl: "/videos/demo8.mp4" },
+  { 
+    id: 1, 
+    th: "อนุสาวรีย์ประชาธิปไตย", 
+    en: "Democracy Monument", 
+    top: "30%", 
+    left: "41%", 
+    videoUrl: "/videos/demo1.mp4",
+    icon: "/images/icons/Democracy_icon.png" 
+  },
+  { 
+    id: 2, 
+    th: "ศาลาเฉลิมกรุง", 
+    en: "Sala Chalermkrung", 
+    top: "62.5%", 
+    left: "44.5%", 
+    videoUrl: "/videos/demo2.mp4",
+    icon: "/images/icons/ChalermKrung_icon.png"
+  },
+  { 
+    id: 3, 
+    th: "เสาชิงช้า & วัดสุทัศน์", 
+    en: "Giant Swing & Wat Suthat", 
+    top: "47%", 
+    left: "43.5%", 
+    videoUrl: "/videos/demo3.mp4",
+    icon: "/images/icons/Giant_icon.png"
+  },
+  { 
+    id: 4, 
+    th: "ถนนข้าวสาร", 
+    en: "Khaosan Road", 
+    top: "28%", 
+    left: "28%", 
+    videoUrl: "/videos/demo4.mp4",
+    icon: "/images/icons/Khaosan_icon.png"
+  },
+  { 
+    id: 5, 
+    th: "ป้อมพระสุเมรุ", 
+    en: "Phra Sumen Fort", 
+    top: "14%", 
+    left: "20%", 
+    videoUrl: "/videos/demo5.mp4",
+    icon: "/images/icons/Sumane_icon.png" // อิงตามชื่อไฟล์ในภาพ (Sumane)
+  },
+  { 
+    id: 6, 
+    th: "พิพิธภัณฑสถานแห่งชาติ", 
+    en: "National Museum", 
+    top: "37%", 
+    left: "17.25%", 
+    videoUrl: "/videos/demo6.mp4",
+    icon: "/images/icons/National_icon.png"
+  },
+  { 
+    id: 7, 
+    th: "ถนนเยาวราช", 
+    en: "Yaowarat (Chinatown)", 
+    top: "74%", 
+    left: "70%", 
+    videoUrl: "/videos/demo7.mp4",
+    icon: "/images/icons/Yaowarat_icon.png"
+  },
+  { 
+    id: 8, 
+    th: "สนามหลวง", 
+    en: "Sanam Luang", 
+    top: "50%", 
+    left: "21%", 
+    videoUrl: "/videos/demo8.mp4",
+    icon: "/images/icons/SanamLuang_icon.png"
+  },
 ];
 
 const Controls = () => {
@@ -46,7 +110,8 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
         style={{ 
             top: loc.top, 
             left: loc.left, 
-            transform: 'translate(-50%, -100%)' 
+            transform: 'translate(-50%, -100%) ',
+            zIndex: activePin === loc.id ? 100 : 10 
         }}
         onMouseEnter={() => setActivePin(loc.id)}
         onMouseLeave={() => setActivePin(null)}
@@ -58,25 +123,32 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
         }}
     >
         <div 
-            className="text-4xl md:text-5xl drop-shadow-md text-red-600 hover:scale-125 transition-transform animate-bounce"
-            style={{ 
-                transform: `scale(${counterScale})`, 
+            className="transition-transform duration-300 ease-out animate-bounce"
+            style={{  
                 transformOrigin: 'bottom center' 
             }}
         >
-            <img src="/svg/pin-gold.svg" alt="Pin" className="w-16 h-16"/>
+            <img 
+                src={loc.icon} 
+                alt={loc.en} 
+                className={`
+                    w-[7rem] h-[7rem] md:w-[10rem] md:h-[10rem] object-contain drop-shadow-[0_4px_3px_rgba(0,0,0,0.3)]
+                    transition-all duration-300 z-[50]
+                    ${activePin === loc.id ? 'scale-125 drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] brightness-110' : 'hover:scale-110'}
+                `}
+            />
         </div>
 
         <div 
             className={`
-                absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-max px-3 py-1 
+                absolute top-full left-1/4 -translate-x-1/2 mb-1 w-max px-3 py-1 
                 bg-black/90 text-white text-xs md:text-sm tracking-wide border border-gold
-                transition-opacity duration-200 pointer-events-none z-50 rounded shadow-lg
+                transition-opacity duration-200 pointer-events-none z-[100] rounded shadow-lg
                 ${activePin === loc.id ? 'opacity-100' : 'opacity-0'} ${language === 'TH' ? 'font-krub' : 'font-merri'}
             `}
             style={{
                 transform: `scale(${counterScale})`,
-                transformOrigin: 'bottom center',
+                transformOrigin: 'top center',
                 marginBottom: `${10 * counterScale}px` 
             }}
         >
@@ -191,7 +263,7 @@ export default function MapPage() {
                 
                 <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full flex items-center justify-center">
                     
-                    <div className="relative w-auto h-auto inline-block">
+                    <div className="relative w-auto h-auto inline-block mt-14">
                         <img 
                             src="/images/map.png" 
                             alt="Phra Nakhon Map"
