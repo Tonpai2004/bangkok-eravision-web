@@ -133,8 +133,8 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
                 alt={loc.en} 
                 className={`
                     w-[7rem] h-[7rem] md:w-[10rem] md:h-[10rem] object-contain drop-shadow-[0_4px_3px_rgba(0,0,0,0.3)]
-                    transition-all duration-300 z-[50]
-                    ${activePin === loc.id ? 'scale-125 drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] brightness-110' : 'hover:scale-110'}
+                    transition-all duration-300 z-[50] drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] brightness-110
+                    ${activePin === loc.id ? 'scale-125' : 'hover:scale-110'}
                 `}
             />
         </div>

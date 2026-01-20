@@ -201,35 +201,71 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Phra Sumen Fort (1960).
+        **TASK:** Create a **HYPER-REALISTIC COLOR PHOTOGRAPH** of the **RUINS** of Phra Sumen Fort (Bangkok 1960).
         
-        **CRITICAL ACCURACY: TRUNCATED HALF-FORT:**
-        - **Status:** The main white fort tower is **DESTROYED / TRUNCATED**. The entire upper half (roof and spire) is **GONE**. It looks like a large, white, hexagonal stump or base only.
-        - **Condition:** Aged white plaster, heavily stained with black mold and humidity. Do not alter the remaining base structure.
-        
-        **TRAFFIC:**
-        - **Cars:** A few **Austin/Morris Minor** cars driving in **ONE DIRECTION ONLY**. No traffic jams.
+        **STRUCTURAL STATE (CRITICAL):**
+        - **NOT A FULL TOWER:** The fort is a **DECAPITATED RUIN**. 
+        - **HEIGHT:** It must be **ONLY 1 STORY HIGH**. It is just a wide, white hexagonal stone base (stump).
+        - **TOP PART:** The entire upper tower, all windows on the second floor, and the conical roof are **TOTALLY REMOVED/NON-EXISTENT**. 
+        - **SURFACE:** The top of the ruin is jagged, flat.
+        - **STAINING:** Heavily weathered with black mold, moss, and humidity stains on aged white plaster.
+
+        **ENVIRONMENT (1960s CONTEXT):**
+        - **NO PARK:** There is no "Santi Chai Prakan Park." No green lawn.
+        - **STREET:** Narrow asphalt road.
+
+        **NEGATIVE PROMPT:** complete fort, restored tower, high walls, roof, spire, pointed top, windows on upper floor, public park, green lawn, manicured trees, modern railings, cars.
     """,
 
     "Sanam Luang": """
-        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sanam Luang (Weekend Market 1968).
-        
-        **MARKET DYNAMICS:**
-        - **Stalls:** A mix of vendors **SQUATTING on woven mats** and vendors **STANDING behind simple wooden tables**.
-        - **Goods:** Amulets, books, plants, antiques.
-        - **Atmosphere:** Lively but breathable (not overcrowded).
-        - **Sky:** Only **A FEW** scattered kites.
-        - **Props:** **NO modern plastic chairs**, **NO blue tents**. Use Canvas/Bamboo parasols.
+        **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
+
+        **SPATIAL LOGIC (THE ORGANIC CHAOS):**
+        - **Perimeter:** Large canvas-covered stalls and heavy parasols (Red, Blue, White) are clustered under the massive tamarind trees.
+        - **Central Field:** An **ORGANIC SPRAWL**. Messy and scattered clusters of people sitting on woven bamboo mats (Sua Phra) or cardboard.
+        - **Itinerant Vendors:** Scattered throughout are **Walking Vendors** with bamboo shoulder poles (Kanh-Chab) and small wooden pushcarts selling snacks.
+
+        **GROUND & ATMOSPHERE:**
+        - **Surface:** A realistic mix of **scorched yellow grass** and **dusty dry red dirt**. Sharp focus on the uneven, trodden ground.
+        - **Horizon:** Hazy, golden rooftops of **Wat Phra Kaew** visible in the distance under a bright tropical sun.
+        - **Lighting:** Dappled sunlight filtering through tamarind trees creating high-contrast shadows.
+
+        **MARKET DETAILS:**
+        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins.
+        - **Props:** Use only **Large Canvas/Bamboo Parasols**. Add vintage hand-painted billboards at the edges.
+
+        **PEOPLE & ATTIRE:**
+        - **Vibe:** A dense, unorganized crowd of 1960s Thai locals in simple white shirts and sarongs, moving in all directions.
+
+        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars.
     """,
 
-    "National Museum": """
-        **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
+    # "National Museum": """
+    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
         
-        **FRONT ATMOSPHERE:**
-        - **Vibe:** Serene, shady, well-maintained.
-        - **Grounds:** Swept gravel, manicured grass, large trees. NOT overgrown.
-        - **Perspective:** Keep the exact view of the front facade from the input image.
-    """
+    #     **FRONT ATMOSPHERE:**
+    #     - **Vibe:** Serene, shady, well-maintained.
+    #     - **Grounds:** Swept gravel, manicured grass, large trees. NOT overgrown.
+    #     - **Perspective:** Keep the exact view of the front facade from the input image.
+    # """,
+
+    "National Museum": """
+        **TASK:** Create an **AUTHENTIC 1960s VINTAGE PHOTOGRAPH** of the National Museum Bangkok.
+        
+        **BACKGROUND PURGE (CRITICAL):**
+        - **REMOVE ALL MODERN BUILDINGS:** Absolutely NO skyscrapers, NO office buildings, NO modern concrete structures visible behind the temple or trees. The horizon must be only sky and tree canopies.
+        
+        **HISTORICAL TEXTURES (STRICT):**
+        - **The Fence:** A low, thick white-washed masonry base. The **SQUARE PILLARS** must look aged with **cracks, peeling lime-wash, and dark grey humidity stains**. The iron bars between them must be dark, rusty black.
+        - **Architecture:** The main buildings must have **DULL, MATTE walls** (not bright white). Add heavy weathering on the stucco. Roof tiles should be faded, dusty orange.
+        
+        **ATMOSPHERIC DEPTH:**
+        - **Haze & Dust:** Add a very subtle tropical haze in the air to soften the background. 
+        - **Lighting:** Warm, late-afternoon sun. Create long, soft shadows.
+        - **Film Aesthetic:** 1960s warm-toned print, low saturation, visible organic film grain. NO digital sharpness.
+
+        **NEGATIVE PROMPT:** modern skyscrapers, modern buildings in background, bright white paint, vibrant orange, digital sharpness, 3D render look, flags, modern signs, motion blur.
+    """,
 }
 
 # ==========================================
@@ -312,7 +348,11 @@ def get_random_reference(folder_name):
 
 # --- Gemini Generation Logic ---
 def step1_analyze(client, img_bytes):
-    prompt = "Analyze the precise geometry, camera angle, and structural layout..."
+    prompt = """Analyze this image of the National Museum Bangkok:
+    1. Identify all permanent structures.
+    2. PERSPECTIVE CHECK: Is this a view from the OUTSIDE (looking at the perimeter fence) or from the INSIDE (the courtyard/throne hall area)?
+    3. FENCE DETECTED: Answer 'YES' if a perimeter fence/gate is visible, or 'NO' if it is an inner courtyard.
+    4. Provide a structural description based on this perspective."""
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -328,7 +368,6 @@ def step1_analyze(client, img_bytes):
                 break
     return "Keep original perspective rigid."
 
-# 🔴 FIX: ใช้ gemini-2.0-flash-exp-image-generation หรือ nano-banana-pro-preview
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
@@ -362,7 +401,15 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     max_retries = 5
     
     # 🔴 เลือกโมเดลที่มีในบัญชีจริง
-    model_name = "gemini-2.0-flash-exp-image-generation" 
+    # === เรียงลิสต์ ===
+    # gemini-2.0-flash-exp-image-generation
+    # gemini-2.5-flash-image
+    # gemini-3-flash-preview
+    # === Premium ===
+    # gemini-3-pro-preview
+    # gemini-3-pro-image-preview
+
+    model_name = "gemini-2.5-flash-image" # เริ่มต้นด้วยโมเดลกลางๆ
 
     for attempt in range(max_retries):
         try:
@@ -373,7 +420,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
                 contents=parts,
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
-                    temperature=0.4
+                    temperature=0.2
                 )
             )
             for part in response.candidates[0].content.parts:
@@ -384,7 +431,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
         except Exception as e:
             if "not found" in str(e).lower() and model_name == "gemini-2.0-flash-exp-image-generation":
                 print("⚠️ Switching model to nano-banana-pro-preview...")
-                model_name = "nano-banana-pro-preview"
+                model_name = "gemini-2.0-flash-exp-image-generation" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
                 time.sleep(1)
                 continue
 
@@ -440,30 +487,38 @@ def generate_video_runway(image_bytes, location_key):
         
         # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
         # Goal: Static camera, realistic physics, no filters, no glitches.
+
+        # base_prompt = """
+        # Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation. 
+        # Hyper-realistic 8k video, high fidelity, sharp focus. 
+        # Clear daylight, natural colors (NO vintage filter, NO sepia, NO grain). 
+        # Physics-based motion: cars driving straight in lanes, people walking naturally (no sliding).
+        # Stable structures, no morphing buildings. No visual glitches.
+        # """
+
         base_prompt = """
         Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation. 
-        Hyper-realistic 8k video, high fidelity, sharp focus. 
-        Clear daylight, natural colors (NO vintage filter, NO sepia, NO grain). 
-        Physics-based motion: cars driving straight in lanes, people walking naturally (no sliding).
-        Stable structures, no morphing buildings. No visual glitches.
+        Hyper-realistic 8k video, high fidelity. 
+        Subtle environmental motion only. Stable structures, no morphing buildings. 
+        Natural 1960s lighting with very subtle film grain. No visual glitches.
         """
 
         location_prompts = {
-            "Democracy Monument": "Clouds moving slowly. Birds flying high. Vintage cars (Fiat, Austin) moving smoothly in a ONE-WAY CLOCKWISE circle on the asphalt road. No cars touching the monument.",
+            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all.",
             
-            "Sala Chalermkrung": "Subtle street life. People standing or walking naturally near the theater entrance. A vintage Datsun taxi driving past smoothly. Flags waving. No camera movement.",
+            "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
             
-            "Giant Swing": "Vintage Fiat 1100 driving slowly STRAIGHT past the swing. No weaving. Clear blue sky. NO swinging motion on the red pillars. No ropes.",
+            "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
             
-            "Yaowarat": "A yellow tram moving slowly and heavily on rails on the right side. Pedestrians walking on sidewalks. Flags waving gently. No neon flickering.",
+            "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
             
-            "Khaosan Road": "Thai locals sitting and talking (subtle head/hand movements). A dog walking. Trees swaying gently. Peaceful residential vibe. No foreigners.",
+            "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
             
-            "Phra Sumen Fort": "Trees rustling in the breeze near the white fort ruins. Sunlight and shadows shifting naturally. A vintage Austin car driving straight past.",
+            "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
             
-            "Sanam Luang": "Canvas umbrellas fluttering in the wind. People squatting and walking in the market (natural gait, no sliding feet). A few kites floating in the sky.",
+            "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
             
-            "National Museum": "Dappled sunlight filtering through tree leaves. Shadows moving on the ground. Very calm and still atmosphere. No people running."
+            "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
         }
 
         specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
