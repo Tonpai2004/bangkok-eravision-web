@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { useLanguage } from "@/context/LanguageContext";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { TransformWrapper, TransformComponent, useControls, useTransformContext, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 import { useRouter } from "next/navigation";
@@ -198,7 +198,7 @@ const VideoModal = ({ location, onClose, language }: any) => {
                    </span>
                    <button 
                        onClick={handleNavigateToUpload}
-                       className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2"
+                       className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2 hover:bg-[#dfbd4e] transition-all"
                    >
                       {language === 'TH' ? "ลองสร้างวิดีโอของคุณ" : "Generate Your Own"}
                    </button>
@@ -218,6 +218,14 @@ export default function MapPage() {
   const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   const fontClass = language === 'ENG' ? 'font-merri' : 'font-krub';
+
+  const [showHint, setShowHint] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowHint(false);
+    }, 4000); // โชว์ค้างไว้ 4 วินาที
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main className="w-full px-4 md:px-6 pb-20 mx-auto">
@@ -289,8 +297,27 @@ export default function MapPage() {
                 </TransformComponent>
              </TransformWrapper>
 
-             <div className={`absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm p-2 border border-dark text-xs pointer-events-none z-10 ${fontClass}`}>
-                {language === 'TH' ? "🖱️ เลื่อนเมาส์เพื่อซูม / คลิกแล้วลากเพื่อขยับ" : "🖱️ Scroll to Zoom / Drag to Pan"}
+             <div 
+                className={`
+                    absolute bottom-4 left-4 z-10 
+                    bg-white/90 backdrop-blur-sm p-3 rounded-lg border shadow-lg
+                    text-xs md:text-sm text-dark font-bold pointer-events-none
+                    transition-opacity duration-1000 ease-out 
+                    ${fontClass}
+                    ${showHint ? 'opacity-100' : 'opacity-0'} 
+                `}
+             >
+                {language === 'TH' ? (
+                   <div className="flex items-center gap-2">
+                      <span className="text-xl">🖱️</span> 
+                      <span>ลากเพื่อขยับ</span>
+                   </div>
+                ) : (
+                   <div className="flex items-center gap-2">
+                      <span className="text-xl">🖱️</span> 
+                      <span>Drag to Pan</span>
+                   </div>
+                )}
              </div>
         </div>
       </div>

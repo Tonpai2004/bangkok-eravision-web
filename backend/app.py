@@ -110,22 +110,22 @@ LOCATION_PROMPTS = {
           
           **PERSPECTIVE LOCK (CRITICAL):**
           - Use the Uploaded Image as the **Absolute Layout Blueprint**.
-          - Keep the exact camera angle and composition. DO NOT ROTATE.
+          - **Keep the exact camera angle and composition. DO NOT ROTATE**.
           
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco.
-          - **Center:** Solid turret with **Dark Bronze/Black Metal Tray**.
-          - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are **75 SMALL BLACK CANNONS** buried muzzle-up in the ground, connected by **HEAVY IRON CHAINS**.
-          - **NEGATIVE PROMPT:** No cannons on the steps, no flowers, no grass on the monument.
+          - **Constitution Pedestal:** Metallic dark grey/black statue of the Constitution on top of round pedestal. Red door at base.
+          - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are SMALL BLACK CANNONS** buried in the ground around the monument base, connected by **HEAVY IRON CHAINS**.
+          - **NEGATIVE PROMPT:** cannons on the steps, flowers, grass on the monument.
 
           **TRAFFIC RULES (CRITICAL):**
           - **One-Way Circle:** Cars drive **CLOCKWISE** around the circle (Thai left-hand traffic rule means roundabout flow is clockwise).
-          - **Vehicle Models:** **Fiat 1100, Austin Cambridge, Morris Minor**. NO MODERN CARS.
-          - **Safety:** **NO CARS ON THE MONUMENT BASE.** Keep them on the asphalt road.
+          - **Vehicle Models:** NO MODERN CARS Use only 1960s Thailand vehicles.
+          - **Safety:** **NO Any Cars On the Democracy monument.** **Keep them all on the road.**
           
           **SURROUNDINGS:**
-          - **Buildings:** Aged Terracotta/Brick Orange Ratchadamnoen buildings.
-          - **Road:** Wide Asphalt. NO modern lane markings.
+          - **Buildings:** Aged Terracotta/Brick Orange color Ratchadamnoen buildings.
+          - **Road:** Wide Asphalt. NO modern lane markings or painting on the road.
       """,
 
     "Sala Chalermkrung": """
@@ -146,37 +146,60 @@ LOCATION_PROMPTS = {
     """,
 
     "Giant Swing": """
-        **TASK:** Create a **SHARP, PHOTOREALISTIC COLOR PHOTOGRAPH** of The Giant Swing (1965).
+        **TASK:** Create an **AUTHENTIC 1965 KODACHROME SCAN** of The Giant Swing.
 
-        **PERSPECTIVE & VISIBILITY RULE (CRITICAL):**
-        - **IF the original image shows Wat Suthat:** Render it clearly with aged, weathered roof tiles and white walls.
-        - **IF the original image DOES NOT show the temple:** **DO NOT ADD IT.** Focus solely on transforming the surrounding shophouses to be historically accurate (1960s style, aged wood/concrete, tile roofs).
+        **🏘️ 1960s SHOPHOUSE ARCHITECTURE (STRICT):**
+        - **Structure:** Long, continuous rows of **two-story colonial-style shophouses**.
+        - **Ground Floor:** Features dark, weathered **Wooden Folding Doors (Ban-Fiam)**.
+        - **Upper Floor:** Symmetrical **Wooden Shuttered Windows**. NO glass modern windows.
+        - **Texture:** Walls are aged white or grey plaster with heavy **humidity stains, soot, and peeling paint**. NO clean modern white.
+        - **Roofs:** Slanted roofs with **weathered brown/terracotta tiles**.
 
-        **DETAILS:**
-        - **The Swing:** Two towering **Vibrant Red Teak Pillars** standing on a clean White Stone Plinth.
-        - **Structure:** Intricate carved crossbar at the top. **NO ROPES HANGING DOWN**. It is empty.
-        
-        **TRAFFIC REALISM:**
-        - **Cars:** **Fiat 1100 and Austin Cambridge**. Driving straight on the road alongside the swing.
-        - **Clean Image:** **NO SPEED LINES, NO MOTION BLUR LINES, NO GLITCHES** following the cars. The air must be clear.
+        **📍 PERSPECTIVE & ROUTE LOGIC:**
+        - **TRAM CHECK:** If the road next to Wat Suthat is visible, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
+        - **ROAD SURFACE:** Replace modern pavement with **weathered grey concrete** and layers of tropical dust. Erase all traffic paint.
 
-        **NEGATIVE PROMPT:** Ropes hanging from swing, men swinging, modern traffic lights, 7-Eleven, tourists in shorts, speed lines, motion trails.
+        **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
     """,
     
+    # "Yaowarat": """
+    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
+        
+    #     **STRICT TEXT & SIGNS:**
+    #     - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish.
+    #     - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
+    #     - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
+        
+    #     **TRAM REALISM:**
+    #     - **Tram:** Weathered Yellow/Red wooden tram at the middle of the road.
+    #     - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
+        
+    #     **TRAFFIC:**
+    #     - **Vehicles:** **Samlors (Tricycles)** and **Round-nose Trucks (Isuzu TX)**. No modern sedans.
+    # """,
+
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
-        
+
+        **🏘️ ARCHITECTURAL TRANSFORMATION (CRITICAL):**
+        - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
+        - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
+        - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
+
         **STRICT TEXT & SIGNS:**
-        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish.
-        - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
-        - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
+        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish must have meaning in those textds.
+        - **STYLE:** Hand-painted vertical signs attached to building pillars. Matte finish, no internal glow.
+        - **CONTENT:** Use legible Thai and Chinese calligraphy for "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", and "**ขายยาจีน**".
+
+        **🚋 TRAM & ROAD:**
+        - **TRAM:** A weathered Yellow/Red open-air wooden tram running on tracks embedded in the aged asphalt road.
+        - **POSITION:** The tram must be **HUGGING THE RIGHT CURB**, extremely close to the shophouse fronts.
         
-        **TRAM REALISM:**
-        - **Tram:** Weathered Yellow/Red wooden tram.
-        - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
-        
-        **TRAFFIC:**
-        - **Vehicles:** **Samlors (Tricycles)** and **Round-nose Trucks (Isuzu TX)**. No modern sedans.
+        **🚦 ATMOSPHERE:**
+        - **Transport:** Samlors (tricycles).
+        - **Crowd:** Busy street market vibe with Thai locals in 1960s attire.
+
+        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building.
     """,
 
     "Khaosan Road": """
@@ -240,31 +263,25 @@ LOCATION_PROMPTS = {
         **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars.
     """,
 
-    # "National Museum": """
-    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of the **FRONT** of National Museum Bangkok (1960).
-        
-    #     **FRONT ATMOSPHERE:**
-    #     - **Vibe:** Serene, shady, well-maintained.
-    #     - **Grounds:** Swept gravel, manicured grass, large trees. NOT overgrown.
-    #     - **Perspective:** Keep the exact view of the front facade from the input image.
-    # """,
-
     "National Museum": """
-        **TASK:** Create an **AUTHENTIC 1960s VINTAGE PHOTOGRAPH** of the National Museum Bangkok.
-        
-        **BACKGROUND PURGE (CRITICAL):**
-        - **REMOVE ALL MODERN BUILDINGS:** Absolutely NO skyscrapers, NO office buildings, NO modern concrete structures visible behind the temple or trees. The horizon must be only sky and tree canopies.
-        
-        **HISTORICAL TEXTURES (STRICT):**
-        - **The Fence:** A low, thick white-washed masonry base. The **SQUARE PILLARS** must look aged with **cracks, peeling lime-wash, and dark grey humidity stains**. The iron bars between them must be dark, rusty black.
-        - **Architecture:** The main buildings must have **DULL, MATTE walls** (not bright white). Add heavy weathering on the stucco. Roof tiles should be faded, dusty orange.
-        
-        **ATMOSPHERIC DEPTH:**
-        - **Haze & Dust:** Add a very subtle tropical haze in the air to soften the background. 
-        - **Lighting:** Warm, late-afternoon sun. Create long, soft shadows.
-        - **Film Aesthetic:** 1960s warm-toned print, low saturation, visible organic film grain. NO digital sharpness.
+        **TASK:** Create a **VINTAGE 1960s** photograph of the National Museum Bangkok.
 
-        **NEGATIVE PROMPT:** modern skyscrapers, modern buildings in background, bright white paint, vibrant orange, digital sharpness, 3D render look, flags, modern signs, motion blur.
+        **🚧 ROAD & CURB OVERRIDE (CRITICAL PRIORITY):**
+        - **DESTROY THE CURB:** The road is Asphalt. It must extend ALL THE WAY to the base of the fence.
+        - **COVER UP:** Use **layers of dust, brown dirt,** to BURY the sidewalk edges.
+        - **VISUAL RULE:** There is **NO CONCRETE SIDEWALK** and **NO RED/WHITE PAINT**.
+
+        **HISTORICAL FENCE (DOWNSIZING):**
+        - **Structure:** The fence is a **LOW** masonry wall (Waist-high).
+        - **Gate Pillars:** The entrance pillars are **SHORT and MODEST** (only slightly taller than a person). NOT massive towers.
+        - **Material:** Aged, stained white stucco with black iron spikes on top.
+        - **Signage:** No sign at all.
+
+        **ATMOSPHERE:**
+        - **Vibe:** Quiet, ancient, Luxury. 
+        - **Background:** The chapel roof is faded orange, visible through large, messy tamarind trees.
+
+        **NEGATIVE PROMPT:** red and white curb, traffic stripes, concrete sidewalk, high-rise gate towers, modern paving, clean road, road markings, zebra crossing.
     """,
 }
 
@@ -300,18 +317,15 @@ def get_friendly_error_message(raw_reason, lang='TH'):
     
     return "Image composition is unclear." if is_eng else "องค์ประกอบภาพยังไม่ชัดเจน"
 
+SIMILARITY_THRESHOLD = 0.4
 # --- CLIP Logic ---
 def get_best_match_reference(location_th, user_img_bytes):
     if location_th == "ถนนข้าวสาร":
-        print(f"🌾 Khaosan Road: Using Prompt Only.")
         return None
 
     mapped_key = LOCATION_KEY_MAP.get(location_th)
-    if not mapped_key: return None 
-
-    if not SEARCH_MODEL or mapped_key not in LOCATION_INDICES:
-        print(f"⚠️ No AI Index for '{mapped_key}'. Fallback to Random.")
-        return get_random_reference(mapped_key)
+    if not mapped_key or not SEARCH_MODEL or mapped_key not in LOCATION_INDICES:
+        return None
     
     try:
         data = LOCATION_INDICES[mapped_key]
@@ -320,16 +334,22 @@ def get_best_match_reference(location_th, user_img_bytes):
         
         distances = cdist([user_vector], data['vectors'], metric='cosine')[0]
         best_idx = np.argmin(distances)
-        best_filename = data['filenames'][best_idx]
+        min_distance = distances[best_idx]
         
-        print(f"🎯 Smart Match ({mapped_key}): Matches -> {best_filename}")
+        # --- เพิ่ม Logic ตรงนี้ ---
+        if min_distance > SIMILARITY_THRESHOLD:
+            print(f"⚠️ No close match found (Dist: {min_distance:.2f}). Skipping Reference Image.")
+            return None
+            
+        best_filename = data['filenames'][best_idx]
+        print(f"🎯 Smart Match ({mapped_key}): Dist {min_distance:.2f} -> {best_filename}")
         file_path = os.path.join(os.path.dirname(__file__), "reference_images", mapped_key, best_filename)
         with open(file_path, "rb") as f:
             return f.read()
             
     except Exception as e:
-        print(f"❌ Smart Match Error: {e}. Fallback to random.")
-        return get_random_reference(mapped_key)
+        print(f"❌ Smart Match Error: {e}")
+        return None
 
 def get_random_reference(folder_name):
     base_path = os.path.join(os.path.dirname(__file__), "reference_images", folder_name)
@@ -348,55 +368,64 @@ def get_random_reference(folder_name):
 
 # --- Gemini Generation Logic ---
 def step1_analyze(client, img_bytes):
-    prompt = """Analyze this image of the National Museum Bangkok:
-    1. Identify all permanent structures.
-    2. PERSPECTIVE CHECK: Is this a view from the OUTSIDE (looking at the perimeter fence) or from the INSIDE (the courtyard/throne hall area)?
-    3. FENCE DETECTED: Answer 'YES' if a perimeter fence/gate is visible, or 'NO' if it is an inner courtyard.
-    4. Provide a structural description based on this perspective."""
+    # ปรับ Prompt ให้เป็น Structured Analysis
+    prompt = """
+    Analyze this modern-day image of a Bangkok landmark for a historical 1960s reconstruction:
+    
+    1. **Perspective Type**: Identify the camera angle (e.g., Eye-level, High-angle, Ground-level POV, Wide-angle, or Close-up).
+    2. **Visible Landmark Parts**: List ONLY the parts of the landmark actually visible in this frame (e.g., 'only the left wing', 'top of the turret', 'no ground visible').
+    3. **Spatial Layout**: Describe where the main structure sits (e.g., 'Centered', 'Leading from bottom-right to top-left').
+    4. **Modern Elements to Remove**: Identify specific modern objects and their positions (e.g., 'Blue bus on the left', 'CCTV on the pole', 'Traffic lights in foreground').
+    
+    Output this as a concise summary to be used as a 'Geometry Constraint' for an image generation model.
+    """
+    
     max_retries = 3
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-1.5-flash", 
+                model="gemini-2.0-flash-001", 
                 contents=[prompt, types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg")]
             )
-            return response.text
+            # เราจะได้คำบรรยายที่ระบุมุมมองชัดเจน เช่น "POV from sidewalk, only the base visible..."
+            return response.text 
         except Exception as e:
             if "429" in str(e) or "503" in str(e):
                 time.sleep((2 ** attempt) + random.uniform(0, 1))
             else:
                 break
-    return "Keep original perspective rigid."
+    return "Maintain original perspective and visible structures exactly."
 
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    global_style = """
-    **GLOBAL STYLE INSTRUCTION (MUST FOLLOW):**
-    - **OUTPUT MUST BE A PHOTOREALISTIC COLOR PHOTOGRAPH.** Do not generate black and white images.
-    - **FILM LOOK:** Imitate 1960s Kodachrome slide film aesthetic.
-    - **ASPECT RATIO & PERSPECTIVE:** The output image must maintain the same aspect ratio, framing, and camera angle as the input image. DO NOT ROTATE. DO NOT ZOOM.
-    - **GLOBAL NEGATIVE PROMPT:** modern logos (7-Eleven, Starbucks, Apple, etc.), brand names, QR codes, CCTV cameras, satellite dishes, air conditioning units, modern cars (Toyota, Honda, Tesla), motorcycles, LED signs, concrete barriers, plastic chairs, watermarks, text overlay, glitch text, distorted letters.
+    # เพิ่มคำสั่งควบคุม Perspective ให้แข็งแกร่งขึ้น
+    global_style = f"""
+    **STRICT PERSPECTIVE CONTROL:**
+    - {structure_desc}
+    - Keep the original image's geometry, camera height, and focal length. 
+    - DO NOT add historical elements that would be out of frame according to the identified perspective.
+    
+    **GLOBAL STYLE:**
+    - Output: Photorealistic color 1960s Kodachrome filter photograph.
+    - Remove all modern objects identified in the analysis.
     """
     
-    parts = []
+    parts = [f"{specific_prompt}\n{global_style}"]
+    parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
+
     if ref_img_bytes:
+        # ถ้ามี Reference ที่ใกล้เคียงพอ (ผ่าน Threshold) ให้ใช้ IP-Adapter Mode
         style_instruction = """
-        **STYLE TRANSFER INSTRUCTION (IP-ADAPTER MODE):**
-        - The second image is the **STYLE REFERENCE** (Ground Truth).
-        - **COPY the color palette, lighting, and historical atmosphere** from the Reference Image.
-        - **CRITICAL:** Use the Reference mainly for COLOR/VIBE. Use the Prompt for STRUCTURAL details.
+        **STYLE TRANSFER (REFERENCE ENABLED):**
+        - Use the second image ONLY for color grading, lighting, and film texture.
+        - DO NOT let the reference image change the geometry of the first image.
         """
-        parts = [
-            f"{specific_prompt}\n{global_style}\n{style_instruction}\n**GEOMETRY CONSTRAINT:**\nReference Analysis: {structure_desc}",
-            types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"),
-            types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg") 
-        ]
+        parts[0] += f"\n{style_instruction}"
+        parts.append(types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg"))
     else:
-        parts = [
-            f"{specific_prompt}\n{global_style}\n**GEOMETRY CONSTRAINT:**\nReference Analysis: {structure_desc}",
-            types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg")
-        ]
+        # ถ้าไม่มี Reference ให้เน้นไปที่การสร้างจาก Text Prompt
+        parts[0] += "\n**Note:** Generate lighting and color based on authentic 1960s Bangkok daylight."
 
     max_retries = 5
     
@@ -409,7 +438,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     # gemini-3-pro-preview
     # gemini-3-pro-image-preview
 
-    model_name = "gemini-2.5-flash-image" # เริ่มต้นด้วยโมเดลกลางๆ
+    model_name = "nano-banana-pro-preview" # เริ่มต้นด้วยโมเดลกลางๆ
 
     for attempt in range(max_retries):
         try:
@@ -691,6 +720,7 @@ def generate_image_route():
         img_bytes = file.read()
         
         ref_bytes = get_best_match_reference(location_th, img_bytes)
+        
         client = get_client()
         structure = step1_analyze(client, img_bytes)
         
