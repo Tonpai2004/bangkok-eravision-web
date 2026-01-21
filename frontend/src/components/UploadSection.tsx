@@ -13,6 +13,46 @@ const LOCATIONS_DATA = [
   { id: "พิพิธภัณฑสถานแห่งชาติ", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
 ];
 
+// ฟังก์ชันแปลง Error ภาษาต่างดาว ให้เป็นภาษาคน (ไทย/อังกฤษ)
+const getFriendlyErrorMessage = (rawError: string, lang: 'TH' | 'ENG'): string => {
+  if (lang === 'ENG') return rawError; // ถ้าโหมดอังกฤษ ให้ส่งค่าเดิมกลับไป
+
+  const err = rawError.toLowerCase();
+
+  // --- 1. Network / Server Connection ---
+  if (err.includes("failed to fetch") || err.includes("network error")) {
+    return "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้\n(กรุณาเช็คอินเทอร์เน็ต หรือ Server อาจจะปิดอยู่)";
+  }
+  if (err.includes("timeout") || err.includes("timed out")) {
+    return "การเชื่อมต่อหมดเวลา (Server ตอบสนองช้ากว่าปกติ)\nกรุณาลองใหม่อีกครั้ง";
+  }
+
+  // --- 2. AI Model Errors (Gemini / Runway) ---
+  if (err.includes("503") || err.includes("overloaded") || err.includes("busy") || err.includes("capacity")) {
+    return "ขณะนี้ AI กำลังทำงานหนักมาก (Server Busy)\nกรุณารอสักครู่ แล้วกด 'ลองใหม่อีกครั้ง'";
+  }
+  if (err.includes("429") || err.includes("quota") || err.includes("resource exhausted")) {
+    return "โควต้าการใช้งาน AI เต็มชั่วคราว\nกรุณารอประมาณ 1-2 นาที แล้วลองใหม่";
+  }
+  if (err.includes("safety") || err.includes("blocked") || err.includes("harmful")) {
+    return "รูปภาพถูกระงับโดยระบบความปลอดภัยของ AI\n(อาจมีเนื้อหาที่ AI มองว่าไม่เหมาะสม หรือมีความเสี่ยง)";
+  }
+  if (err.includes("model returned no image") || err.includes("none is not iterable")) {
+    return "AI ไม่สามารถสร้างภาพได้ในขณะนี้\n(อาจเกิดจาก Server รวน หรือรูปต้นฉบับซับซ้อนเกินไป)";
+  }
+
+  // --- 3. Data / Parsing Errors ---
+  if (err.includes("json") || err.includes("unexpected token") || err.includes("syntaxerror")) {
+    return "เกิดข้อผิดพลาดในการรับ-ส่งข้อมูล (JSON Error)\nกรุณาลองใหม่อีกครั้ง";
+  }
+  if (err.includes("no image provided") || err.includes("file")) {
+    return "ไม่พบไฟล์รูปภาพ หรือไฟล์เสียหาย";
+  }
+
+  // --- 4. Fallback (ถ้าไม่เข้าเคสไหนเลย) ---
+  return `เกิดข้อผิดพลาด: ${rawError}`;
+};
+
 const UI_TEXT = {
   TH: {
     label_location: "เลือกสถานที่",
@@ -205,11 +245,17 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
           method: 'POST',
           body: genFormData,
       });
+      if (!genRes.ok) {
+          const errData = await genRes.json().catch(() => ({})); // กัน JSON parse พัง
+          // ถ้าเป็น 503 ให้โยนคำว่า 503 เพื่อให้ตัวแปลภาษาจับได้
+          if (genRes.status === 503) throw new Error("503 Service Unavailable (Model Busy)");
+          throw new Error(errData.error || `Server Error: ${genRes.status}`);
+      }
       const genData = await genRes.json();
 
       if (!genData.image) throw new Error(genData.error || "Image generation failed");
 
-      // ✅ ได้รูปมาแล้ว! ต่อไปส่งไปทำวิดีโอ (Runway)
+      // ได้รูปมาแล้ว! ต่อไปส่งไปทำวิดีโอ (Runway)
       // เปลี่ยนสถานะเป็น animating เพื่อโชว์ UI ใหม่
       currentStep = 'animating';
       setStatus('animating'); 
@@ -246,7 +292,9 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
 
     } catch (err: any) {
         console.error("Process Error:", err);
-        setFailReason(err.message);
+        // แปลงข้อความ Error ให้คนอ่านไม่งง
+        const friendlyMsg = getFriendlyErrorMessage(err.message || "Unknown Error", currentLang);
+        setFailReason(friendlyMsg);
         
         if (currentStep === 'verifying') {
              setStatus('verified_fail'); 
