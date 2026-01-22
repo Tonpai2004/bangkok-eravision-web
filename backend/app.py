@@ -107,6 +107,10 @@ LOCATION_PROMPTS = {
     # 🏛️ อนุสาวรีย์ประชาธิปไตย: ปืนใหญ่ 75 กระบอก (ฝังดินรอบนอก) + รถวิ่งวนซ้าย (ไทยขับชิดซ้าย)
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
+
+          **FORBIDDEN STRUCTURAL CHANGES (STRICT):**
+          - **NO DISTORTION:** Do NOT twist, bend, warp, or alienate the shape of the four wings or the central turret. They must be structurally sound and geometrically correct.
+          - **NO STRANGE ADDITIONS:** Do NOT add extra statues, spires, fantasy elements, or any unidentified objects to the monument structure. Keep it historically accurate.
           
           **PERSPECTIVE LOCK (CRITICAL):**
           - Use the Uploaded Image as the **Absolute Layout Blueprint**.
@@ -114,9 +118,9 @@ LOCATION_PROMPTS = {
           
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco.
-          - **Constitution Pedestal:** Metallic dark grey/black statue of the Constitution on top of round pedestal. Red door at base.
+          - **Constitution Pedestal:** Metallic dark grey/black Constitution on top of round pedestal. Red door at base.
           - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are SMALL BLACK CANNONS** buried in the ground around the monument base, connected by **HEAVY IRON CHAINS**.
-          - **NEGATIVE PROMPT:** cannons on the steps, flowers, grass on the monument.
+          - **NEGATIVE PROMPT:** flowers, grass on the monument.
 
           **TRAFFIC RULES (CRITICAL):**
           - **One-Way Circle:** Cars drive **CLOCKWISE** around the circle (Thai left-hand traffic rule means roundabout flow is clockwise).
@@ -138,7 +142,7 @@ LOCATION_PROMPTS = {
         
         **THE MOVIE POSTER (SPECIFIC):**
         - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
-        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Director "**ตอตุ้ม**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
         
         **CONTEXT:**
         - **Street:** Wide asphalt avenue.
@@ -162,7 +166,7 @@ LOCATION_PROMPTS = {
     #     **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
     # """,
 
-"Giant Swing": """
+    "Giant Swing": """
         **TASK:** Transform the uploaded image into a **HYPER-REALISTIC 1965 KODACHROME PHOTOGRAPH** of The Giant Swing area.
 
         **🔒 1. PERSPECTIVE & GEOMETRY LOCK (ABSOLUTE PRIORITY):**
@@ -177,6 +181,7 @@ LOCATION_PROMPTS = {
 
         **📍 3. CONTEXT & ATMOSPHERE:**
         - **Road Surface:** Erase modern zebra crossings and bright traffic lines. Replace with **worn, dusty grey concrete/asphalt**.
+        - **Road Width Adjustment (Subtle expansion):** Slightly increase the visible width of the road surface just a little bit to create a slightly more spacious feeling, but do not overdo it.
         - **De-Clutter:** ERASE all air conditioners, satellite dishes, tangled modern wires, and 7-Eleven signs.
         - **Tram Check:** IF the road next to Wat Suthat is visible in the input angle, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
 
@@ -201,6 +206,7 @@ LOCATION_PROMPTS = {
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
+        **LOCK:** Maintain the exact building geometry and camera height of [IMAGE 1].
 
         **🏘️ ARCHITECTURAL TRANSFORMATION (CRITICAL):**
         - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
@@ -210,17 +216,20 @@ LOCATION_PROMPTS = {
         **STRICT TEXT & SIGNS:**
         - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish must have meaning in those textds.
         - **STYLE:** Hand-painted vertical signs attached to building pillars. Matte finish, no internal glow.
-        - **CONTENT:** Use legible Thai and Chinese calligraphy for "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", and "**ขายยาจีน**".
+        - **CONTENT:** STRICTLY NO GIBBERISH OR ILLEGIBLE TEXT. All signs must contain legible, meaningful Thai or Chinese characters. Limit the 'ห้างทอง' sign to ONE distinct, prominent location. Other signs should have different, legible names appropriate for the era (e.g., 'ร้านขายยา', 'ภัตตาคาร', 'ยา'). Ensure hand-painted textures look authentic, not generated.
 
-        **🚋 TRAM & ROAD:**
-        - **TRAM:** A weathered Yellow/Red open-air wooden tram running on tracks embedded in the aged asphalt road.
-        - **POSITION:** The tram must be **HUGGING THE RIGHT CURB**, extremely close to the shophouse fronts.
+        **🚋 TRAM & ROAD (SINGLE TRACK PRIORITY):**
+        - **TRACK CONFIGURATION:** **GENERATE ONLY ONE SINGLE TRAM TRACK.** Do NOT create double tracks or multiple lanes of rails.
+        - **TRACK LOCATION:** This single track MUST be embedded flush with the asphalt and located **EXTREMELY CLOSE TO THE RIGHT-SIDE CURB**, hugging the shophouses.
+        - **TRAM ALIGNMENT:** The Yellow/Red wooden tram must be positioned **DIRECTLY ON TOP OF THIS SINGLE TRACK**. The wheels must align with the rails.
+        - **SPATIAL RULE:** The tram and track take up only the far right edge of the road. The rest of the road width (center and left) must be empty asphalt for Samlors and pedestrians.
         
         **🚦 ATMOSPHERE:**
         - **Transport:** Samlors (tricycles).
+        - **Road Surface:** Worn asphalt with embedded tram tracks. NO modern lane markings.
         - **Crowd:** Busy street market vibe with Thai locals in 1960s attire.
 
-        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building.
+        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, multiple tram lines.
     """,
 
     "Khaosan Road": """
@@ -246,13 +255,16 @@ LOCATION_PROMPTS = {
 
     "Phra Sumen Fort": """
         **TASK:** Create a **HYPER-REALISTIC COLOR PHOTOGRAPH** of the **RUINS** of Phra Sumen Fort (Bangkok 1960).
+
+        **🔒 PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
+        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly.
+        - **NO ROTATION:** Do not change the viewpoint. Adhere strictly to the composition of the source image.
         
         **STRUCTURAL STATE (CRITICAL):**
-        - **NOT A FULL TOWER:** The fort is a **DECAPITATED RUIN**. 
-        - **HEIGHT:** It must be **ONLY 1 STORY HIGH**. It is just a wide, white hexagonal stone base (stump).
-        - **TOP PART:** The entire upper tower, all windows on the second floor, and the conical roof are **TOTALLY REMOVED/NON-EXISTENT**. 
-        - **SURFACE:** The top of the ruin is jagged, flat.
-        - **STAINING:** Heavily weathered with black mold, moss, and humidity stains on aged white plaster.
+        - **THE BASE IS ALIVE:** Maintain the massive **2-STORY HEXAGONAL MASONRY BASE**. It is not a stump; the primary walls of the fort are still standing tall.
+        - **DECAPITATED TOP:** ONLY the small upper pavilion, its windows, and the conical spire roof are **REMOVED**.
+        - **TOP EDGE:** The top of the walls must look jagged and broken, showing exposed red bricks and crumbling old mortar.
+        - **PATINA:** The white-washed walls are heavily weathered with **thick black mold, green moss, and humidity streaks**.
 
         **ENVIRONMENT (1960s CONTEXT):**
         - **NO PARK:** There is no "Santi Chai Prakan Park." No green lawn.
@@ -264,10 +276,13 @@ LOCATION_PROMPTS = {
     "Sanam Luang": """
         **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
 
-        **SPATIAL LOGIC (THE ORGANIC CHAOS):**
-        - **Perimeter:** Large canvas-covered stalls and heavy parasols (Red, Blue, White) are clustered under the massive tamarind trees.
-        - **Central Field:** An **ORGANIC SPRAWL**. Messy and scattered clusters of people sitting on woven bamboo mats (Sua Phra) or cardboard.
-        - **Itinerant Vendors:** Scattered throughout are **Walking Vendors** with bamboo shoulder poles (Kanh-Chab) and small wooden pushcarts selling snacks.
+        **🔒 PERSPECTIVE & COMPOSITION LOCK (ABSOLUTE PRIORITY):**
+        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly. Do not zoom in or shift the view.
+        - **LAYOUT BASE:** Use the spatial arrangement of the input image as the foundation for placing the market activity.
+
+        **SPATIAL LOGIC (WIDESPREAD ORGANIC CHAOS):**
+        - **FILL THE FRAME:** The market activity, stalls, and crowds must be spread **thoroughly** across the entire visible ground area dictated by the input perspective. Avoid large empty gaps; the scene should feel bustling from edge to edge.
+        - **Perimeter to Center:** Stalls cluster under trees, but the central field is a **DENSE, continuous sprawl** of people on mats and walking vendors covering the dusty ground.
 
         **GROUND & ATMOSPHERE:**
         - **Surface:** A realistic mix of **scorched yellow grass** and **dusty dry red dirt**. Sharp focus on the uneven, trodden ground.
@@ -275,17 +290,17 @@ LOCATION_PROMPTS = {
         - **Lighting:** Dappled sunlight filtering through tamarind trees creating high-contrast shadows.
 
         **MARKET DETAILS:**
-        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins.
+        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins visible throughout.
         - **Props:** Use only **Large Canvas/Bamboo Parasols**. Add vintage hand-painted billboards at the edges.
 
-        **PEOPLE & ATTIRE:**
-        - **Vibe:** A dense, unorganized crowd of 1960s Thai locals in simple white shirts and sarongs, moving in all directions.
+        **PEOPLE (DENSE & WIDESPREAD):**
+        - **Vibe:** A **DENSE, busy crowd filling the entire scene**. People are everywhere—sitting, walking, browsing—creating a feeling of a bustling, jam-packed market throughout the whole frame. 1960s attire (white shirts, sarongs).
 
-        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars.
+        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, empty spaces.
     """,
 
     "National Museum": """
-        **TASK:** Create a **VINTAGE 1960s** photograph of the National Museum Bangkok.
+        **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
         **🚧 ROAD & CURB OVERRIDE (CRITICAL PRIORITY):**
         - **DESTROY THE CURB:** The road is Asphalt. It must extend ALL THE WAY to the base of the fence.
@@ -420,57 +435,47 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # เพิ่มคำสั่งควบคุม Perspective ให้แข็งแกร่งขึ้น
+    # 1. หัวใจสำคัญ: แยกหน้าที่ด้วย Labeling ชัดเจน
     global_style = f"""
-    **STRICT PERSPECTIVE CONTROL:**
+    **MANDATORY PERSPECTIVE INSTRUCTION:**
     - {structure_desc}
-    - Keep the original image's geometry, camera height, and focal length. 
-    - DO NOT add historical elements that would be out of frame according to the identified perspective.
-    
-    **GLOBAL STYLE:**
-    - Output: Photorealistic color 1960s Kodachrome filter photograph.
-    - Remove all modern objects identified in the analysis.
+    - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition and angle.
+    - **CONSTRAINT:** Do NOT rotate, shift, or zoom. The output MUST be a perfect overlay of [IMAGE 1].
+    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture and perspective entirely.
     """
+
+    # 2. ประกอบ Parts แบบสลับลำดับ (Interleaving) เพื่อคุมน้ำหนัก
+    parts = []
+
+    max_retries = 3
     
-    parts = [f"{specific_prompt}\n{global_style}"]
+    # ก้อนที่ 1: คำสั่งหลักและ Blueprint
+    parts.append(f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**")
     parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
 
+    # ก้อนที่ 2: คำสั่งสำหรับภาพอ้างอิง (ถ้ามี)
     if ref_img_bytes:
-        # ถ้ามี Reference ที่ใกล้เคียงพอ (ผ่าน Threshold) ให้ใช้ IP-Adapter Mode
         style_instruction = """
-        **STYLE TRANSFER (REFERENCE ENABLED):**
-        - Use the second image ONLY for color grading, lighting, and film texture.
-        - DO NOT let the reference image change the geometry of the first image.
+        **[IMAGE 2] THE STYLE REFERENCE (SECONDARY):**
+        - USE ONLY for: Color grading, film grain, and 1960s lighting.
+        - **DANGER:** DO NOT follow the camera angle or building placement of [IMAGE 2]. 
+        - TASK: Apply the 'Skin' of [IMAGE 2] onto the 'Skeletal Structure' of [IMAGE 1].
         """
-        parts[0] += f"\n{style_instruction}"
+        parts.append(style_instruction)
         parts.append(types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg"))
-    else:
-        # ถ้าไม่มี Reference ให้เน้นไปที่การสร้างจาก Text Prompt
-        parts[0] += "\n**Note:** Generate lighting and color based on authentic 1960s Bangkok daylight."
 
-    max_retries = 5
-    
-    # 🔴 เลือกโมเดลที่มีในบัญชีจริง
-    # === เรียงลิสต์ ===
-    # gemini-2.0-flash-exp-image-generation
-    # gemini-2.5-flash-image
-    # gemini-3-flash-preview
-    # === Premium ===
-    # gemini-3-pro-preview
-    # gemini-3-pro-image-preview
-
-    model_name = "gemini-3-pro-image-preview" # เริ่มต้นด้วยโมเดลกลางๆ
+    # 3. เรียกโมเดลด้วยค่าความสร้างสรรค์ต่ำที่สุด (Locking the result)
+    model_name = "gemini-3-pro-image-preview" 
 
     for attempt in range(max_retries):
         try:
-            print(f"🎨 Generating Image (Attempt {attempt+1}/{max_retries}) using {model_name}...")
-            
+            print(f"🎨 Generating Image (Attempt {attempt+1}) using {model_name}...")
             response = client.models.generate_content(
                 model=model_name, 
-                contents=parts,
+                contents=parts, # ส่งแบบ List ที่แยกคำสั่งกับรูปสลับกัน
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
-                    temperature=0.2
+                    temperature=0.0 # ลดเหลือ 0.1 เพื่อให้ทำตามโครงสร้างเดิมเป๊ะขึ้น
                 )
             )
             for part in response.candidates[0].content.parts:
@@ -479,7 +484,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             print(f"⚠️ Warning: Model returned no image (Attempt {attempt+1})")
             
         except Exception as e:
-            if "not found" in str(e).lower() and model_name == "gemini-2.0-flash-exp-image-generation":
+            if "not found" in str(e).lower() and model_name == "gemini-3-pro-image-preview":
                 print("⚠️ Switching model to gemini-3-pro-image-preview...")
                 model_name = "gemini-2.0-flash-exp-image-generation" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
                 time.sleep(1)
@@ -489,6 +494,13 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
                 t = (2 ** attempt) + random.uniform(1, 3)
                 print(f"⚠️ Server Busy ({model_name}) -> Waiting {t:.1f}s...")
                 time.sleep(t)
+
+            if "503" in str(e).lower() and model_name == "gemini-3-pro-image-preview":
+                print("⚠️ Switching model to nano-banana-pro-preview...")
+                model_name = "nano-banana-pro-preview" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
+                time.sleep(1)
+                continue
+
             else:
                 print(f"❌ Critical Gen Error: {e}")
                 if model_name != "gemini-3-pro-image-preview":
@@ -554,7 +566,7 @@ def generate_video_runway(image_bytes, location_key):
         """
 
         location_prompts = {
-            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all.",
+            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
             
             "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
             
