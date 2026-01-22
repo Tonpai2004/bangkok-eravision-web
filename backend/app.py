@@ -43,7 +43,7 @@ def load_ai_memory():
     global SEARCH_MODEL, LOCATION_INDICES
     try:
         print("👁️  Loading CLIP Vision Model...")
-        SEARCH_MODEL = SentenceTransformer('clip-ViT-B-32')
+        SEARCH_MODEL = SentenceTransformer('clip-ViT-L-14')
         
         indices_path = os.path.join(os.path.dirname(__file__), 'indices')
         if os.path.exists(indices_path):
@@ -145,21 +145,42 @@ LOCATION_PROMPTS = {
         - **Traffic:** Vintage **Datsun Bluebird taxis** and classic sedans. No Trams.
     """,
 
-    "Giant Swing": """
-        **TASK:** Create an **AUTHENTIC 1965 KODACHROME SCAN** of The Giant Swing.
+    # "Giant Swing": """
+    #     **TASK:** Create an **AUTHENTIC 1965 KODACHROME SCAN** of The Giant Swing.
 
-        **🏘️ 1960s SHOPHOUSE ARCHITECTURE (STRICT):**
-        - **Structure:** Long, continuous rows of **two-story colonial-style shophouses**.
-        - **Ground Floor:** Features dark, weathered **Wooden Folding Doors (Ban-Fiam)**.
-        - **Upper Floor:** Symmetrical **Wooden Shuttered Windows**. NO glass modern windows.
-        - **Texture:** Walls are aged white or grey plaster with heavy **humidity stains, soot, and peeling paint**. NO clean modern white.
-        - **Roofs:** Slanted roofs with **weathered brown/terracotta tiles**.
+    #     **🏘️ 1960s SHOPHOUSE ARCHITECTURE (STRICT):**
+    #     - **Structure:** Long, continuous rows of **two-story colonial-style shophouses**.
+    #     - **Ground Floor:** Features dark, weathered **Wooden Folding Doors (Ban-Fiam)**.
+    #     - **Upper Floor:** Symmetrical **Wooden Shuttered Windows**. NO glass modern windows.
+    #     - **Texture:** Walls are aged white or grey plaster with heavy **humidity stains, soot, and peeling paint**. NO clean modern white.
+    #     - **Roofs:** Slanted roofs with **weathered brown/terracotta tiles**.
 
-        **📍 PERSPECTIVE & ROUTE LOGIC:**
-        - **TRAM CHECK:** If the road next to Wat Suthat is visible, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
-        - **ROAD SURFACE:** Replace modern pavement with **weathered grey concrete** and layers of tropical dust. Erase all traffic paint.
+    #     **📍 PERSPECTIVE & ROUTE LOGIC:**
+    #     - **TRAM CHECK:** If the road next to Wat Suthat is visible, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
+    #     - **ROAD SURFACE:** Replace modern pavement with **weathered grey concrete** and layers of tropical dust. Erase all traffic paint.
 
-        **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
+    #     **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
+    # """,
+
+"Giant Swing": """
+        **TASK:** Transform the uploaded image into a **HYPER-REALISTIC 1965 KODACHROME PHOTOGRAPH** of The Giant Swing area.
+
+        **🔒 1. PERSPECTIVE & GEOMETRY LOCK (ABSOLUTE PRIORITY):**
+        - **BLUEPRINT RULE:** You MUST use the uploaded image as a rigid structural skeleton.
+        - **MULTI-ANGLE ADAPTATION:** Whether the input is a wide shot or a close-up detail, **DO NOT CHANGE** the camera angle, focal length, or building positions.
+        - **ACTION:** Keep the geometry exactly as is, but **"re-skin"** every surface to match the 1960s era.
+
+        **🏘️ 2. HISTORICAL RE-TEXTURING (THE TRANSFORMATION):**
+        - **Shophouse Facades:** Identify modern buildings in the background/foreground. Replace modern glass fronts and rolling steel shutters with **Aged Wooden Folding Doors (Ban-Fiam)** on ground floors and **Wooden Louvered Shutters** on upper floors.
+        - **Wall Texture:** Change clean, modern paint to **Weathered Plaster**. It MUST show signs of age: heavy humidity stains (black/green streaks), soot, and peeling paint.
+        - **The Swing Structure:** If the Swing is visible, render it as **Red Teak Wood**. **REMOVE ALL ROPES**. It must stand as a bare structural monument.
+
+        **📍 3. CONTEXT & ATMOSPHERE:**
+        - **Road Surface:** Erase modern zebra crossings and bright traffic lines. Replace with **worn, dusty grey concrete/asphalt**.
+        - **De-Clutter:** ERASE all air conditioners, satellite dishes, tangled modern wires, and 7-Eleven signs.
+        - **Tram Check:** IF the road next to Wat Suthat is visible in the input angle, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
+
+        **NEGATIVE PROMPT:** modern cars, glass windows, aluminum frames, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, modern traffic lines, red pavement tiles, digital sharpness.
     """,
     
     # "Yaowarat": """
@@ -438,7 +459,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     # gemini-3-pro-preview
     # gemini-3-pro-image-preview
 
-    model_name = "nano-banana-pro-preview" # เริ่มต้นด้วยโมเดลกลางๆ
+    model_name = "gemini-3-pro-image-preview" # เริ่มต้นด้วยโมเดลกลางๆ
 
     for attempt in range(max_retries):
         try:
@@ -459,7 +480,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             
         except Exception as e:
             if "not found" in str(e).lower() and model_name == "gemini-2.0-flash-exp-image-generation":
-                print("⚠️ Switching model to nano-banana-pro-preview...")
+                print("⚠️ Switching model to gemini-3-pro-image-preview...")
                 model_name = "gemini-2.0-flash-exp-image-generation" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
                 time.sleep(1)
                 continue
@@ -470,8 +491,8 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
                 time.sleep(t)
             else:
                 print(f"❌ Critical Gen Error: {e}")
-                if model_name != "nano-banana-pro-preview":
-                     model_name = "nano-banana-pro-preview"
+                if model_name != "gemini-3-pro-image-preview":
+                     model_name = "gemini-3-pro-image-preview"
                      continue
                 return None
                 

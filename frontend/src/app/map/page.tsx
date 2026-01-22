@@ -132,9 +132,11 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
                 src={loc.icon} 
                 alt={loc.en} 
                 className={`
-                    w-[7rem] h-[7rem] md:w-[10rem] md:h-[10rem] object-contain drop-shadow-[0_4px_3px_rgba(0,0,0,0.3)]
-                    transition-all duration-300 z-[50] drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] brightness-110
-                    ${activePin === loc.id ? 'scale-125' : 'hover:scale-110'}
+                    w-[7rem] h-[7rem] md:w-[10rem] md:h-[10rem] object-contain 
+                    transition-all duration-300 z-[50] brightness-110
+                    ${activePin === loc.id 
+                        ? 'drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] scale-125' 
+                        : 'drop-shadow-[0_4px_3px_rgba(0,0,0,0.3)] hover:drop-shadow-[0_8px_8px_rgba(212,182,102,0.6)] hover:scale-110'}
                 `}
             />
         </div>
@@ -198,7 +200,7 @@ const VideoModal = ({ location, onClose, language }: any) => {
                    </span>
                    <button 
                        onClick={handleNavigateToUpload}
-                       className="bg-gold text-dark transition-colors px-6 py-2 font-bold tracking-widest flex items-center gap-2 hover:bg-[#dfbd4e] transition-all"
+                       className="bg-gold text-dark px-6 py-2 font-bold tracking-widest flex items-center gap-2 hover:bg-[#dfbd4e] transition-all"
                    >
                       {language === 'TH' ? "ลองสร้างวิดีโอของคุณ" : "Generate Your Own"}
                    </button>
