@@ -114,9 +114,9 @@ LOCATION_PROMPTS = {
           
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco.
-          - **Constitution Pedestal:** Metallic dark grey/black statue of the Constitution on top of round pedestal. Red door at base.
+          - **Constitution Pedestal:** Metallic dark grey/black Constitution on top of round pedestal. Red door at base.
           - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are SMALL BLACK CANNONS** buried in the ground around the monument base, connected by **HEAVY IRON CHAINS**.
-          - **NEGATIVE PROMPT:** cannons on the steps, flowers, grass on the monument.
+          - **NEGATIVE PROMPT:** flowers, grass on the monument.
 
           **TRAFFIC RULES (CRITICAL):**
           - **One-Way Circle:** Cars drive **CLOCKWISE** around the circle (Thai left-hand traffic rule means roundabout flow is clockwise).
@@ -162,7 +162,7 @@ LOCATION_PROMPTS = {
     #     **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
     # """,
 
-"Giant Swing": """
+    "Giant Swing": """
         **TASK:** Transform the uploaded image into a **HYPER-REALISTIC 1965 KODACHROME PHOTOGRAPH** of The Giant Swing area.
 
         **🔒 1. PERSPECTIVE & GEOMETRY LOCK (ABSOLUTE PRIORITY):**
@@ -201,6 +201,7 @@ LOCATION_PROMPTS = {
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
+        **LOCK:** Maintain the exact building geometry and camera height of [IMAGE 1].
 
         **🏘️ ARCHITECTURAL TRANSFORMATION (CRITICAL):**
         - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
@@ -210,14 +211,17 @@ LOCATION_PROMPTS = {
         **STRICT TEXT & SIGNS:**
         - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish must have meaning in those textds.
         - **STYLE:** Hand-painted vertical signs attached to building pillars. Matte finish, no internal glow.
-        - **CONTENT:** Use legible Thai and Chinese calligraphy for "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", and "**ขายยาจีน**".
+        - **CONTENT:** STRICTLY NO GIBBERISH OR ILLEGIBLE TEXT. All signs must contain legible, meaningful Thai or Chinese characters. Limit the 'ห้างทอง' sign to ONE distinct, prominent location. Other signs should have different, legible names appropriate for the era (e.g., 'ร้านขายยา', 'ภัตตาคาร', 'ยา'). Ensure hand-painted textures look authentic, not generated.
 
-        **🚋 TRAM & ROAD:**
-        - **TRAM:** A weathered Yellow/Red open-air wooden tram running on tracks embedded in the aged asphalt road.
-        - **POSITION:** The tram must be **HUGGING THE RIGHT CURB**, extremely close to the shophouse fronts.
+        **🚋 TRAM & ROAD (POSITIONAL PRIORITY):**
+        - **TRACK LOCATION:** Tracks MUST be STRAIGHT and parallel, embedded flush with the worn asphalt surface. NO curves, switches, or complex junctions should be visible in this perspective.**.
+        - **TRAM TYPE:** A well-used, aged yellow and red wooden tram. Show realistic wear, faded paint, and some rust streaks. Details should include slatted wooden windows (some open, some closed), a detailed pantograph or trolley pole connecting to overhead wires, and a driver figure.
+        - **TRAM POSITION:** The tram must be positioned ON THE MAIN ROAD and EXTREMELY close to the right-side building facades, HUGGING the curb tightly. This must leave the significant MAJORITY of the road width empty on the left side for other traffic.
+        - **GEOMETRY RULE:** Do NOT place the tram or tracks in the center of the road. Shift the entire tram structure to the far right edge of the street.
         
         **🚦 ATMOSPHERE:**
         - **Transport:** Samlors (tricycles).
+        - **Road Surface:** Worn asphalt with embedded tram tracks. NO modern lane markings.
         - **Crowd:** Busy street market vibe with Thai locals in 1960s attire.
 
         **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building.
@@ -248,11 +252,10 @@ LOCATION_PROMPTS = {
         **TASK:** Create a **HYPER-REALISTIC COLOR PHOTOGRAPH** of the **RUINS** of Phra Sumen Fort (Bangkok 1960).
         
         **STRUCTURAL STATE (CRITICAL):**
-        - **NOT A FULL TOWER:** The fort is a **DECAPITATED RUIN**. 
-        - **HEIGHT:** It must be **ONLY 1 STORY HIGH**. It is just a wide, white hexagonal stone base (stump).
-        - **TOP PART:** The entire upper tower, all windows on the second floor, and the conical roof are **TOTALLY REMOVED/NON-EXISTENT**. 
-        - **SURFACE:** The top of the ruin is jagged, flat.
-        - **STAINING:** Heavily weathered with black mold, moss, and humidity stains on aged white plaster.
+        - **THE BASE IS ALIVE:** Maintain the massive **2-STORY HEXAGONAL MASONRY BASE**. It is not a stump; the primary walls of the fort are still standing tall.
+        - **DECAPITATED TOP:** ONLY the small upper pavilion, its windows, and the conical spire roof are **REMOVED**.
+        - **TOP EDGE:** The top of the walls must look jagged and broken, showing exposed red bricks and crumbling old mortar.
+        - **PATINA:** The white-washed walls are heavily weathered with **thick black mold, green moss, and humidity streaks**.
 
         **ENVIRONMENT (1960s CONTEXT):**
         - **NO PARK:** There is no "Santi Chai Prakan Park." No green lawn.
@@ -420,57 +423,47 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # เพิ่มคำสั่งควบคุม Perspective ให้แข็งแกร่งขึ้น
+    # 1. หัวใจสำคัญ: แยกหน้าที่ด้วย Labeling ชัดเจน
     global_style = f"""
-    **STRICT PERSPECTIVE CONTROL:**
+    **MANDATORY PERSPECTIVE INSTRUCTION:**
     - {structure_desc}
-    - Keep the original image's geometry, camera height, and focal length. 
-    - DO NOT add historical elements that would be out of frame according to the identified perspective.
-    
-    **GLOBAL STYLE:**
-    - Output: Photorealistic color 1960s Kodachrome filter photograph.
-    - Remove all modern objects identified in the analysis.
+    - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition and angle.
+    - **CONSTRAINT:** Do NOT rotate, shift, or zoom. The output MUST be a perfect overlay of [IMAGE 1].
+    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture and perspective entirely.
     """
+
+    # 2. ประกอบ Parts แบบสลับลำดับ (Interleaving) เพื่อคุมน้ำหนัก
+    parts = []
+
+    max_retries = 3
     
-    parts = [f"{specific_prompt}\n{global_style}"]
+    # ก้อนที่ 1: คำสั่งหลักและ Blueprint
+    parts.append(f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**")
     parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
 
+    # ก้อนที่ 2: คำสั่งสำหรับภาพอ้างอิง (ถ้ามี)
     if ref_img_bytes:
-        # ถ้ามี Reference ที่ใกล้เคียงพอ (ผ่าน Threshold) ให้ใช้ IP-Adapter Mode
         style_instruction = """
-        **STYLE TRANSFER (REFERENCE ENABLED):**
-        - Use the second image ONLY for color grading, lighting, and film texture.
-        - DO NOT let the reference image change the geometry of the first image.
+        **[IMAGE 2] THE STYLE REFERENCE (SECONDARY):**
+        - USE ONLY for: Color grading, film grain, and 1960s lighting.
+        - **DANGER:** DO NOT follow the camera angle or building placement of [IMAGE 2]. 
+        - TASK: Apply the 'Skin' of [IMAGE 2] onto the 'Skeletal Structure' of [IMAGE 1].
         """
-        parts[0] += f"\n{style_instruction}"
+        parts.append(style_instruction)
         parts.append(types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg"))
-    else:
-        # ถ้าไม่มี Reference ให้เน้นไปที่การสร้างจาก Text Prompt
-        parts[0] += "\n**Note:** Generate lighting and color based on authentic 1960s Bangkok daylight."
 
-    max_retries = 5
-    
-    # 🔴 เลือกโมเดลที่มีในบัญชีจริง
-    # === เรียงลิสต์ ===
-    # gemini-2.0-flash-exp-image-generation
-    # gemini-2.5-flash-image
-    # gemini-3-flash-preview
-    # === Premium ===
-    # gemini-3-pro-preview
-    # gemini-3-pro-image-preview
-
-    model_name = "gemini-3-pro-image-preview" # เริ่มต้นด้วยโมเดลกลางๆ
+    # 3. เรียกโมเดลด้วยค่าความสร้างสรรค์ต่ำที่สุด (Locking the result)
+    model_name = "gemini-3-pro-image-preview" 
 
     for attempt in range(max_retries):
         try:
-            print(f"🎨 Generating Image (Attempt {attempt+1}/{max_retries}) using {model_name}...")
-            
+            print(f"🎨 Generating Image (Attempt {attempt+1}) using {model_name}...")
             response = client.models.generate_content(
                 model=model_name, 
-                contents=parts,
+                contents=parts, # ส่งแบบ List ที่แยกคำสั่งกับรูปสลับกัน
                 config=types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
-                    temperature=0.2
+                    temperature=0.0 # ลดเหลือ 0.1 เพื่อให้ทำตามโครงสร้างเดิมเป๊ะขึ้น
                 )
             )
             for part in response.candidates[0].content.parts:
@@ -479,7 +472,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
             print(f"⚠️ Warning: Model returned no image (Attempt {attempt+1})")
             
         except Exception as e:
-            if "not found" in str(e).lower() and model_name == "gemini-2.0-flash-exp-image-generation":
+            if "not found" in str(e).lower() and model_name == "gemini-3-pro-image-preview":
                 print("⚠️ Switching model to gemini-3-pro-image-preview...")
                 model_name = "gemini-2.0-flash-exp-image-generation" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
                 time.sleep(1)
@@ -489,6 +482,13 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
                 t = (2 ** attempt) + random.uniform(1, 3)
                 print(f"⚠️ Server Busy ({model_name}) -> Waiting {t:.1f}s...")
                 time.sleep(t)
+
+            if "503" in str(e).lower() and model_name == "gemini-3-pro-image-preview":
+                print("⚠️ Switching model to nano-banana-pro-preview...")
+                model_name = "nano-banana-pro-preview" # ถ้าไม่ได้ปรับไปตัวกากๆ(ประหยัดงบ)
+                time.sleep(1)
+                continue
+
             else:
                 print(f"❌ Critical Gen Error: {e}")
                 if model_name != "gemini-3-pro-image-preview":
