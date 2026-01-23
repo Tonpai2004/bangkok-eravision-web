@@ -140,11 +140,14 @@ LOCATION_PROMPTS = {
         
         **THE MOVIE POSTER (SPECIFIC):**
         - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
-        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". "**นำแสดงโดย มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
         
-        **CONTEXT:**
-        - **Street:** Wide asphalt avenue.
-        - **Traffic:** Vintage **Datsun Bluebird taxis** and classic sedans. No Trams.
+        **CONTEXT (PEDESTRIAN ZONE):**
+        - **Street:** Wide asphalt avenue, but **COMPLETELY EMPTY OF CARS**.
+        - **Crowd:** Replace traffic with a **lively crowd of people**. Thai locals in 1960s fashion (white shirts, dark trousers, skirts) walking, standing, and chatting in front of the theater. The street belongs to the pedestrians.
+        - **Atmosphere:** Bustling movie premiere vibe.
+        
+        **NEGATIVE PROMPT:** cars, taxis, buses, tuk-tuks, vehicles, traffic jams.
     """,
 
     # "Giant Swing": """
@@ -168,22 +171,23 @@ LOCATION_PROMPTS = {
         **TASK:** Perform a **STRICT 1960s HISTORICAL RETRO-FIT** on the uploaded image of the Giant Swing area.
 
         **🔒 1. PERSPECTIVE & GEOMETRY LOCK (ABSOLUTE PRIORITY):**
-        - **ANCHOR:** The uploaded image is the rigid skeleton. You MUST map the 1960s textures directly onto the *exact* positions of the current buildings and roads.
-        - **NO SHIFTING:** Do NOT change the camera angle, do NOT rotate, do NOT move the Giant Swing.
+        - **RIGID ANCHOR:** The uploaded image is the **immutable skeleton**. You must ONLY transform visible surfaces.
+        - **NO ADDITIONS:** DO NOT generate new buildings, extra floors, trees, or structures in empty spaces. If it's not in the source image, do not add it.
+        - **NO SHIFTING:** Maintain the exact camera angle, focal length, and object positions.
 
-        **🔄 2. TRANSFORMATION RULES (MODERN -> 1960s):**
-        - **BUILDINGS:** Look for modern commercial buildings in the photo and **TRANSFORM** them into **1960s Colonial-style Shophouses**.
-            - **Texture:** Painted masonry (Cream, Light Yellow, or White). **Condition: Aged but CIVILIZED and INTACT (Not ruined, not a slum).**
-            - **Windows/Doors:** Replace glass/shutters with **Wooden Louvered Shutters** and **Folding Wooden Doors**.
+        **🔄 2. TRANSFORMATION RULES (IN-PLACE "RE-SKINNING"):**
+        - **BUILDINGS:** Identify existing modern facades and **apply a 1960s Colonial Shophouse "skin"** directly over them.
+            - **Texture:** Painted masonry (Cream, Light Yellow, weathered White). **Condition: Aged but CIVILIZED and INTACT.**
+            - **Windows/Doors:** Swap modern glass/shutters in the exact same spots with **Wooden Louvered Shutters** and **Folding Wooden Doors**.
         - **THE SWING:** Render the **Red Teak Pillars** vividly at the exact same spot. **REMOVE ROPES** if visible.
-        - **ROAD:** The road surface is **AGED ASPHALT or CONCRETE**. It must look paved and usable for a city center. **DO NOT MAKE IT DIRT, SAND, OR MUD.**
 
-        **🏙️ 3. CONTEXT & VIBE:**
-        - **Atmosphere:** A bustling Bangkok city center in the 1960s.
-        - **Traffic:** Vintage cars (Mercedes W110, Austin Cambridge) and Samlors.
-        - **Details:** Vintage street lamps. Remove air conditioners and 7-Eleven signs.
+        **📍 3. CONTEXT & ATMOSPHERE (PEDESTRIAN ERA):**
+        - **NO VEHICLES (CRITICAL):** The entire scene must be **COMPLETELY EMPTY OF CARS**, taxis, buses, and tuk-tuks. The roads are cleared.
+        - **Road Surface:** **Worn, dusty grey asphalt/concrete**. It must look paved but aged.
+        - **TRAM TRACKS (RAILS ONLY):** If the road next to Wat Suthat is visible, render **parallel steel tram tracks** embedded flush into the asphalt. **NO TRAM CAR.**
+        - **De-Clutter:** ERASE all modern signage, wiring, and air conditioners.
 
-        **⛔ NEGATIVE PROMPT:** dirt road, sand, mud, rubble, destroyed buildings, slum, modern cars, air conditioners, 7-Eleven, modern billboards, bright traffic lines.
+        **⛔ NEGATIVE PROMPT:** cars, vehicles, traffic, buses, tuk-tuks, samlors, dirt road, sand, mud, slums, modern signs, air conditioners, 7-Eleven.
     """,
     
     # "Yaowarat": """
@@ -211,112 +215,120 @@ LOCATION_PROMPTS = {
         - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
         - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
 
-        **STRICT TEXT & SIGNS:**
-        - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish must have meaning in those textds.
-        - **STYLE:** Hand-painted vertical signs attached to building pillars. Matte finish, no internal glow.
-        - **CONTENT:** STRICTLY NO GIBBERISH OR ILLEGIBLE TEXT. All signs must contain legible, meaningful Thai or Chinese characters. Limit the 'ห้างทอง' sign to ONE distinct, prominent location. Other signs should have different, legible names appropriate for the era (e.g., 'ร้านขายยา', 'ภัตตาคาร', 'ยา'). Ensure hand-painted textures look authentic, not generated.
+        **🔤 STRICT TEXT & SIGNS (HIGH PRECISION TYPOGRAPHY):**
+        - **LEGIBILITY IS KEY:** All Hand-painted signs must contain **CORRECT, READABLE Thai & Chinese characters**. Absolutely NO GIBBERISH or squiggly lines.
+        - **STYLE:** Vertical wooden signs attached to pillars. Matte finish paint (No Neon/LED).
+        - **CONTENT:** Use distinct names like "**ห้างทอง**" (Gold Shop), "**ยา**" (Medicine), "**ภัตตาคาร**" (Restaurant). Ensure the calligraphy looks authentic to the 1960s style.
 
-        **🚋 TRAM & ROAD (SINGLE TRACK PRIORITY):**
-        - **TRACK CONFIGURATION:** **GENERATE ONLY ONE SINGLE TRAM TRACK.** Do NOT create double tracks or multiple lanes of rails.
-        - **TRACK LOCATION:** This single track MUST be embedded flush with the asphalt and located **EXTREMELY CLOSE TO THE RIGHT-SIDE CURB**, hugging the shophouses.
-        - **TRAM ALIGNMENT:** The Yellow/Red wooden tram must be positioned **DIRECTLY ON TOP OF THIS SINGLE TRACK**. The wheels must align with the rails.
-        - **SPATIAL RULE:** The tram and track take up only the far right edge of the road. The rest of the road width (center and left) must be empty asphalt for Samlors and pedestrians.
+        **🚋 TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
+        - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
+        - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road.
+        - **SPACING:** It is close to the curb/buildings but **NOT TOUCHING**. Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
+        - **TRAM:** A weathered Yellow/Red wooden tram runs on this track.
         
-        **🚦 ATMOSPHERE:**
-        - **Transport:** Samlors (tricycles).
-        - **Road Surface:** Worn asphalt with embedded tram tracks. NO modern lane markings.
-        - **Crowd:** Busy street market vibe with Thai locals in 1960s attire.
+        **🚦 ATMOSPHERE (MINIMAL TRAFFIC):**
+        - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS. Keep the street mostly clear.
+        - **ALLOWED TRANSPORT:** Only a few **Pedal Samlors (Tricycles)** allowed.
+        - **Road Surface:** Worn asphalt with the embedded single rail.
+        - **Crowd:** A lively scene of pedestrians walking and shopping.
 
-        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, multiple tram lines.
+        **NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks.
     """,
 
     "Khaosan Road": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Bang Lamphu / Khaosan Road (1962).
 
-        **PERSPECTIVE LOCK (CRITICAL):**
-        - **Blueprint:** Use the Uploaded Image as the **ABSOLUTE LAYOUT REFERENCE**.
-        
-        **VISUALS & COLORS:**
-        - **Houses:** Wooden row houses painted **YELLOW WOOD** with **GREEN WINDOWS**.
-        - **Signage:** **NO SIGNS** on the house fronts. Residential look only.
-        
-        **PEOPLE (THAI LOCALS):**
-        - **Faces:** Authentic **THAI FACES** (South East Asian features, tan skin, black hair).
-        - **Clothing:** White shirts, simple trousers/sarongs. **NO FOREIGNERS/BACKPACKERS**.
-        
-        **LIFE:**
-        - **Atmosphere:** Vibrant community. Locals chatting.
-        - **Props:** Rice sacks stacked at **ONLY 2-3 HOUSES**.
+        **🔒 PERSPECTIVE LOCK (CRITICAL):**
+        - **Blueprint:** Use the Uploaded Image as the **ABSOLUTE LAYOUT REFERENCE**. Map the vintage textures directly onto the existing building structures.
 
-        **NEGATIVE PROMPT:** Backpackers, foreigners in shorts, neon signs, bars, hostels, Caucasian faces.
+        **🚫 STRICT 1960s TIME-CAPSULE RULE:**
+        - **NO MODERN ELEMENTS:** Absolutely NO air conditioners, NO satellite dishes, NO 7-Eleven signs, NO plastic chairs, NO electrical tangles.
+        - **AUTHENTIC HISTORY:** The scene must strictly follow the oral history of the area: a quiet residential rice-trading community, NOT a tourist hub.
+
+        **🏘️ VISUALS & COLORS (RESIDENTIAL VIBE):**
+        - **Architecture:** 2-story Wooden Row Houses.
+        - **Color Palette:** **YELLOW-PAINTED WOOD** with **GREEN WINDOW FRAMES** (Classic colonial influence).
+        - **Signage:** **ZERO COMMERCIAL SIGNS.** No neon, no banners. Just pure residential fronts.
+
+        **🚶 PEOPLE & TRAFFIC (QUIET COMMUNITY):**
+        - **ZERO VEHICLES:** The narrow street is **COMPLETELY EMPTY OF CARS**, tuk-tuks, and samlors. It is a walking street for locals only.
+        - **Locals Only:** Authentic Thai residents (tan skin, black hair) in 1960s attire (white shirts, sarongs, simple trousers).
+        - **Activity:** Neighbors chatting in front of houses, a slow and peaceful daily life atmosphere. **NO BACKPACKERS. NO TOURISTS.**
+
+        **🍚 PROPS:**
+        - Rice sacks (White/Hemp) stacked neatly in front of **ONLY 2-3 houses** (reflecting the rice trade history).
+
+        **⛔ NEGATIVE PROMPT:** cars, vehicles, motorcycles, backpackers, foreigners, tourists, hostels, bars, alcohol signs, neon lights, modern street lamps, concrete buildings, 7-Eleven.
     """,
 
     "Phra Sumen Fort": """
         **TASK:** Generate a **PHOTOREALISTIC 1960s HISTORICAL RECONSTRUCTION** of the Phra Sumen Fort Ruins.
 
-        **📸 1. PERSPECTIVE & COMPOSITION LOCK (FROM INPUT [IMAGE 1]):**
-        - **MASTER BLUEPRINT:** Use the uploaded image [IMAGE 1] as the rigid skeleton for camera angle, composition, and placement of the fort. Do not rotate or shift the view.
+        **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
+        - **MASTER BLUEPRINT:** Use the **[INPUT_IMAGE]** as the rigid geometric skeleton. The final image MUST perfectly overlay the perspective, focal length, camera height, and composition of the input.
+        - **NO SHIFTING:** Do not zoom, rotate, or alter the viewpoint in any way. The fort must sit exactly where it is in the input image's frame.
 
-        **🏚️ 2. STRUCTURAL REFERENCE (FROM REFERENCE [IMAGE 2]):**
-        - **ADOPT THE RUINED STATE:** The structural condition of the fort (e.g., missing roof, weathered state, damaged top, patina) must **STRICTLY FOLLOW the visual evidence provided in the historical reference image [IMAGE 2]**.
-        - **NO RECONSTRUCTION:** Do NOT rebuild or restore any part of the fort that appears ruined or missing in the reference image. Trust the reference image for the building's physical state.
+        **🏚️ 2. STRUCTURAL STATE: THE "DECAPITATED" RUIN (CRITICAL):**
+        - **HISTORICAL EVIDENCE:** The structural condition MUST **STRICTLY FOLLOW** the visual evidence seen in the historical reference images **[IMAGE 0]**, **[IMAGE 1]**, and **[IMAGE 2]**.
+        - **TRUNCATED BASE:** The fort is a **massive, two-story hexagonal masonry stump**. The stairs and lower defensive battlements (leaf-shaped Sema walls) are present but heavily weathered.
+        - **MISSING TOP:** The entire upper wooden pavilion, the roof structure, the spire, and upper window frames are **TOTALLY GONE**. It must look like the top section was sliced off, exactly as shown in the reference photos.
+        - **JAGGED RIM:** The top edge of the highest walls is **NOT flat or smooth**. It must be **jagged, crumbling, and uneven**, showing **exposed red bricks and broken mortar** at the break line where the upper structure used to be.
 
-        **📍 3. 1960s ENVIRONMENT & ATMOSPHERE:**
-        - **REMOVE MODERN PARK:** Erase the modern "Santi Chai Prakan Park", manicured lawns, and modern concrete paving.
-        - **HISTORICAL GROUND:** Replace modern landscaping with unkempt grass, wild weeds, dirt patches, and natural overgrowth appropriate for a neglected historical site in the 1960s.
-        - **VIBE:** aged film grain, natural light, historical authenticity.
+        **🎨 3. TEXTURE & PATINA (HEAVY DECAY):**
+        - **WEATHERED PLASTER:** The white-washed walls are extremely aged and neglected. They must be heavily covered in **thick black mold stains, dark humidity streaks running down the walls, green moss patches in crevices, and peeling paint**.
+        - **CRUMBLING DETAILS:** The stucco ornamentation along the battlements is chipped, cracked, and eroded by time. It should not look clean or restored.
 
-        **⛔ NEGATIVE PROMPT:** modern park, manicured lawn, modern streetlights, tourists, cars, modern fences, flags, restored condition (unless visible in ref image).
+        **📍 4. 1960s ENVIRONMENT & ATMOSPHERE:**
+        - **ERASE MODERNITY:** Completely remove the modern "Santi Chai Prakan Park", manicured lawns, modern concrete paving, and modern railings.
+        - **HISTORICAL GROUND:**Surround the base with **unkempt ground**, featuring patches of wild grass, overgrown weeds, dirt, and gravel, appropriate for a neglected historical site in the 1960s.
+        - **STREET (If visible):** The road in front is a narrow, worn asphalt or dirt road, similar to the condition seen in **[IMAGE 0]**.
+        - **VIBE:** Authentic 1960s film photography aesthetic, natural daylight.
+
+        **⛔ NEGATIVE PROMPT (STRICT REMOVAL):**
+        - **RESTORED ELEMENTS:** restored roof, wooden pavilion, spire, pointed top, gold leaf, complete tower, clean white paint, smooth top edge.
+        - **MODERN ELEMENTS:** public park, manicured lawn, modern streetlights, tourists, modern cars, modern fences, flags.
     """,
 
     "Sanam Luang": """
-        **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
+        **TASK:** TRANSFORM [IMAGE 1] into a **VIBRANT & LIVELY** 1968 photograph of Sanam Luang.
 
-        **📸 1. ABSOLUTE PERSPECTIVE LOCK (NON-NEGOTIABLE):**
-        - **MASTER BLUEPRINT:** The uploaded image is the rigid frame. You MUST generate the market scene within the **EXACT SAME camera angle, focal length, and perspective** as the input.
-        - **NO SHIFTING:** Do not zoom in, do not zoom out, do not rotate. The horizon line and background landmarks must match the original photo perfectly.
+        **📸 1. PERSPECTIVE LOCK:**
+        - **STRICT MATCH:** Use [IMAGE 1] as the rigid layout. **Do NOT shift or change the camera angle**.
 
-        **🌳 2. VEGETATION RESTRICTION (STRICT):**
-        - **NO NEW TREES:** Do **NOT** generate extra trees, forests, or bushes in the open field. Keep the field open for the market.
-        - **EXISTING TREES ONLY:** Only render trees if they act as a border in the original image. The main subject is the **MARKET**, not a park.
+        **🎪 2. DEPTH-BASED ZONING (CRITICAL):**
+        - **IMMEDIATE FOREGROUND (BOTTOM OF IMAGE):** This area MUST be **100% CLEAR** of any market stalls, umbrellas, tents, or permanent structures. It should only be dry red dirt, dust, and people walking, riding bicycles, or sitting.
+        - **THE PERIMETER (FAR LEFT, FAR RIGHT, & DISTANCE):** All makeshift stalls, tent shanties, and disorganized clusters of umbrellas MUST be pushed to the **EXTREME LEFT and RIGHT EDGES** of the frame, and the far distant boundary near the trees.
+        - **THE CENTRAL CORE:** Maintain a wide, open corridor from the bottom-center of the image all the way to the Wat Phra Kaew in the background. No stalls allowed in this central viewing lane.
 
-        **🎪 3. MARKET DENSITY (BUSTLING WITH BREATHING ROOM):**
-        - **BALANCED SPACING:** The market is active and sprawling, but **NOT** overwhelmingly packed. There must be visible **patches of open, dusty ground** between clusters of stalls and people, allowing space to walk.
-        - **GROUND LAYER:** Woven bamboo mats (Sua) with goods (amulets, books, pots) are spread widely, but interspersed with areas of exposed dry red dust and scorched grass. It is **NOT** a solid carpet of goods.
-        - **CANOPY LAYER:** Clusters of **large canvas parasols/umbrellas** (White, Red, Blue - faded colors) provide shade, grouped naturally with gaps between them at the mercy of the sun.
-        - **HUMAN LAYER:** A bustling crowd of Thai locals (1960s attire) gathered in active clusters around vendors, but leaving **walkable open spaces** in between groups. They are not packed shoulder-to-shoulder everywhere.
+        **🏃 3. POPULATION & ACTIVITY (MINIMAL KITES):**
+        - **VIBRANT CENTER:** Fill the foreground and middle ground with **DOZENS of people scattered throughout**. Focus on activities like riding **vintage bicycles**, sitting in groups on mats, strolling, and socializing.
+        - **KITE RESTRICTION:** **VERY FEW TO ZERO KITES.** If any are present, they must be small and distant in the background sky, not dominating the scene.
+        - **MOBILE VENDORS:** Include **Mobile Hawkers (Mae-Ka-Hab-Ray)** with shoulder poles walking in the foreground to add life without blocking the view.
 
-        **☀️ 4. ATMOSPHERE & DETAILS:**
-        - **Surface:** Dry red dust mixed with scorched yellow grass.
-        - **Lighting:** Harsh, bright tropical sunlight creating sharp shadows.
-        - **Background:** Hazy golden rooftops of Wat Phra Kaew visible in the distance (if angle permits).
+        **🏜️ 4. TERRAIN & LIGHTING:**
+        - **SURFACE:** Dry red dirt and fine dust. Absolutely **NO ASPHALT, NO CONCRETE, and NO ROADS**.
+        - **DYNAMIC LIGHTING:** Strictly follow the lighting and time of day (Day/Night) from [IMAGE 1].
 
-        **⛔ NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, **forest**, **extra trees**, **park**, **overcrowded**, **packed like sardines**.
+        **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads, **many kites**, **large kites**.
     """,
 
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **📸 1. PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
-        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly. Do not zoom in or shift the view.
-        - **ALIGNMENT:** Adhere strictly to the composition of the source image. The buildings and fence line must be in the exact same position.
+        **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
+        - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
+        - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
+        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR Slab** with a **COMPLETELY FLAT TOP**.
+        - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
 
-        **🛣️ 2. ROAD CONDITION (CIVILIZED & PAVED):**
-        - **SURFACE:** The road is **Smooth, Weathered Asphalt**. It is **NOT** a dirt road or a muddy track. It must look well-maintained and accessible, befitting a major national landmark.
-        - **CLEANLINESS:** The street is relatively clean (no piles of rubble or thick mud). It should look like a proper city street.
-        - **NO MODERN MARKINGS:** Remove traffic lanes, zebra crossings, and red/white curb paint, but keep the road surface looking like **solid paved road**, not soil.
+        **🚧 2. ROAD & CURB:**
+        - **SURFACE:** Clean, formal **DARK ASPHALT**. No raised curb, no paint markings.
 
-        **🧱 3. HISTORICAL FENCE (DOWNSIZING):**
-        - **Structure:** The fence is a **LOW** masonry wall (Waist-high).
-        - **Gate Pillars:** The entrance pillars are **SHORT and MODEST** (only slightly taller than a person). NOT massive towers.
-        - **Material:** Aged, stained white stucco with black iron spikes on top.
-        - **Signage:** No sign at all.
+        **🏛️ 3. ATMOSPHERE:**
+        - **Vibe:** Quiet, Royal, and Prestigious.
+        - **Background:** Faded orange chapel roof visible through dense, messy tamarind trees.
 
-        **🏛️ 4. ATMOSPHERE:**
-        - **Vibe:** Quiet, Ancient but **Majestic and Well-Kept**. Not abandoned.
-        - **Background:** The chapel roof is faded orange, visible through large tamarind trees.
-
-        **⛔ NEGATIVE PROMPT:** dirt road, mud, slum, abandoned, red and white curb, traffic stripes, concrete sidewalk, high-rise gate towers, modern paving, road markings, zebra crossing.
+        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, fence openings, secondary gates, pointed pillars, spires, finials, stone caps, red and white curb, zebra crossing.
     """,
 }
 
@@ -441,23 +453,46 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # 1. หัวใจสำคัญ: แยกหน้าที่ด้วย Labeling ชัดเจน
-    global_style = f"""
+    # 1. สร้างฐานคำสั่งกลางสำหรับทุกสถานที่ (Standard Instruction)
+    perspective_instr = f"""
     **MANDATORY PERSPECTIVE INSTRUCTION:**
     - {structure_desc}
     - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition and angle.
     - **CONSTRAINT:** Do NOT rotate, shift, or zoom. The output MUST be a perfect overlay of [IMAGE 1].
-    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture and perspective entirely.
     """
-
-    # 2. ประกอบ Parts แบบสลับลำดับ (Interleaving) เพื่อคุมน้ำหนัก
-    parts = []
-
-    max_retries = 3
     
-    # ก้อนที่ 1: คำสั่งหลักและ Blueprint
-    parts.append(f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**")
+    # 2. เพิ่ม Logic พิเศษเฉพาะป้อมพระสุเมรุ (Conditional Deletion)
+    # ใช้ชื่อ Key ให้ตรงกับใน LOCATION_PROMPTS
+    if location_key == "Phra Sumen Fort":
+        perspective_instr += """
+    - **SPECIAL TASK (DELETION):** Look at the upper watchtower room on top of the fort in [IMAGE 1]. You MUST **ERASE and DELETE** it.
+    - **REPLACE:** Replace that specific upper area with **EMPTY BLUE SKY**. 
+    - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
+        """
+
+    elif location_key == "National Museum":
+        extra_instructions = """
+    - **GEOMETRY ANOMALY DETECTED:** Identify any small pedestrian gates or side openings in [IMAGE 1]. 
+    - **TASK:** You MUST **DELETE** these openings. Fill the gaps with a **SOLID MASONRY BASE** and a **CONTINUOUS IRON FENCE**.
+    - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
+    - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
+    - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
+        """
+
+    # 3. ประกอบเป็น Global Style
+    global_style = f"""
+    {perspective_instr}
+    
+    **GLOBAL STYLE:**
+    - Output: Photorealistic color 1960s Kodachrome filter photograph.
+    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture entirely.
+    - Remove all modern objects identified in the analysis.
+    """
+    
+    # ส่วนที่เหลือของฟังก์ชัน (การประกอบ parts และการเรียก AI) ให้คงเดิมไว้ครับ
+    parts = [f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**"]
     parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
+    max_retries = 5
 
     # ก้อนที่ 2: คำสั่งสำหรับภาพอ้างอิง (ถ้ามี)
     if ref_img_bytes:
@@ -666,6 +701,9 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 #         print(f"⚠️ Failed to auto-save image: {e}")
 #         return None
 
+# ==========================================
+# 🎬 VIDEO GENERATION (RUNWAY ML - COMPRESSED PROMPT)
+# ==========================================
 def generate_video_runway(image_bytes, location_key):
     runway_key = os.getenv("RUNWAYML_API_KEY")
     if not runway_key:
@@ -673,36 +711,33 @@ def generate_video_runway(image_bytes, location_key):
         return None
 
     try:
-        print("🎬 Starting Runway Gen-3 Video Generation (Strict Source Fidelity)...")
+        print("🎬 Starting Runway Gen-3 Video Generation (Compact Prompt)...")
         
         # 1. Prepare Base64
         base64_str = base64.b64encode(image_bytes).decode('utf-8')
 
-        # 2. UNIVERSAL PROMPT (ปรับปรุงใหม่ตามรีเควส)
-        # เน้น: ขยับแค่นิดเดียว (Minimal), แพนกล้องช้าๆ, ห้ามเติมของ, ห้ามเปลี่ยนโครงสร้าง
+        # 2. UNIVERSAL PROMPT (ย่อให้สั้นกว่า 1000 ตัวอักษร)
+        # ยังคงคำสั่งหลัก: 0.25x speed, Pan only, No new objects, Static buildings
         final_prompt = """
-        **CAMERA MOTION:**
-        - Slow, smooth, cinematic horizontal pan. Very subtle movement.
-        - **NO ZOOM.** Keep the focal length locked.
-
-        **SCENE MOVEMENT (MICRO-MOTION ONLY):**
-        - **NATURE:** Gentle rustling of leaves, slow drifting clouds, subtle atmospheric dust/haze floating in the light.
-        - **PEOPLE/TRAFFIC:** **MINIMAL MOVEMENT.** People and cars should appear almost static or move very slightly and naturally. No fast walking or driving.
-        
-        **STRICT CONSTRAINTS (DO NOT BREAK):**
-        - **FROZEN STRUCTURES:** Buildings, roads, and monuments must remain 100% STATIC and RIGID. No morphing, breathing, or warping.
-        - **SOURCE FIDELITY:** animate ONLY what is visible in the input image. **DO NOT ADD** new people, vehicles, or objects.
-        - **VIBE:** Peaceful, slow-motion vintage atmosphere.
+        Extreme 0.25x slow motion. Cinematic slow horizontal pan. NO ZOOM.
+        CRITICAL: Animate ONLY existing pixels. DO NOT ADD new people, cars, or objects.
+        STATIC ARCHITECTURE: Buildings/roads must be frozen and rigid. No morphing.
+        MICRO-MOTION: Gentle leaf rustle, slow clouds. Existing people/cars move very slowly/naturally.
+        Atmosphere: Peaceful, vintage 1960s.
         """
         
-        print(f"📝 Video Prompt: {final_prompt}")
+        # ตรวจสอบความยาว Prompt ก่อนส่ง
+        if len(final_prompt) > 990:
+            print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
+
+        print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
 
         # 3. Call Runway API directly
         url = "https://api.dev.runwayml.com/v1/image_to_video"
         payload = {
             "promptImage": f"data:image/png;base64,{base64_str}",
             "model": "gen3a_turbo", 
-            "promptText": final_prompt,
+            "promptText": final_prompt.strip(), # ลบเว้นวรรคส่วนเกิน
             "duration": 5,
             "ratio": "1280:768"
         }
