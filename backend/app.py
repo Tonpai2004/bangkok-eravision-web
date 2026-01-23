@@ -107,6 +107,10 @@ LOCATION_PROMPTS = {
     # 🏛️ อนุสาวรีย์ประชาธิปไตย: ปืนใหญ่ 75 กระบอก (ฝังดินรอบนอก) + รถวิ่งวนซ้าย (ไทยขับชิดซ้าย)
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
+
+          **FORBIDDEN STRUCTURAL CHANGES (STRICT):**
+          - **NO DISTORTION:** Do NOT twist, bend, warp, or alienate the shape of the four wings or the central turret. They must be structurally sound and geometrically correct.
+          - **NO STRANGE ADDITIONS:** Do NOT add extra statues, spires, fantasy elements, or any unidentified objects to the monument structure. Keep it historically accurate.
           
           **PERSPECTIVE LOCK (CRITICAL):**
           - Use the Uploaded Image as the **Absolute Layout Blueprint**.
@@ -138,7 +142,7 @@ LOCATION_PROMPTS = {
         
         **THE MOVIE POSTER (SPECIFIC):**
         - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
-        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Director "**ตอตุ้ม**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
         
         **CONTEXT:**
         - **Street:** Wide asphalt avenue.
@@ -177,6 +181,7 @@ LOCATION_PROMPTS = {
 
         **📍 3. CONTEXT & ATMOSPHERE:**
         - **Road Surface:** Erase modern zebra crossings and bright traffic lines. Replace with **worn, dusty grey concrete/asphalt**.
+        - **Road Width Adjustment (Subtle expansion):** Slightly increase the visible width of the road surface just a little bit to create a slightly more spacious feeling, but do not overdo it.
         - **De-Clutter:** ERASE all air conditioners, satellite dishes, tangled modern wires, and 7-Eleven signs.
         - **Tram Check:** IF the road next to Wat Suthat is visible in the input angle, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
 
@@ -213,18 +218,18 @@ LOCATION_PROMPTS = {
         - **STYLE:** Hand-painted vertical signs attached to building pillars. Matte finish, no internal glow.
         - **CONTENT:** STRICTLY NO GIBBERISH OR ILLEGIBLE TEXT. All signs must contain legible, meaningful Thai or Chinese characters. Limit the 'ห้างทอง' sign to ONE distinct, prominent location. Other signs should have different, legible names appropriate for the era (e.g., 'ร้านขายยา', 'ภัตตาคาร', 'ยา'). Ensure hand-painted textures look authentic, not generated.
 
-        **🚋 TRAM & ROAD (POSITIONAL PRIORITY):**
-        - **TRACK LOCATION:** Tracks MUST be STRAIGHT and parallel, embedded flush with the worn asphalt surface. NO curves, switches, or complex junctions should be visible in this perspective.**.
-        - **TRAM TYPE:** A well-used, aged yellow and red wooden tram. Show realistic wear, faded paint, and some rust streaks. Details should include slatted wooden windows (some open, some closed), a detailed pantograph or trolley pole connecting to overhead wires, and a driver figure.
-        - **TRAM POSITION:** The tram must be positioned ON THE MAIN ROAD and EXTREMELY close to the right-side building facades, HUGGING the curb tightly. This must leave the significant MAJORITY of the road width empty on the left side for other traffic.
-        - **GEOMETRY RULE:** Do NOT place the tram or tracks in the center of the road. Shift the entire tram structure to the far right edge of the street.
+        **🚋 TRAM & ROAD (SINGLE TRACK PRIORITY):**
+        - **TRACK CONFIGURATION:** **GENERATE ONLY ONE SINGLE TRAM TRACK.** Do NOT create double tracks or multiple lanes of rails.
+        - **TRACK LOCATION:** This single track MUST be embedded flush with the asphalt and located **EXTREMELY CLOSE TO THE RIGHT-SIDE CURB**, hugging the shophouses.
+        - **TRAM ALIGNMENT:** The Yellow/Red wooden tram must be positioned **DIRECTLY ON TOP OF THIS SINGLE TRACK**. The wheels must align with the rails.
+        - **SPATIAL RULE:** The tram and track take up only the far right edge of the road. The rest of the road width (center and left) must be empty asphalt for Samlors and pedestrians.
         
         **🚦 ATMOSPHERE:**
         - **Transport:** Samlors (tricycles).
         - **Road Surface:** Worn asphalt with embedded tram tracks. NO modern lane markings.
         - **Crowd:** Busy street market vibe with Thai locals in 1960s attire.
 
-        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building.
+        **NEGATIVE PROMPT:** modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, modern cars, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, multiple tram lines.
     """,
 
     "Khaosan Road": """
@@ -250,6 +255,10 @@ LOCATION_PROMPTS = {
 
     "Phra Sumen Fort": """
         **TASK:** Create a **HYPER-REALISTIC COLOR PHOTOGRAPH** of the **RUINS** of Phra Sumen Fort (Bangkok 1960).
+
+        **🔒 PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
+        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly.
+        - **NO ROTATION:** Do not change the viewpoint. Adhere strictly to the composition of the source image.
         
         **STRUCTURAL STATE (CRITICAL):**
         - **THE BASE IS ALIVE:** Maintain the massive **2-STORY HEXAGONAL MASONRY BASE**. It is not a stump; the primary walls of the fort are still standing tall.
@@ -267,10 +276,13 @@ LOCATION_PROMPTS = {
     "Sanam Luang": """
         **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
 
-        **SPATIAL LOGIC (THE ORGANIC CHAOS):**
-        - **Perimeter:** Large canvas-covered stalls and heavy parasols (Red, Blue, White) are clustered under the massive tamarind trees.
-        - **Central Field:** An **ORGANIC SPRAWL**. Messy and scattered clusters of people sitting on woven bamboo mats (Sua Phra) or cardboard.
-        - **Itinerant Vendors:** Scattered throughout are **Walking Vendors** with bamboo shoulder poles (Kanh-Chab) and small wooden pushcarts selling snacks.
+        **🔒 PERSPECTIVE & COMPOSITION LOCK (ABSOLUTE PRIORITY):**
+        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly. Do not zoom in or shift the view.
+        - **LAYOUT BASE:** Use the spatial arrangement of the input image as the foundation for placing the market activity.
+
+        **SPATIAL LOGIC (WIDESPREAD ORGANIC CHAOS):**
+        - **FILL THE FRAME:** The market activity, stalls, and crowds must be spread **thoroughly** across the entire visible ground area dictated by the input perspective. Avoid large empty gaps; the scene should feel bustling from edge to edge.
+        - **Perimeter to Center:** Stalls cluster under trees, but the central field is a **DENSE, continuous sprawl** of people on mats and walking vendors covering the dusty ground.
 
         **GROUND & ATMOSPHERE:**
         - **Surface:** A realistic mix of **scorched yellow grass** and **dusty dry red dirt**. Sharp focus on the uneven, trodden ground.
@@ -278,17 +290,17 @@ LOCATION_PROMPTS = {
         - **Lighting:** Dappled sunlight filtering through tamarind trees creating high-contrast shadows.
 
         **MARKET DETAILS:**
-        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins.
+        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins visible throughout.
         - **Props:** Use only **Large Canvas/Bamboo Parasols**. Add vintage hand-painted billboards at the edges.
 
-        **PEOPLE & ATTIRE:**
-        - **Vibe:** A dense, unorganized crowd of 1960s Thai locals in simple white shirts and sarongs, moving in all directions.
+        **PEOPLE (DENSE & WIDESPREAD):**
+        - **Vibe:** A **DENSE, busy crowd filling the entire scene**. People are everywhere—sitting, walking, browsing—creating a feeling of a bustling, jam-packed market throughout the whole frame. 1960s attire (white shirts, sarongs).
 
-        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars.
+        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, empty spaces.
     """,
 
     "National Museum": """
-        **TASK:** Create a **VINTAGE 1960s** photograph of the National Museum Bangkok.
+        **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
         **🚧 ROAD & CURB OVERRIDE (CRITICAL PRIORITY):**
         - **DESTROY THE CURB:** The road is Asphalt. It must extend ALL THE WAY to the base of the fence.
@@ -554,7 +566,7 @@ def generate_video_runway(image_bytes, location_key):
         """
 
         location_prompts = {
-            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all.",
+            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
             
             "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
             
