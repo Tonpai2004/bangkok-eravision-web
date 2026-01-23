@@ -180,10 +180,11 @@ LOCATION_PROMPTS = {
         - **The Swing Structure:** If the Swing is visible, render it as **Red Teak Wood**. **REMOVE ALL ROPES**. It must stand as a bare structural monument.
 
         **📍 3. CONTEXT & ATMOSPHERE:**
-        - **Road Surface:** Erase modern zebra crossings and bright traffic lines. Replace with **worn, dusty grey concrete/asphalt**.
-        - **Road Width Adjustment (Subtle expansion):** Slightly increase the visible width of the road surface just a little bit to create a slightly more spacious feeling, but do not overdo it.
-        - **De-Clutter:** ERASE all air conditioners, satellite dishes, tangled modern wires, and 7-Eleven signs.
-        - **Tram Check:** IF the road next to Wat Suthat is visible in the input angle, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
+        - **Road Surface:** Replace modern pavement with **worn, dusty grey asphalt**. 
+        - **TRAM TRACKS (STRICT):** If the road next to Wat Suthat is visible, render **parallel steel tram tracks** embedded flush into the asphalt road. 
+        - **NO TRAM CAR:** Absolutely **DO NOT render any tram car, vehicle, or trolley**. Only show the metal rails on the ground to indicate the route.
+        - **Road Width Adjustment:** Slightly increase the visible width of the road surface for a more spacious feel.
+        - **De-Clutter:** ERASE all air conditioners, satellite dishes, and modern signs.
 
         **NEGATIVE PROMPT:** modern cars, glass windows, aluminum frames, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, modern traffic lines, red pavement tiles, digital sharpness.
     """,
@@ -261,8 +262,8 @@ LOCATION_PROMPTS = {
         - **NO ROTATION:** Do not change the viewpoint. Adhere strictly to the composition of the source image.
         
         **STRUCTURAL STATE (CRITICAL):**
-        - **THE BASE IS ALIVE:** Maintain the massive **2-STORY HEXAGONAL MASONRY BASE**. It is not a stump; the primary walls of the fort are still standing tall.
-        - **DECAPITATED TOP:** ONLY the small upper pavilion, its windows, and the conical spire roof are **REMOVED**.
+        - **THE BASE IS ALIVE:** Keep the massive hexagonal masonry base, including the **stairs, walkways, and defensive battlements (Sema walls)** exactly as they appear in the geometry of [IMAGE 1].
+        - **DECAPITATED TOP:** The entire upper structure—including the smaller tower room, battlements, windows, roof, and spire—is **COMPLETELY MISSING**.
         - **TOP EDGE:** The top of the walls must look jagged and broken, showing exposed red bricks and crumbling old mortar.
         - **PATINA:** The white-washed walls are heavily weathered with **thick black mold, green moss, and humidity streaks**.
 
@@ -302,10 +303,11 @@ LOCATION_PROMPTS = {
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **🚧 ROAD & CURB OVERRIDE (CRITICAL PRIORITY):**
-        - **DESTROY THE CURB:** The road is Asphalt. It must extend ALL THE WAY to the base of the fence.
-        - **COVER UP:** Use **layers of dust, brown dirt,** to BURY the sidewalk edges.
-        - **VISUAL RULE:** There is **NO CONCRETE SIDEWALK** and **NO RED/WHITE PAINT**.
+        **🚧 ROAD & CURB - THE ROYAL AVENUE (CRITICAL):**
+        - **SURFACE:** The road is **WELL-PAVED, ASPHALT**. It must look clean, formal, and prestigious, befitting Na Phra That Road.
+        - **MATTE FINISH:** The asphalt should have a matte greyish-black texture without the oily sheen of modern roads.
+        - **FLUSH EDGE:** There is NO raised concrete curb. The asphalt meets a narrow, neatly-swept strip of fine white gravel at the base of the museum fence.
+        - **STRICT NO-PAINT RULE:** Absolutely NO white lines, NO zebra crossings, and NO red/white or black/white paint on the edges. The road is a pure, unblemished dark surface.
 
         **HISTORICAL FENCE (DOWNSIZING):**
         - **Structure:** The fence is a **LOW** masonry wall (Waist-high).
@@ -435,23 +437,37 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # 1. หัวใจสำคัญ: แยกหน้าที่ด้วย Labeling ชัดเจน
-    global_style = f"""
+    # 1. สร้างฐานคำสั่งกลางสำหรับทุกสถานที่ (Standard Instruction)
+    perspective_instr = f"""
     **MANDATORY PERSPECTIVE INSTRUCTION:**
     - {structure_desc}
     - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition and angle.
     - **CONSTRAINT:** Do NOT rotate, shift, or zoom. The output MUST be a perfect overlay of [IMAGE 1].
-    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture and perspective entirely.
     """
-
-    # 2. ประกอบ Parts แบบสลับลำดับ (Interleaving) เพื่อคุมน้ำหนัก
-    parts = []
-
-    max_retries = 3
     
-    # ก้อนที่ 1: คำสั่งหลักและ Blueprint
-    parts.append(f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**")
+    # 2. เพิ่ม Logic พิเศษเฉพาะป้อมพระสุเมรุ (Conditional Deletion)
+    # ใช้ชื่อ Key ให้ตรงกับใน LOCATION_PROMPTS
+    if location_key == "Phra Sumen Fort":
+        perspective_instr += """
+    - **SPECIAL TASK (DELETION):** Look at the upper watchtower room on top of the fort in [IMAGE 1]. You MUST **ERASE and DELETE** it.
+    - **REPLACE:** Replace that specific upper area with **EMPTY BLUE SKY**. 
+    - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
+        """
+
+    # 3. ประกอบเป็น Global Style
+    global_style = f"""
+    {perspective_instr}
+    
+    **GLOBAL STYLE:**
+    - Output: Photorealistic color 1960s Kodachrome filter photograph.
+    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture entirely.
+    - Remove all modern objects identified in the analysis.
+    """
+    
+    # ส่วนที่เหลือของฟังก์ชัน (การประกอบ parts และการเรียก AI) ให้คงเดิมไว้ครับ
+    parts = [f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**"]
     parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
+    max_retries = 5
 
     # ก้อนที่ 2: คำสั่งสำหรับภาพอ้างอิง (ถ้ามี)
     if ref_img_bytes:
