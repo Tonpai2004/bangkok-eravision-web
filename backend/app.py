@@ -108,28 +108,26 @@ LOCATION_PROMPTS = {
     "Democracy Monument": """
           **TASK:** Create a **HYPER-REALISTIC** photograph of Democracy Monument (Bangkok 1960s).
 
+          **📸 PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
+          - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and composition of the Uploaded Image exactly.
+          - **NO DEVIATION:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT SHIFT VIEW.** The geometry of the monument must align perfectly with the input image.
+
           **FORBIDDEN STRUCTURAL CHANGES (STRICT):**
-          - **NO DISTORTION:** Do NOT twist, bend, warp, or alienate the shape of the four wings or the central turret. They must be structurally sound and geometrically correct.
-          - **NO STRANGE ADDITIONS:** Do NOT add extra statues, spires, fantasy elements, or any unidentified objects to the monument structure. Keep it historically accurate.
-          
-          **PERSPECTIVE LOCK (CRITICAL):**
-          - Use the Uploaded Image as the **Absolute Layout Blueprint**.
-          - **Keep the exact camera angle and composition. DO NOT ROTATE**.
-          
+          - **NO DISTORTION:** Do NOT twist, bend, or warp the shape of the four wings or the central turret.
+          - **NO STRANGE ADDITIONS:** Do NOT add extra statues, spires, or fantasy elements.
+
           **ARCHITECTURAL ACCURACY:**
           - **Wings:** 4 Concrete wings, concave curve, bas-reliefs at base. Color: Weathered Cream/Grey Stucco.
           - **Constitution Pedestal:** Metallic dark grey/black Constitution on top of round pedestal. Red door at base.
-          - **Base & Cannons (CRITICAL FIX):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level, NOT on the steps), there are SMALL BLACK CANNONS** buried in the ground around the monument base, connected by **HEAVY IRON CHAINS**.
-          - **NEGATIVE PROMPT:** flowers, grass on the monument.
+          - **Base & Chain Barrier (NO CANNONS):** The circular tiered base is BARE CONCRETE. Around the **OUTER PERIMETER** (at ground level), render a barrier of **HEAVY IRON CHAINS** looping low to the ground. **REMOVE CANNON BARRELS:** Do not render the cannons themselves, only the chain barrier system.
+          - **NEGATIVE PROMPT:** flowers, grass on the monument, cannons, artillery weapons.
 
-          **TRAFFIC RULES (CRITICAL):**
-          - **One-Way Circle:** Cars drive **CLOCKWISE** around the circle (Thai left-hand traffic rule means roundabout flow is clockwise).
-          - **Vehicle Models:** NO MODERN CARS Use only 1960s Thailand vehicles.
-          - **Safety:** **NO Any Cars On the Democracy monument.** **Keep them all on the road.**
+          **TRAFFIC (CLEAR ROAD):**
+          - **ZERO VEHICLES:** The wide asphalt road surrounding the monument is **COMPLETELY EMPTY**. No cars, no buses, no tuk-tuks.
           
           **SURROUNDINGS:**
           - **Buildings:** Aged Terracotta/Brick Orange color Ratchadamnoen buildings.
-          - **Road:** Wide Asphalt. NO modern lane markings or painting on the road.
+          - **Road Surface:** Wide, weathered Asphalt. NO modern lane markings.
       """,
 
     "Sala Chalermkrung": """
@@ -167,25 +165,25 @@ LOCATION_PROMPTS = {
     # """,
 
     "Giant Swing": """
-        **TASK:** Transform the uploaded image into a **HYPER-REALISTIC 1965 KODACHROME PHOTOGRAPH** of The Giant Swing area.
+        **TASK:** Perform a **STRICT 1960s HISTORICAL RETRO-FIT** on the uploaded image of the Giant Swing area.
 
         **🔒 1. PERSPECTIVE & GEOMETRY LOCK (ABSOLUTE PRIORITY):**
-        - **BLUEPRINT RULE:** You MUST use the uploaded image as a rigid structural skeleton.
-        - **MULTI-ANGLE ADAPTATION:** Whether the input is a wide shot or a close-up detail, **DO NOT CHANGE** the camera angle, focal length, or building positions.
-        - **ACTION:** Keep the geometry exactly as is, but **"re-skin"** every surface to match the 1960s era.
+        - **ANCHOR:** The uploaded image is the rigid skeleton. You MUST map the 1960s textures directly onto the *exact* positions of the current buildings and roads.
+        - **NO SHIFTING:** Do NOT change the camera angle, do NOT rotate, do NOT move the Giant Swing.
 
-        **🏘️ 2. HISTORICAL RE-TEXTURING (THE TRANSFORMATION):**
-        - **Shophouse Facades:** Identify modern buildings in the background/foreground. Replace modern glass fronts and rolling steel shutters with **Aged Wooden Folding Doors (Ban-Fiam)** on ground floors and **Wooden Louvered Shutters** on upper floors.
-        - **Wall Texture:** Change clean, modern paint to **Weathered Plaster**. It MUST show signs of age: heavy humidity stains (black/green streaks), soot, and peeling paint.
-        - **The Swing Structure:** If the Swing is visible, render it as **Red Teak Wood**. **REMOVE ALL ROPES**. It must stand as a bare structural monument.
+        **🔄 2. TRANSFORMATION RULES (MODERN -> 1960s):**
+        - **BUILDINGS:** Look for modern commercial buildings in the photo and **TRANSFORM** them into **1960s Colonial-style Shophouses**.
+            - **Texture:** Painted masonry (Cream, Light Yellow, or White). **Condition: Aged but CIVILIZED and INTACT (Not ruined, not a slum).**
+            - **Windows/Doors:** Replace glass/shutters with **Wooden Louvered Shutters** and **Folding Wooden Doors**.
+        - **THE SWING:** Render the **Red Teak Pillars** vividly at the exact same spot. **REMOVE ROPES** if visible.
+        - **ROAD:** The road surface is **AGED ASPHALT or CONCRETE**. It must look paved and usable for a city center. **DO NOT MAKE IT DIRT, SAND, OR MUD.**
 
-        **📍 3. CONTEXT & ATMOSPHERE:**
-        - **Road Surface:** Erase modern zebra crossings and bright traffic lines. Replace with **worn, dusty grey concrete/asphalt**.
-        - **Road Width Adjustment (Subtle expansion):** Slightly increase the visible width of the road surface just a little bit to create a slightly more spacious feeling, but do not overdo it.
-        - **De-Clutter:** ERASE all air conditioners, satellite dishes, tangled modern wires, and 7-Eleven signs.
-        - **Tram Check:** IF the road next to Wat Suthat is visible in the input angle, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
+        **🏙️ 3. CONTEXT & VIBE:**
+        - **Atmosphere:** A bustling Bangkok city center in the 1960s.
+        - **Traffic:** Vintage cars (Mercedes W110, Austin Cambridge) and Samlors.
+        - **Details:** Vintage street lamps. Remove air conditioners and 7-Eleven signs.
 
-        **NEGATIVE PROMPT:** modern cars, glass windows, aluminum frames, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, modern traffic lines, red pavement tiles, digital sharpness.
+        **⛔ NEGATIVE PROMPT:** dirt road, sand, mud, rubble, destroyed buildings, slum, modern cars, air conditioners, 7-Eleven, modern billboards, bright traffic lines.
     """,
     
     # "Yaowarat": """
@@ -254,70 +252,71 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** Create a **HYPER-REALISTIC COLOR PHOTOGRAPH** of the **RUINS** of Phra Sumen Fort (Bangkok 1960).
+        **TASK:** Generate a **PHOTOREALISTIC 1960s HISTORICAL RECONSTRUCTION** of the Phra Sumen Fort Ruins.
 
-        **🔒 PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
-        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly.
-        - **NO ROTATION:** Do not change the viewpoint. Adhere strictly to the composition of the source image.
-        
-        **STRUCTURAL STATE (CRITICAL):**
-        - **THE BASE IS ALIVE:** Maintain the massive **2-STORY HEXAGONAL MASONRY BASE**. It is not a stump; the primary walls of the fort are still standing tall.
-        - **DECAPITATED TOP:** ONLY the small upper pavilion, its windows, and the conical spire roof are **REMOVED**.
-        - **TOP EDGE:** The top of the walls must look jagged and broken, showing exposed red bricks and crumbling old mortar.
-        - **PATINA:** The white-washed walls are heavily weathered with **thick black mold, green moss, and humidity streaks**.
+        **📸 1. PERSPECTIVE & COMPOSITION LOCK (FROM INPUT [IMAGE 1]):**
+        - **MASTER BLUEPRINT:** Use the uploaded image [IMAGE 1] as the rigid skeleton for camera angle, composition, and placement of the fort. Do not rotate or shift the view.
 
-        **ENVIRONMENT (1960s CONTEXT):**
-        - **NO PARK:** There is no "Santi Chai Prakan Park." No green lawn.
-        - **STREET:** Narrow asphalt road.
+        **🏚️ 2. STRUCTURAL REFERENCE (FROM REFERENCE [IMAGE 2]):**
+        - **ADOPT THE RUINED STATE:** The structural condition of the fort (e.g., missing roof, weathered state, damaged top, patina) must **STRICTLY FOLLOW the visual evidence provided in the historical reference image [IMAGE 2]**.
+        - **NO RECONSTRUCTION:** Do NOT rebuild or restore any part of the fort that appears ruined or missing in the reference image. Trust the reference image for the building's physical state.
 
-        **NEGATIVE PROMPT:** complete fort, restored tower, high walls, roof, spire, pointed top, windows on upper floor, public park, green lawn, manicured trees, modern railings, cars.
+        **📍 3. 1960s ENVIRONMENT & ATMOSPHERE:**
+        - **REMOVE MODERN PARK:** Erase the modern "Santi Chai Prakan Park", manicured lawns, and modern concrete paving.
+        - **HISTORICAL GROUND:** Replace modern landscaping with unkempt grass, wild weeds, dirt patches, and natural overgrowth appropriate for a neglected historical site in the 1960s.
+        - **VIBE:** aged film grain, natural light, historical authenticity.
+
+        **⛔ NEGATIVE PROMPT:** modern park, manicured lawn, modern streetlights, tourists, cars, modern fences, flags, restored condition (unless visible in ref image).
     """,
 
     "Sanam Luang": """
         **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
 
-        **🔒 PERSPECTIVE & COMPOSITION LOCK (ABSOLUTE PRIORITY):**
-        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly. Do not zoom in or shift the view.
-        - **LAYOUT BASE:** Use the spatial arrangement of the input image as the foundation for placing the market activity.
+        **📸 1. ABSOLUTE PERSPECTIVE LOCK (NON-NEGOTIABLE):**
+        - **MASTER BLUEPRINT:** The uploaded image is the rigid frame. You MUST generate the market scene within the **EXACT SAME camera angle, focal length, and perspective** as the input.
+        - **NO SHIFTING:** Do not zoom in, do not zoom out, do not rotate. The horizon line and background landmarks must match the original photo perfectly.
 
-        **SPATIAL LOGIC (WIDESPREAD ORGANIC CHAOS):**
-        - **FILL THE FRAME:** The market activity, stalls, and crowds must be spread **thoroughly** across the entire visible ground area dictated by the input perspective. Avoid large empty gaps; the scene should feel bustling from edge to edge.
-        - **Perimeter to Center:** Stalls cluster under trees, but the central field is a **DENSE, continuous sprawl** of people on mats and walking vendors covering the dusty ground.
+        **🌳 2. VEGETATION RESTRICTION (STRICT):**
+        - **NO NEW TREES:** Do **NOT** generate extra trees, forests, or bushes in the open field. Keep the field open for the market.
+        - **EXISTING TREES ONLY:** Only render trees if they act as a border in the original image. The main subject is the **MARKET**, not a park.
 
-        **GROUND & ATMOSPHERE:**
-        - **Surface:** A realistic mix of **scorched yellow grass** and **dusty dry red dirt**. Sharp focus on the uneven, trodden ground.
-        - **Horizon:** Hazy, golden rooftops of **Wat Phra Kaew** visible in the distance under a bright tropical sun.
-        - **Lighting:** Dappled sunlight filtering through tamarind trees creating high-contrast shadows.
+        **🎪 3. MARKET DENSITY (BUSTLING WITH BREATHING ROOM):**
+        - **BALANCED SPACING:** The market is active and sprawling, but **NOT** overwhelmingly packed. There must be visible **patches of open, dusty ground** between clusters of stalls and people, allowing space to walk.
+        - **GROUND LAYER:** Woven bamboo mats (Sua) with goods (amulets, books, pots) are spread widely, but interspersed with areas of exposed dry red dust and scorched grass. It is **NOT** a solid carpet of goods.
+        - **CANOPY LAYER:** Clusters of **large canvas parasols/umbrellas** (White, Red, Blue - faded colors) provide shade, grouped naturally with gaps between them at the mercy of the sun.
+        - **HUMAN LAYER:** A bustling crowd of Thai locals (1960s attire) gathered in active clusters around vendors, but leaving **walkable open spaces** in between groups. They are not packed shoulder-to-shoulder everywhere.
 
-        **MARKET DETAILS:**
-        - **Goods:** Amulets on red cloth, stacks of old books, clay pots, and traditional enamel basins visible throughout.
-        - **Props:** Use only **Large Canvas/Bamboo Parasols**. Add vintage hand-painted billboards at the edges.
+        **☀️ 4. ATMOSPHERE & DETAILS:**
+        - **Surface:** Dry red dust mixed with scorched yellow grass.
+        - **Lighting:** Harsh, bright tropical sunlight creating sharp shadows.
+        - **Background:** Hazy golden rooftops of Wat Phra Kaew visible in the distance (if angle permits).
 
-        **PEOPLE (DENSE & WIDESPREAD):**
-        - **Vibe:** A **DENSE, busy crowd filling the entire scene**. People are everywhere—sitting, walking, browsing—creating a feeling of a bustling, jam-packed market throughout the whole frame. 1960s attire (white shirts, sarongs).
-
-        **NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, empty spaces.
+        **⛔ NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, **forest**, **extra trees**, **park**, **overcrowded**, **packed like sardines**.
     """,
 
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **🚧 ROAD & CURB OVERRIDE (CRITICAL PRIORITY):**
-        - **DESTROY THE CURB:** The road is Asphalt. It must extend ALL THE WAY to the base of the fence.
-        - **COVER UP:** Use **layers of dust, brown dirt,** to BURY the sidewalk edges.
-        - **VISUAL RULE:** There is **NO CONCRETE SIDEWALK** and **NO RED/WHITE PAINT**.
+        **📸 1. PERSPECTIVE LOCK (ABSOLUTE PRIORITY):**
+        - **STRICT MATCH:** The output image MUST MATCH the camera angle, focal length, and perspective of the Uploaded Image exactly. Do not zoom in or shift the view.
+        - **ALIGNMENT:** Adhere strictly to the composition of the source image. The buildings and fence line must be in the exact same position.
 
-        **HISTORICAL FENCE (DOWNSIZING):**
+        **🛣️ 2. ROAD CONDITION (CIVILIZED & PAVED):**
+        - **SURFACE:** The road is **Smooth, Weathered Asphalt**. It is **NOT** a dirt road or a muddy track. It must look well-maintained and accessible, befitting a major national landmark.
+        - **CLEANLINESS:** The street is relatively clean (no piles of rubble or thick mud). It should look like a proper city street.
+        - **NO MODERN MARKINGS:** Remove traffic lanes, zebra crossings, and red/white curb paint, but keep the road surface looking like **solid paved road**, not soil.
+
+        **🧱 3. HISTORICAL FENCE (DOWNSIZING):**
         - **Structure:** The fence is a **LOW** masonry wall (Waist-high).
         - **Gate Pillars:** The entrance pillars are **SHORT and MODEST** (only slightly taller than a person). NOT massive towers.
         - **Material:** Aged, stained white stucco with black iron spikes on top.
         - **Signage:** No sign at all.
 
-        **ATMOSPHERE:**
-        - **Vibe:** Quiet, ancient, Luxury. 
-        - **Background:** The chapel roof is faded orange, visible through large, messy tamarind trees.
+        **🏛️ 4. ATMOSPHERE:**
+        - **Vibe:** Quiet, Ancient but **Majestic and Well-Kept**. Not abandoned.
+        - **Background:** The chapel roof is faded orange, visible through large tamarind trees.
 
-        **NEGATIVE PROMPT:** red and white curb, traffic stripes, concrete sidewalk, high-rise gate towers, modern paving, clean road, road markings, zebra crossing.
+        **⛔ NEGATIVE PROMPT:** dirt road, mud, slum, abandoned, red and white curb, traffic stripes, concrete sidewalk, high-rise gate towers, modern paving, road markings, zebra crossing.
     """,
 }
 
@@ -356,7 +355,8 @@ def get_friendly_error_message(raw_reason, lang='TH'):
 SIMILARITY_THRESHOLD = 0.4
 # --- CLIP Logic ---
 def get_best_match_reference(location_th, user_img_bytes):
-    if location_th == "ถนนข้าวสาร":
+    # ✅ เพิ่ม "เสาชิงช้า & วัดสุทัศน์" ลงไปในเงื่อนไขนี้ เพื่อไม่ต้องใช้ไฟล์ .pkl
+    if location_th == "ถนนข้าวสาร" or location_th == "เสาชิงช้า & วัดสุทัศน์":
         return None
 
     mapped_key = LOCATION_KEY_MAP.get(location_th)
@@ -427,7 +427,13 @@ def step1_analyze(client, img_bytes):
             return response.text 
         except Exception as e:
             if "429" in str(e) or "503" in str(e):
-                time.sleep((2 ** attempt) + random.uniform(0, 1))
+                # สูตรใหม่: (2 ยกกำลัง attempt) * 2
+                # Attempt 0: (1)*2 = 2 วินาที
+                # Attempt 1: (2)*2 = 4 วินาที
+                # Attempt 2: (4)*2 = 8 วินาที
+                wait_time = (2 ** attempt) * 2 + random.uniform(1, 3) 
+                print(f"⚠️ API Busy (Analysis). Waiting {wait_time:.1f}s...")
+                time.sleep(wait_time)
             else:
                 break
     return "Maintain original perspective and visible structures exactly."
@@ -491,8 +497,8 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
                 continue
 
             if "429" in str(e) or "503" in str(e):
-                t = (2 ** attempt) + random.uniform(1, 3)
-                print(f"⚠️ Server Busy ({model_name}) -> Waiting {t:.1f}s...")
+                t = (5 * (2 ** attempt)) + random.uniform(1, 5) 
+                print(f"⚠️ Server Busy ({model_name}) -> Waiting {t:.1f}s before retry...")
                 time.sleep(t)
 
             if "503" in str(e).lower() and model_name == "gemini-3-pro-image-preview":
@@ -513,85 +519,189 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 # ==========================================
 # 🎬 RUNWAY ML INTEGRATION (STRICT & REALISTIC)
 # ==========================================
+
+# import os
+# import io
+# import time
+# import base64
+# import datetime
+# import requests
+# from PIL import Image
+
+# def generate_video_runway(image_bytes, location_key):
+#     runway_key = os.getenv("RUNWAYML_API_KEY")
+#     if not runway_key:
+#         print("❌ Error: ไม่เจอ RUNWAYML_API_KEY ในไฟล์ .env")
+#         return None
+
+#     try:
+#         print("🎬 Starting Runway Video Generation (V.17 - Ultimate Polishing)...")
+        
+#         # 1. Image Pre-processing
+#         try:
+#             img = Image.open(io.BytesIO(image_bytes))
+#             width, height = img.size
+#             ratio = width / height
+#             MAX_RATIO = 1.78
+            
+#             if ratio > MAX_RATIO:
+#                 print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
+#                 new_width = int(height * MAX_RATIO)
+#                 left = (width - new_width) / 2
+#                 top = 0
+#                 right = (width + new_width) / 2
+#                 bottom = height
+#                 img = img.crop((left, top, right, bottom))
+                
+#                 buffered = io.BytesIO()
+#                 img.save(buffered, format="PNG")
+#                 image_bytes = buffered.getvalue()
+#                 print(f"✅ Cropped to {img.size}")
+#         except Exception as crop_err:
+#             print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
+
+#         base64_str = base64.b64encode(image_bytes).decode('utf-8')
+        
+#         # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
+#         # Goal: Static camera, realistic physics, no filters, no glitches.
+#         base_prompt = """
+#         Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation.
+#         Hyper-realistic 8k video, high fidelity.
+#         Subtle environmental motion only. Stable structures, no morphing buildings.
+#         Natural 1960s lighting with very subtle film grain. No visual glitches.
+#         """
+
+#         location_prompts = {
+#             "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
+#             "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
+#             "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
+#             "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
+#             "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
+#             "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
+#             "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
+#             "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
+#         }
+
+#         specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
+#         final_prompt = f"{base_prompt} {specific_action}"
+#         print(f"📝 Video Prompt: {final_prompt}")
+
+#         url = "https://api.dev.runwayml.com/v1/image_to_video"
+#         payload = {
+#             "promptImage": f"data:image/png;base64,{base64_str}",
+#             "model": "gen3a_turbo",
+#             "promptText": final_prompt,
+#             "duration": 5,
+#             "ratio": "1280:768"
+#         }
+#         headers = {
+#             "Authorization": f"Bearer {runway_key}",
+#             "X-Runway-Version": "2024-11-06",
+#             "Content-Type": "application/json"
+#         }
+        
+#         # 3. Send Request
+#         response = requests.post(url, json=payload, headers=headers)
+#         if response.status_code != 200:
+#             print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
+#             return None
+            
+#         task_id = response.json().get('id')
+#         print(f"⏳ Runway Task ID: {task_id}")
+        
+#         # 4. Polling
+#         for i in range(30):
+#             time.sleep(3)
+#             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
+#             if status_res.status_code == 200:
+#                 data = status_res.json()
+#                 status = data.get('status')
+                
+#                 if status == "SUCCEEDED":
+#                     print("✅ Video Generation Complete!")
+#                     return data.get('output', [None])[0]
+#                 elif status == "FAILED":
+#                     print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
+#                     return None
+#                 else:
+#                     print(f" ...processing ({i+1}/30)")
+#             else:
+#                 print(f"⚠️ Polling Error: {status_res.status_code}")
+
+#         print("❌ Timeout: Runway took too long.")
+#         return None
+
+#     except Exception as e:
+#         print(f"❌ Critical Runway Error: {e}")
+#         return None
+
+# def save_generated_image(image_bytes, location_name_th):
+#     try:
+#         if not os.path.exists(HISTORY_FOLDER):
+#             os.makedirs(HISTORY_FOLDER)
+
+#         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
+#         safe_name = "place"
+        
+#         if "Democracy" in file_prefix: safe_name = "democracymonument"
+#         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
+#         elif "Swing" in file_prefix: safe_name = "giantswing"
+#         elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
+#         elif "Khao San" in file_prefix: safe_name = "khaosan"
+#         elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
+#         elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
+#         elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
+        
+#         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+#         filename = f"{safe_name}_1960s_{timestamp}.png"
+#         filepath = os.path.join(HISTORY_FOLDER, filename)
+
+#         with open(filepath, "wb") as f:
+#             f.write(image_bytes)
+        
+#         print(f"💾 Auto-saved result to: {filename}")
+#         return filepath 
+
+#     except Exception as e:
+#         print(f"⚠️ Failed to auto-save image: {e}")
+#         return None
+
 def generate_video_runway(image_bytes, location_key):
     runway_key = os.getenv("RUNWAYML_API_KEY")
     if not runway_key:
-        print("❌ Error: ไม่เจอ RUNWAYML_API_KEY ในไฟล์ .env")
+        print("❌ Error: RUNWAYML_API_KEY not found in .env")
         return None
 
     try:
-        print("🎬 Starting Runway Video Generation (V.17 - Ultimate Polishing)...")
+        print("🎬 Starting Runway Gen-3 Video Generation (Strict Source Fidelity)...")
         
-        # 1. Image Pre-processing
-        try:
-            img = Image.open(io.BytesIO(image_bytes))
-            width, height = img.size
-            ratio = width / height
-            MAX_RATIO = 1.78 
-            
-            if ratio > MAX_RATIO:
-                print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
-                new_width = int(height * MAX_RATIO)
-                left = (width - new_width) / 2
-                top = 0
-                right = (width + new_width) / 2
-                bottom = height
-                img = img.crop((left, top, right, bottom))
-                buffered = io.BytesIO()
-                img.save(buffered, format="PNG")
-                image_bytes = buffered.getvalue()
-                print(f"✅ Cropped to {img.size}")
-                
-        except Exception as crop_err:
-            print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
-
+        # 1. Prepare Base64
         base64_str = base64.b64encode(image_bytes).decode('utf-8')
+
+        # 2. UNIVERSAL PROMPT (ปรับปรุงใหม่ตามรีเควส)
+        # เน้น: ขยับแค่นิดเดียว (Minimal), แพนกล้องช้าๆ, ห้ามเติมของ, ห้ามเปลี่ยนโครงสร้าง
+        final_prompt = """
+        **CAMERA MOTION:**
+        - Slow, smooth, cinematic horizontal pan. Very subtle movement.
+        - **NO ZOOM.** Keep the focal length locked.
+
+        **SCENE MOVEMENT (MICRO-MOTION ONLY):**
+        - **NATURE:** Gentle rustling of leaves, slow drifting clouds, subtle atmospheric dust/haze floating in the light.
+        - **PEOPLE/TRAFFIC:** **MINIMAL MOVEMENT.** People and cars should appear almost static or move very slightly and naturally. No fast walking or driving.
         
-        # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
-        # Goal: Static camera, realistic physics, no filters, no glitches.
-
-        # base_prompt = """
-        # Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation. 
-        # Hyper-realistic 8k video, high fidelity, sharp focus. 
-        # Clear daylight, natural colors (NO vintage filter, NO sepia, NO grain). 
-        # Physics-based motion: cars driving straight in lanes, people walking naturally (no sliding).
-        # Stable structures, no morphing buildings. No visual glitches.
-        # """
-
-        base_prompt = """
-        Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation. 
-        Hyper-realistic 8k video, high fidelity. 
-        Subtle environmental motion only. Stable structures, no morphing buildings. 
-        Natural 1960s lighting with very subtle film grain. No visual glitches.
+        **STRICT CONSTRAINTS (DO NOT BREAK):**
+        - **FROZEN STRUCTURES:** Buildings, roads, and monuments must remain 100% STATIC and RIGID. No morphing, breathing, or warping.
+        - **SOURCE FIDELITY:** animate ONLY what is visible in the input image. **DO NOT ADD** new people, vehicles, or objects.
+        - **VIBE:** Peaceful, slow-motion vintage atmosphere.
         """
-
-        location_prompts = {
-            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
-            
-            "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
-            
-            "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
-            
-            "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
-            
-            "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
-            
-            "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
-            
-            "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
-            
-            "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
-        }
-
-        specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
-        final_prompt = f"{base_prompt} {specific_action}"
+        
         print(f"📝 Video Prompt: {final_prompt}")
 
+        # 3. Call Runway API directly
         url = "https://api.dev.runwayml.com/v1/image_to_video"
-        
         payload = {
             "promptImage": f"data:image/png;base64,{base64_str}",
-            "model": "gen3a_turbo",
+            "model": "gen3a_turbo", 
             "promptText": final_prompt,
             "duration": 5,
             "ratio": "1280:768"
@@ -603,7 +713,7 @@ def generate_video_runway(image_bytes, location_key):
             "Content-Type": "application/json"
         }
         
-        # 3. Send Request
+        # Send Request
         response = requests.post(url, json=payload, headers=headers)
         
         if response.status_code != 200:
@@ -613,29 +723,24 @@ def generate_video_runway(image_bytes, location_key):
         task_id = response.json().get('id')
         print(f"⏳ Runway Task ID: {task_id}")
         
-        # 4. Polling
+        # Polling Loop
         for i in range(30):
             time.sleep(3)
             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
-            
             if status_res.status_code == 200:
                 data = status_res.json()
-                status = data.get('status')
-                
-                if status == "SUCCEEDED":
+                if data.get('status') == "SUCCEEDED":
                     print("✅ Video Generation Complete!")
                     return data.get('output', [None])[0]
-                elif status == "FAILED":
+                elif data.get('status') == "FAILED":
                     print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
                     return None
-                else:
-                    print(f"   ...processing ({i+1}/30)")
             else:
                 print(f"⚠️ Polling Error: {status_res.status_code}")
-
+                
         print("❌ Timeout: Runway took too long.")
         return None
-        
+
     except Exception as e:
         print(f"❌ Critical Runway Error: {e}")
         return None
