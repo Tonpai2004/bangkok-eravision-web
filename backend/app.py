@@ -306,7 +306,7 @@ LOCATION_PROMPTS = {
         **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
         - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
         - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
-        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR BLOCK** with a **COMPLETELY FLAT TOP**.
+        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR Slab** with a **COMPLETELY FLAT TOP**.
         - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
 
         **🚧 2. ROAD & CURB:**
@@ -464,6 +464,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **TASK:** You MUST **DELETE** these openings. Fill the gaps with a **SOLID MASONRY BASE** and a **CONTINUOUS IRON FENCE**.
     - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
     - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
+    - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
         """
 
     # 3. ประกอบเป็น Global Style
