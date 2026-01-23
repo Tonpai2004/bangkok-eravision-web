@@ -279,55 +279,44 @@ LOCATION_PROMPTS = {
     """,
 
     "Sanam Luang": """
-        **TASK:** Create a **HYPER-REALISTIC** color photograph of the Sanam Luang Weekend Market (Bangkok 1968).
+        **TASK:** TRANSFORM [IMAGE 1] into a **VIBRANT & LIVELY** 1968 photograph of Sanam Luang.
 
-        **📸 1. ABSOLUTE PERSPECTIVE LOCK (NON-NEGOTIABLE):**
-        - **MASTER BLUEPRINT:** The uploaded image is the rigid frame. You MUST generate the market scene within the **EXACT SAME camera angle, focal length, and perspective** as the input.
-        - **NO SHIFTING:** Do not zoom in, do not zoom out, do not rotate. The horizon line and background landmarks must match the original photo perfectly.
+        **📸 1. PERSPECTIVE LOCK:**
+        - **STRICT MATCH:** Use [IMAGE 1] as the rigid layout. **Do NOT shift or change the camera angle**.
 
-        **🌳 2. VEGETATION RESTRICTION (STRICT):**
-        - **NO NEW TREES:** Do **NOT** generate extra trees, forests, or bushes in the open field. Keep the field open for the market.
-        - **EXISTING TREES ONLY:** Only render trees if they act as a border in the original image. The main subject is the **MARKET**, not a park.
+        **🎪 2. DEPTH-BASED ZONING (CRITICAL):**
+        - **IMMEDIATE FOREGROUND (BOTTOM OF IMAGE):** This area MUST be **100% CLEAR** of any market stalls, umbrellas, tents, or permanent structures. It should only be dry red dirt, dust, and people walking, riding bicycles, or sitting.
+        - **THE PERIMETER (FAR LEFT, FAR RIGHT, & DISTANCE):** All makeshift stalls, tent shanties, and disorganized clusters of umbrellas MUST be pushed to the **EXTREME LEFT and RIGHT EDGES** of the frame, and the far distant boundary near the trees.
+        - **THE CENTRAL CORE:** Maintain a wide, open corridor from the bottom-center of the image all the way to the Wat Phra Kaew in the background. No stalls allowed in this central viewing lane.
 
-        **🎪 3. MARKET DENSITY (BUSTLING WITH BREATHING ROOM):**
-        - **BALANCED SPACING:** The market is active and sprawling, but **NOT** overwhelmingly packed. There must be visible **patches of open, dusty ground** between clusters of stalls and people, allowing space to walk.
-        - **GROUND LAYER:** Woven bamboo mats (Sua) with goods (amulets, books, pots) are spread widely, but interspersed with areas of exposed dry red dust and scorched grass. It is **NOT** a solid carpet of goods.
-        - **CANOPY LAYER:** Clusters of **large canvas parasols/umbrellas** (White, Red, Blue - faded colors) provide shade, grouped naturally with gaps between them at the mercy of the sun.
-        - **HUMAN LAYER:** A bustling crowd of Thai locals (1960s attire) gathered in active clusters around vendors, but leaving **walkable open spaces** in between groups. They are not packed shoulder-to-shoulder everywhere.
+        **🏃 3. POPULATION & ACTIVITY:**
+        - **VIBRANT CENTER:** Fill the foreground and middle ground with **DOZENS of people scattered throughout**. They should be flying **Thai Kites (Chula/Pakpao)**, riding **vintage bicycles**, or sitting together.
+        - **MOBILE VENDORS:** Include **Mobile Hawkers (Mae-Ka-Hab-Ray)** with shoulder poles walking in the foreground to add life without blocking the view.
 
-        **☀️ 4. ATMOSPHERE & DETAILS:**
-        - **Surface:** Dry red dust mixed with scorched yellow grass.
-        - **Lighting:** Harsh, bright tropical sunlight creating sharp shadows.
-        - **Background:** Hazy golden rooftops of Wat Phra Kaew visible in the distance (if angle permits).
+        **🏜️ 4. TERRAIN & LIGHTING:**
+        - **SURFACE:** Dry red dirt and fine dust. Absolutely **NO ASPHALT, NO CONCRETE, and NO ROADS**.
+        - **DYNAMIC LIGHTING:** Strictly follow the lighting and time of day (Day/Night) from [IMAGE 1].
 
-        **⛔ NEGATIVE PROMPT:** modern blue plastic tents, plastic chairs, neat rows, modern street furniture, digital signage, motion blur, modern cars, **forest**, **extra trees**, **park**, **overcrowded**, **packed like sardines**.
+        **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads.
     """,
 
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **🚧 ROAD & CURB - THE ROYAL AVENUE (CRITICAL):**
-        - **SURFACE:** The road is **WELL-PAVED, ASPHALT**. It must look clean, formal, and prestigious, befitting Na Phra That Road.
-        - **MATTE FINISH:** The asphalt should have a matte greyish-black texture without the oily sheen of modern roads.
-        - **FLUSH EDGE:** There is NO raised concrete curb. The asphalt meets a narrow, neatly-swept strip of fine white gravel at the base of the museum fence.
-        - **STRICT NO-PAINT RULE:** Absolutely NO white lines, NO zebra crossings, and NO red/white or black/white paint on the edges. The road is a pure, unblemished dark surface.
+        **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
+        - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
+        - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
+        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR BLOCK** with a **COMPLETELY FLAT TOP**.
+        - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
 
-        **🛣️ 2. ROAD CONDITION (CIVILIZED & PAVED):**
-        - **SURFACE:** The road is **Smooth, Weathered Asphalt**. It is **NOT** a dirt road or a muddy track. It must look well-maintained and accessible, befitting a major national landmark.
-        - **CLEANLINESS:** The street is relatively clean (no piles of rubble or thick mud). It should look like a proper city street.
-        - **NO MODERN MARKINGS:** Remove traffic lanes, zebra crossings, and red/white curb paint, but keep the road surface looking like **solid paved road**, not soil.
+        **🚧 2. ROAD & CURB:**
+        - **SURFACE:** Clean, formal **DARK ASPHALT**. No raised curb, no paint markings.
 
-        **🧱 3. HISTORICAL FENCE (DOWNSIZING):**
-        - **Structure:** The fence is a **LOW** masonry wall (Waist-high).
-        - **Gate Pillars:** The entrance pillars are **SHORT and MODEST** (only slightly taller than a person). NOT massive towers.
-        - **Material:** Aged, stained white stucco with black iron spikes on top.
-        - **Signage:** No sign at all.
+        **🏛️ 3. ATMOSPHERE:**
+        - **Vibe:** Quiet, Royal, and Prestigious.
+        - **Background:** Faded orange chapel roof visible through dense, messy tamarind trees.
 
-        **🏛️ 4. ATMOSPHERE:**
-        - **Vibe:** Quiet, Ancient but **Majestic and Well-Kept**. Not abandoned.
-        - **Background:** The chapel roof is faded orange, visible through large tamarind trees.
-
-        **⛔ NEGATIVE PROMPT:** dirt road, mud, slum, abandoned, red and white curb, traffic stripes, concrete sidewalk, high-rise gate towers, modern paving, road markings, zebra crossing.
+        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, fence openings, secondary gates, pointed pillars, spires, finials, stone caps, red and white curb, zebra crossing.
     """,
 }
 
@@ -467,6 +456,14 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **SPECIAL TASK (DELETION):** Look at the upper watchtower room on top of the fort in [IMAGE 1]. You MUST **ERASE and DELETE** it.
     - **REPLACE:** Replace that specific upper area with **EMPTY BLUE SKY**. 
     - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
+        """
+
+    elif location_key == "National Museum":
+        extra_instructions = """
+    - **GEOMETRY ANOMALY DETECTED:** Identify any small pedestrian gates or side openings in [IMAGE 1]. 
+    - **TASK:** You MUST **DELETE** these openings. Fill the gaps with a **SOLID MASONRY BASE** and a **CONTINUOUS IRON FENCE**.
+    - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
+    - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
         """
 
     # 3. ประกอบเป็น Global Style
