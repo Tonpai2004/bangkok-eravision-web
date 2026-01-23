@@ -303,20 +303,21 @@ LOCATION_PROMPTS = {
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
-        - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
-        - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
-        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR Slab** with a **COMPLETELY FLAT TOP**.
-        - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
+        **🧱 1. FENCE & PILLAR RECONSTRUCTION (STRICT OVERRIDE):**
+        - **CLOSE ALL SIDE GATES:** You MUST **ERASE and PAINT OVER** the small pedestrian side-gates visible in [IMAGE 1].
+        - **CONTINUOUS BARRIER:** Replace the gate openings with a **SOLID, UNBROKEN IRON FENCE** and a continuous low masonry wall base.
+        - **PILLAR FLATTENING:** Transform ALL pillars into **SIMPLE RECTANGULAR BLOCKS**. 
+        - **NO SPIRES/FINIALS:** Delete any pointed tops or decorative caps from the pillars. They MUST have **COMPLETELY FLAT, SQUARE TOPS**.
 
-        **🚧 2. ROAD & CURB:**
-        - **SURFACE:** Clean, formal **DARK ASPHALT**. No raised curb, no paint markings.
+        **🚫 2. SIGNAGE & MODERN ELEMENT REMOVAL:**
+        - **ERASE ALL SIGNS:** Surgically remove the "พิพิธภัณฑสถานแห่งชาติ" and "NATIONAL MUSEUM" signs from the pillars. Replace them with **BLANK, STAINED WHITE STUCCO**.
+        - **CLEAN FACADE:** Remove any modern metal signs, CCTV, or notice boards attached to the fence or pillars.
 
-        **🏛️ 3. ATMOSPHERE:**
-        - **Vibe:** Quiet, Royal, and Prestigious.
-        - **Background:** Faded orange chapel roof visible through dense, messy tamarind trees.
+        **🚧 3. ROAD & ENVIRONMENT:**
+        - **SURFACE:** Clean, dark asphalt. No zebra crossings. No red-white paint.
+        - **VIBE:** Quiet, royal, and ancient with heavy weathering (black mold/moss) on all white walls.
 
-        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, fence openings, secondary gates, pointed pillars, spires, finials, stone caps, red and white curb, zebra crossing.
+        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, text on pillars, signs, pointed pillar tops, spires, finials, stone caps, red and white curb, modern cars.
     """,
 }
 
@@ -465,6 +466,9 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
     - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
     - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
+    - **PAINTING RULE:** Use the texture of the adjacent iron fence to **COMPLETELY FILL** the gaps of the side-gates. 
+    - **PILLAR OVERRIDE:** Ignore the pointed geometry on top of the pillars from [IMAGE 1]. Force them to be **FLAT SQUARE BLOCKS**.
+    - **TEXT REMOVAL:** Ensure no Thai or English characters appear on any part of the fence or pillars.
         """
 
     # 3. ประกอบเป็น Global Style
