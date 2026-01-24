@@ -113,41 +113,47 @@ LOCATION_PROMPTS = {
           - **NO DEVIATION:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT SHIFT VIEW.** The geometry must align perfectly with the input image.
 
           **🎨 2. HISTORICAL COLOR PALETTE (STRICT ACCURACY):**
-          - **CONSTITUTION TRAY (PHAN):** The tray holding the constitution on the very top is **METALLIC BLACK / DARK BRONZE**.  It is **NOT** gold.
+          - **CONSTITUTION TRAY (PHAN):** The tray holding the constitution on the very top is **METALLIC BLACK / DARK BRONZE**.  It is **NOT** gold change the color of it to black**.
           - **TURRET DOORS:** The small doors embedded at the base of the central turret are **VIBRANT THAI RED (See-Daeng-Chad)**.
           - **WINGS & BODY:** The 4 wings and central tower are **WEATHERED CREAM / OFF-WHITE STUCCO**. They look aged and textured, not bright clean white.
           - **BASE:** The circular base is **Bare Grey Concrete** with **Black Iron Chains** looping around the perimeter (NO Cannons).
 
-          **🏘️ 3. SURROUNDINGS (RETAIN STRUCTURE / CHANGE COLOR):**
-          - **STRUCTURAL PRESERVATION:** **DO NOT REBUILD** the surrounding buildings. Keep the original building shapes and geometry found in the input image.
-          - **COLOR GRADING:** Change the paint/material of these buildings to **Light Brown / Brick Orange (Thai 60s Earth Tone)**.
-          - **CLEAN UP:** Remove ONLY modern elements like air conditioners, LED signs, and glass facades. Keep the walls and windows in their original positions but apply the vintage color palette.
+          **🏘️ 3. SURROUNDINGS & CONTEXT (ADAPT WHAT IS SEEN):**
+          - **VISIBILITY RULE (CRITICAL):** Analyze the input image. **ONLY** transform the buildings, road medians, and pavement *actually visible* in the frame. **DO NOT invent new structures or background elements that are not currently there.**
+          - **BUILDING TRANSFORMATION:** Identify modern building facades in the background/foreground. Transform their surfaces into **1960s Ratchadamnoen Style architecture** (weathered stucco, Art Deco influence). Apply the **Aged Terracotta/Brick Orange** color palette.
+          - **MEDIANS & HARDSCAPE:** If road medians, footpaths, or curbs are visible in the input, change modern concrete to **aged, weathered stone or simple concrete curbs** appropriate for the era.
+          - **CLEAN UP:** Erase modern air conditioners, large billboards, and LED signs from the visible buildings.
 
           **🛣️ 4. GRAND OPEN AVENUE (ZERO VEHICLES):**
-          - **TRAFFIC REMOVAL (CRITICAL):** The wide avenue is **MAJESTICALLY EMPTY**. Absolutely **NO CARS, NO BUSES, NO TUK-TUKS**. The road must be clear asphalt.
-          - **ROAD SURFACE:** Wide, weathered **Dark Grey Asphalt**. NO modern lane markings.
-
+          - **TRAFFIC REMOVAL (CRITICAL):** The wide avenue is **MAJESTICALLY EMPTY**. Absolutely **NO CARS, NO BUSES, NO TUK-TUKS**. The road must be clear, weathered asphalt.
           **⛔ NEGATIVE PROMPT:** gold constitution, white doors, modern cars, traffic, skyscrapers, flowers on monument, cannons, fantasy elements, distortion, modern signs, air conditioners, glass buildings.
       """,
+      # Light Brown / Brick Orange เผื่อเปลี่ยนกลับ
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
         
-        **PERSPECTIVE LOCK:** Maintain exact camera angle from input image.
+        **📸 1. PERSPECTIVE & SKYLINE LOCK:**
+        - **BLUEPRINT:** Maintain the exact camera angle of [IMAGE 1].
+        - **SKYLINE PURGE (CRITICAL):** Identify all high-rise buildings, skyscrapers, and modern concrete towers and houses or big houses in the background of [IMAGE 1]. You MUST **DELETE and ERASE** them.
+        - **REPLACE BACKGROUND:** Replace the modern skyline and adjacent building like houses with a **clear, open tropical sky**. The theater must be the tallest, most prominent structure in the scene.
         
-        **CLEAN FOREGROUND:**
-        - **REMOVE** any wooden shophouses or obstructing buildings in the immediate foreground/opposite side. Keep the view of the theater open and grand.
+        **🚫 2. MODERN REMOVAL:**
+        - **ERASE INFRASTRUCTURE:** Remove all modern traffic lights, LED street lamps, concrete utility poles, and tangled black cables.
+        - **BRANDING:** Delete all modern bank logos like SCB, Kasikorn, Krungthep-Bank, ATM signs, and digital billboards.
         
-        **THE MOVIE POSTER (SPECIFIC):**
-        - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
-        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". "**มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        **🎭 3. THE MOVIE POSTER:**
+        - **Visual:** Large hand-painted cutout poster. Two men back-to-back. One in a sharp **black suit** (half-Chinese), one in a white shirt. Both look like 1960s gentlemen.
+        - **Text:** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**".
         
-        **CONTEXT (PEDESTRIAN ZONE):**
-        - **Street:** Wide asphalt avenue, but **COMPLETELY EMPTY OF CARS**.
-        - **Crowd:** Replace traffic with a **lively crowd of people**. Thai locals in 1960s fashion (white shirts, dark trousers, skirts) walking, standing, and chatting in front of the theater. The street belongs to the pedestrians.
-        - **Atmosphere:** Bustling movie premiere vibe
+        **🚶 4. PEDESTRIAN CONTEXT:**
+        - **STREET:** Wide asphalt avenue, **COMPLETELY EMPTY OF CARS**.
+        - **CROWD:** A lively, crowd of Thai locals in 1960s fashion (white shirts, skirts, slacks) walking and gathered for a premiere.
         
-        **NEGATIVE PROMPT:** cars, taxis, buses, tuk-tuks, vehicles, traffic jams.
+        **🎨 5. STYLE:**
+        - **Look:** 1960s Kodachrome film with warm natural light and soft grain.
+
+        **NEGATIVE PROMPT:** skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
 
     # "Giant Swing": """
@@ -168,75 +174,66 @@ LOCATION_PROMPTS = {
     # """,
 
     "Giant Swing": """
-        **TASK:** Perform a **PIXEL-PERFECT 1960s RE-TEXTURING** of the uploaded image.
+        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation.
 
-        **🔒 1. GEOMETRY & COMPOSITION LOCK (THE "STENCIL" RULE):**
-        - **STRICT OVERLAY:** Treat the input image as a rigid stencil. You must **COLOR INSIDE THE LINES** of the existing structures.
-        - **NO NEW STRUCTURES:** If an area is Sky, KEEP IT SKY. If an area is Road, KEEP IT ROAD. **ABSOLUTELY DO NOT** add new buildings, houses, or towers into the empty spaces.
-        - **PERSPECTIVE:** The camera angle, focal length, and object placement must be **IDENTICAL** to the source.
+        **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK (THE "STENCIL" RULE):**
+        - **FIXED LAYOUT:** The input image is a rigid map. **DO NOT CHANGE THE SPACING** between buildings.
+        - **PRESERVE GAPS:** If there is empty sky or space between buildings in the source, **KEEP IT EMPTY**. Do not fill gaps with new shophouses.
+        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The perspective must perfectly overlay the original image.
 
-        **🔄 2. SURFACE TRANSFORMATION (RE-SKINNING ONLY):**
-        - **METHOD:** "Re-skin" the existing modern buildings. Do not change their shape, just change their material.
-        - **TEXTURE SWAP:**
-            - Replace **Modern Concrete/Glass** with -> **Aged Cream Plaster & Weathered Masonry**.
-            - Replace **Aluminium Windows/Shutters** with -> **Wooden Louvered Shutters & Folding Doors**.
-        - **THE SWING:** Keep the Giant Swing structure exactly where it is in the frame. Red Teak color.
+        **🔄 2. ARCHITECTURAL RE-SKINNING (NO NEW BUILDINGS):**
+        - **STRICT TRANSFORMATION:** Detect *only* the buildings currently present. Transform their **surfaces** to match the **1960s Phra Nakhon style** (Weathered Cream Stucco, Wooden Shutters, Clay Tiles).
+        - **MODERN TO VINTAGE:** If a visible building looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
 
-        **🛣️ 3. CLEAN ROAD (ZERO VEHICLES):**
-        - **REMOVE TRAFFIC:** The road must be **100% EMPTY** of cars, tuk-tuks, and buses. Just reveal the asphalt surface underneath where the cars used to be.
-        - **SURFACE:** Weathered grey asphalt or concrete. Clean, realistic, and civilized.
-        - **TRAM RAILS:** (Optional) If the road angle permits, show faint steel rails flush with the ground.
+        **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
+        - **PILLARS:** Massive **Aged Red Teak** pillars.
+        - **DUAL-LAYER BASE (CRITICAL):** Render the base structure accurately with **TWO DISTINCT CONCRETE LEVELS**:
+            1. **The Plinths:** Concrete blocks directly supporting the red teak legs.
+            2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
+        - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely **NO FLOWERS**, no garlands, no fabric wrappings, and no ornate carvings.
 
-        **🚶 4. HUMAN PRESENCE (PERIPHERAL ONLY):**
-        - **RESTRICTION:** **NO people in the middle of the road.**
-        - **PLACEMENT:** Place a very small number of locals (1960s attire) walking **STRICTLY ON THE SIDEWALKS** or extreme edges of the frame.
+        **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
+        - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
+        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**.
 
-        **⛔ NEGATIVE PROMPT:** new buildings in sky, extra houses, modern cars, traffic, crowd in center, distortion, changing camera angle, cartoonish, low resolution, messy wires.
+        **⛔ NEGATIVE PROMPT:** modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
     """,
-    
-    # "Yaowarat": """
-    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
-        
-    #     **STRICT TEXT & SIGNS:**
-    #     - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish.
-    #     - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
-    #     - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
-        
-    #     **TRAM REALISM:**
-    #     - **Tram:** Weathered Yellow/Red wooden tram at the middle of the road.
-    #     - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
-        
-    #     **TRAFFIC:**
-    #     - **Vehicles:** **Samlors (Tricycles)** and **Round-nose Trucks (Isuzu TX)**. No modern sedans.
-    # """,
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
-        **LOCK:** Maintain the exact building geometry and camera height of [IMAGE 1].
 
-        **🏘️ ARCHITECTURAL TRANSFORMATION (CRITICAL):**
+        **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
+        - **MASTER BLUEPRINT (THE STENCIL RULE):** The uploaded image is a rigid stencil. You must only change the *texture* and *content* within the existing geometric shapes.
+        - **CAMERA FREEZE (CRITICAL):** The camera position, angle, height, and focal length are **FROZEN** to match the input image exactly. **DO NOT ROTATE, DO NOT ZOOM, DO NOT PAN.**
+        - **VIEWPOINT DEPENDENCY:** Do NOT use a default generic angled street view. You MUST analyze the input's specific angle:
+            - If input is **Straight-on (Frontal view)** -> Output MUST be **Straight-on**.
+            - If input is **Angled from the Left** -> Output MUST be **Angled from the Left**.
+            - If input is **Angled from the Right** -> Output MUST be **Angled from the Right**.
+        - **HORIZON ALIGNMENT:** The horizon line and eye level must remain identical to the source image.
+
+        **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
         - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
         - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
         - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
 
-        **🔤 STRICT TEXT & SIGNS (HIGH PRECISION TYPOGRAPHY):**
-        - **LEGIBILITY IS KEY:** All Hand-painted signs must contain **CORRECT, READABLE Thai & Chinese characters**. Absolutely NO GIBBERISH or squiggly lines.
-        - **STYLE:** Vertical wooden signs attached to pillars. Matte finish paint (No Neon/LED).
-        - **CONTENT:** Use distinct names like "**ห้างทอง**" (Gold Shop), "**ยา**" (Medicine), "**ภัตตาคาร**" (Restaurant). Ensure the calligraphy looks authentic to the 1960s style.
+        **🔤 3. SIGNAGE & TYPOGRAPHY (ORGANIC CLUSTERING):**
+        - **CANTILEVERED SIGNS (PRIORITY):** Most signs should be large, hand-painted wooden signs hanging horizontally or vertically from brackets, jutting out over the street.
+        - **LEGIBILITY:** All text must be **CORRECT, READABLE Thai & Chinese characters**. Absolutely NO gibberish.
+        - **STYLE:** Matte, hand-painted finish. NO neon glow, NO internal lighting.
 
-        **🚋 TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
+        **🚋 4. TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
         - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
-        - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road.
-        - **SPACING:** It is close to the curb/buildings but **NOT TOUCHING**. Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
+        - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road (relative to the camera view).
+        - **SPACING:** Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
         - **TRAM:** A weathered Yellow/Red wooden tram runs on this track.
         
-        **🚦 ATMOSPHERE (MINIMAL TRAFFIC):**
-        - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS. Keep the street mostly clear.
+        **🚦 5. ATMOSPHERE (MINIMAL TRAFFIC):**
+        - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS.
         - **ALLOWED TRANSPORT:** Only a few **Pedal Samlors (Tricycles)** allowed.
         - **Road Surface:** Worn asphalt with the embedded single rail.
         - **Crowd:** A lively scene of pedestrians walking and shopping.
 
-        **NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks.
+        **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street.
     """,
 
     "Khaosan Road": """
@@ -266,29 +263,25 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] into a 1960s Historical Scene, strictly adhering to the ATMOSPHERE of [IMAGE 2].
+        **TASK:** TRANSFORM [IMAGE 1] to match the historical ruined style of [IMAGE 2], but place it in a CLEANER urban setting.
 
-        **📸 1. ABSOLUTE PERSPECTIVE LOCK (NON-NEGOTIABLE):**
-        - **MASTER BLUEPRINT:** Use **[IMAGE 1]** (The User Input) as the rigid geometric skeleton.
-        - **NO SHIFTING:** Do not zoom, rotate, or alter the viewpoint. The fort must sit exactly where it is in the input image's frame.
+        **🧠 1. VISUAL LEARNING (FORT TEXTURE & STATE ONLY):**
+        - **SOURCE OF TRUTH:** Study [IMAGE 2] intently *only* for the fort's texture and structural ruin state.
+        - **STYLE TRANSFER:** Apply the heavily weathered white plaster, black mold/soot stains, and jagged ruined edges visible in [IMAGE 2] onto the structure in [IMAGE 1].
 
-        **🏚️ 2. STRUCTURAL STATE: THE "DECAPITATED" RUIN:**
-        - **KEEP THE RUIN:** The fort MUST be rendered as a **massive, two-story hexagonal masonry stump**.
-        - **MISSING TOP:** The entire upper wooden pavilion, roof, and spire are **TOTALLY GONE**.
-        - **JAGGED RIM:** The top edge must be **jagged, crumbling, and uneven**, showing exposed bricks (as defined in your specific requirement).
-        - **TEXTURE:** Heavily weathered white plaster with black mold/soot.
+        **📸 2. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
+        - **PIXEL-PERFECT MATCH:** The input image [IMAGE 1] is the immutable frame. The final output MUST perfectly overlay the input's geometry.
+        - **CAMERA FREEZE:** The camera angle, eye level, horizon line, and focal length are **FROZEN**. **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** Do not shift the view even slightly.
 
-        **🎨 3. ATMOSPHERE CLONING (LEARN FROM [IMAGE 2]):**
-        - **CONTEXT TRANSFER:** **IGNORE** general "street" descriptions. Instead, **LOOK AT [IMAGE 2]** (The Reference Image).
-        - **MATCH THE VIBE:** Generate the surrounding environment (ground texture, trees, lighting, sky) to **MATCH THE STYLE AND MOOD of [IMAGE 2] exactly**.
-        - **GROUND:** If [IMAGE 2] shows dirt/grass, use dirt/grass. If it shows old pavement, use old pavement. **Do not hallucinate a modern park.**
-        - **SURROUNDINGS:** If [IMAGE 2] shows old houses or trees in the background, replicate that specific vintage clutter.
+        **✂️ 3. STRUCTURAL EDIT (DECAPITATION):**
+        - **ACTION:** **REMOVE THE ENTIRE UPPER HALF** of the fort structure.
+        - **TARGET:** Delete the wooden pavilion, roof, spire, and the upper masonry section. The fort must be a massive, truncated stump with a jagged top edge.
 
-        **🚫 4. CLEANUP (ZERO TRAFFIC):**
-        - **NO VEHICLES:** Even if the reference has cars, **REMOVE THEM**. The area in front of the fort must be clear.
-        - **NO MODERNITY:** No modern streetlights, no manicured lawns (unless in ref), no tourists.
+        **🧹 4. ENVIRONMENT CLEANUP (URBAN & TIDY):**
+        - **CLEAN ROAD:** The road or ground surface around the fort must be **clean, functional, and tidy** (e.g., smooth asphalt or compacted dirt). **NO MUD, NO RUBBLE, NO DEBRIS** on the street. It should look like a normal city road, not a disaster zone.
+        - **VEGETATION REDUCTION:** **DRASTICALLY REDUCE** trees and green plants. Remove overgrown grass and dense foliage. It should NOT look like a jungle or forest. It must feel like an urban street corner with minimal, controlled greenery.
 
-        **⛔ NEGATIVE PROMPT:** modern park, restored roof, spire, gold leaf, perfect condition, cars, buses, modern buildings, fantasy forest.
+        **⛔ NEGATIVE PROMPT:** modern park, restored roof, golden spire, modern cars, tourists, **jungle, forest, overgrown vegetation, heavy foliage, muddy road, dirty ground, rubble on street, broken pavement**.
     """,
 
     "Sanam Luang": """
@@ -315,22 +308,28 @@ LOCATION_PROMPTS = {
     """,
 
     "National Museum": """
-        **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
+        **TASK:** TRANSFORM [IMAGE 1] into a **CLEAN & MAJESTIC 1960s** view of the National Museum Bangkok.
 
-        **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
-        - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
-        - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
-        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR Slab** with a **COMPLETELY FLAT TOP**.
-        - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
+        **📸 1. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
+        - **MASTER BLUEPRINT:** [IMAGE 1] is the rigid geometric skeleton. You must map the 1960s textures directly onto the *exact* perspective of the input.
+        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The eye level, horizon line, and object placement must be **IDENTICAL** to the source image. Do not create a new angle.
 
-        **🚧 2. ROAD & CURB:**
-        - **SURFACE:** Clean, formal **DARK ASPHALT**. No raised curb, no paint markings.
+        **🧱 2. HISTORICAL FENCE RECONSTRUCTION (FLAT PILLARS):**
+        - **TARGET STYLE:** Transform the fence to match the 1960s style: **Simple Masonry Pillars + Vertical Iron Bars**.
+        - **PILLAR SHAPE:** All fence pillars must be **MASSIVE RECTANGULAR BLOCKS**.
+        - **DECAPITATION (IMPORTANT):** **REMOVE ALL POINTED FINIALS, SPIRES, OR LOTUS BUDS** from the top of the pillars. The pillar tops must be **COMPLETELY FLAT** or very low-profile caps (Plain White/Cream Stucco).
+        - **INTEGRITY:** The fence line must be solid and continuous.
 
-        **🏛️ 3. ATMOSPHERE:**
-        - **Vibe:** Quiet, Royal, and Prestigious.
-        - **Background:** Faded orange chapel roof visible through dense, messy tamarind trees.
+        **🪓 3. VEGETATION CLEANUP (REVEAL THE BUILDING):**
+        - **DEFORESTATION:** **REMOVE** large, messy trees that obstruct the view of the museum building.
+        - **VISIBILITY:** The beautiful Thai architecture (roofs, gables) must be clearly visible, not hidden behind branches or dense leaves.
+        - **TIDY GROUNDS:** The area should look like a well-maintained royal ground, not a jungle. Keep only minimal, neat greenery if necessary.
 
-        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, fence openings, secondary gates, pointed pillars, spires, finials, stone caps, red and white curb, zebra crossing.
+        **🚧 4. ROAD & SURFACE:**
+        - **ROAD:** Clean, dark asphalt or smooth concrete. No modern traffic lines (zebra crossings).
+        - **CLEANLINESS:** No rubble, no dirt piles. A civilized, prestigious atmosphere.
+
+        **⛔ NEGATIVE PROMPT:** pointed pillars, lotus bud finials, decorative spires on fence, overgrown jungle, tree blocking view, forest, mess, moss, modern cars, traffic cones, distortion, changing angle, grass on the floor.
     """,
 }
 
@@ -366,7 +365,7 @@ def get_friendly_error_message(raw_reason, lang='TH'):
     
     return "Image composition is unclear." if is_eng else "องค์ประกอบภาพยังไม่ชัดเจน"
 
-SIMILARITY_THRESHOLD = 0.4
+SIMILARITY_THRESHOLD = 0.6
 # --- CLIP Logic ---
 def get_best_match_reference(location_th, user_img_bytes):
     # ✅ เพิ่ม "เสาชิงช้า & วัดสุทัศน์" ลงไปในเงื่อนไขนี้ เพื่อไม่ต้องใช้ไฟล์ .pkl
@@ -470,6 +469,12 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **SPECIAL TASK (DELETION):** Look at the upper watchtower room on top of the fort in [IMAGE 1]. You MUST **ERASE and DELETE** it.
     - **REPLACE:** Replace that specific upper area with **EMPTY BLUE SKY**. 
     - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
+        """
+
+    elif location_key == "Yaowarat":
+        extra_instructions = """
+    - **SIGNAGE LOGIC:** Prioritize cantilevered signs that hang over the street. 
+    - **PILLAR OVERRIDE:** Do NOT treat every building pillar as a location for a sign. Keep at least 70 percent of the pillars bare to show the weathered stucco texture.
         """
 
     elif location_key == "National Museum":
@@ -703,90 +708,95 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 #         print(f"⚠️ Failed to auto-save image: {e}")
 #         return None
 
-
+# ==========================================
+# ปิดการใช้งาน RUNWAY ML ไว้แปป
+# ==========================================
 def generate_video_runway(image_bytes, location_key):
-    runway_key = os.getenv("RUNWAYML_API_KEY")
-    if not runway_key:
-        print("❌ Error: RUNWAYML_API_KEY not found in .env")
-        return None
+    # --- 🔴 ปิดการใช้งานชั่วคราว ---
+    print("⚠️ Runway Video Generation is currently DISABLED.")
+    return None
 
-    try:
-        print("🎬 Starting Runway Gen-3 Video Generation (Strict Living Photo)...")
-        
-        # 1. Prepare Base64
-        base64_str = base64.b64encode(image_bytes).decode('utf-8')
+    # runway_key = os.getenv("RUNWAYML_API_KEY")
+    # if not runway_key:
+    #     print("❌ Error: RUNWAYML_API_KEY not found in .env")
+    #     return None
 
-        # 2. UNIVERSAL PROMPT (Living Photo / Motion Graphic Style)
-        # เน้น: แพนกล้องนิ่งๆ, ห้ามเติมของเด็ดขาด, ใช้ Pixel เดิมเท่านั้น
-        final_prompt = """
-        Style: High-end Motion Graphic / Living Photo. Extreme slow motion (0.25x speed).
-        CAMERA: Smooth, constant, slow horizontal pan. NO ZOOM.
+    # try:
+    #     print("🎬 Starting Runway Gen-3 Video Generation (Strict Living Photo)...")
         
-        CRITICAL CONSTRAINTS (ZERO TOLERANCE):
-        - ANIMATE ONLY EXISTING PIXELS: Use only the visual data provided in the source image.
-        - DO NOT ADD ANYTHING: Absolutely NO new people, NO new cars, NO new trees, and NO new leaves.
-        - IF IT'S NOT THERE, DON'T MOVE IT: If the image is empty, keep it empty.
+    #     # 1. Prepare Base64
+    #     base64_str = base64.b64encode(image_bytes).decode('utf-8')
 
-        MOVEMENT DYNAMICS:
-        - STATIC WORLD: Architecture, text, ground, and background must remain 100% RIGID and FROZEN. No warping or morphing.
-        - MICRO-MOTION: Only IF living beings or vehicles are ALREADY present, apply very subtle breathing or slight shifting movements.
+    #     # 2. UNIVERSAL PROMPT (Living Photo / Motion Graphic Style)
+    #     final_prompt = """
+    #     Style: High-end Motion Graphic / Living Photo. Extreme slow motion (0.25x speed).
+    #     CAMERA: Smooth, constant, slow horizontal pan. NO ZOOM.
         
-        Atmosphere: Realistic, frozen moment in time, high fidelity.
-        """
-        
-        # ตรวจสอบความยาว Prompt
-        if len(final_prompt) > 990:
-            print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
+    #     CRITICAL CONSTRAINTS (ZERO TOLERANCE):
+    #     - ANIMATE ONLY EXISTING PIXELS: Use only the visual data provided in the source image.
+    #     - DO NOT ADD ANYTHING: Absolutely NO new people, NO new cars, NO new trees, and NO new leaves.
+    #     - IF IT'S NOT THERE, DON'T MOVE IT: If the image is empty, keep it empty.
 
-        print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
+    #     MOVEMENT DYNAMICS:
+    #     - STATIC WORLD: Architecture, text, ground, and background must remain 100% RIGID and FROZEN. No warping or morphing.
+    #     - MICRO-MOTION: Only IF living beings or vehicles are ALREADY present, apply very subtle breathing or slight shifting movements.
+        
+    #     Atmosphere: Realistic, frozen moment in time, high fidelity.
+    #     """
+        
+    #     # ตรวจสอบความยาว Prompt
+    #     if len(final_prompt) > 990:
+    #         print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
 
-        # 3. Call Runway API directly
-        url = "https://api.dev.runwayml.com/v1/image_to_video"
-        payload = {
-            "promptImage": f"data:image/png;base64,{base64_str}",
-            "model": "gen3a_turbo", 
-            "promptText": final_prompt.strip(),
-            "duration": 5,
-            "ratio": "1280:768"
-        }
+    #     print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
+
+    #     # 3. Call Runway API directly
+    #     url = "https://api.dev.runwayml.com/v1/image_to_video"
+    #     payload = {
+    #         "promptImage": f"data:image/png;base64,{base64_str}",
+    #         "model": "gen3a_turbo", 
+    #         "promptText": final_prompt.strip(),
+    #         "duration": 5,
+    #         "ratio": "1280:768"
+    #     }
         
-        headers = {
-            "Authorization": f"Bearer {runway_key}",
-            "X-Runway-Version": "2024-11-06",
-            "Content-Type": "application/json"
-        }
+    #     headers = {
+    #         "Authorization": f"Bearer {runway_key}",
+    #         "X-Runway-Version": "2024-11-06",
+    #         "Content-Type": "application/json"
+    #     }
         
-        # Send Request
-        response = requests.post(url, json=payload, headers=headers)
+    #     # Send Request
+    #     response = requests.post(url, json=payload, headers=headers)
         
-        if response.status_code != 200:
-            print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
-            return None
+    #     if response.status_code != 200:
+    #         print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
+    #         return None
             
-        task_id = response.json().get('id')
-        print(f"⏳ Runway Task ID: {task_id}")
+    #     task_id = response.json().get('id')
+    #     print(f"⏳ Runway Task ID: {task_id}")
         
-        # Polling Loop
-        for i in range(30):
-            time.sleep(3)
-            status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
-            if status_res.status_code == 200:
-                data = status_res.json()
-                if data.get('status') == "SUCCEEDED":
-                    print("✅ Video Generation Complete!")
-                    return data.get('output', [None])[0]
-                elif data.get('status') == "FAILED":
-                    print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
-                    return None
-            else:
-                print(f"⚠️ Polling Error: {status_res.status_code}")
+    #     # Polling Loop
+    #     for i in range(30):
+    #         time.sleep(3)
+    #         status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
+    #         if status_res.status_code == 200:
+    #             data = status_res.json()
+    #             if data.get('status') == "SUCCEEDED":
+    #                 print("✅ Video Generation Complete!")
+    #                 return data.get('output', [None])[0]
+    #             elif data.get('status') == "FAILED":
+    #                 print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
+    #                 return None
+    #         else:
+    #             print(f"⚠️ Polling Error: {status_res.status_code}")
                 
-        print("❌ Timeout: Runway took too long.")
-        return None
+    #     print("❌ Timeout: Runway took too long.")
+    #     return None
 
-    except Exception as e:
-        print(f"❌ Critical Runway Error: {e}")
-        return None
+    # except Exception as e:
+    #     print(f"❌ Critical Runway Error: {e}")
+    #     return None
     
 def save_generated_image(image_bytes, location_name_th):
     try:
@@ -930,52 +940,55 @@ def generate_image_route():
 # ENDPOINT 2: ANIMATE VIDEO
 @app.route('/animate', methods=['POST'])
 def animate_video_route():
-    try:
-        print("🚀 [Step 2] Animating Video...")
-        data = request.json
-        image_data = data.get('image') # Base64 Image
-        location_key = data.get('location_key')
+    # --- 🔴 ส่งคืนค่าว่างทันที เพื่อไม่ให้โปรแกรมพัง ---
+    return jsonify({'status': 'skipped', 'message': 'Video generation is temporarily disabled.'})
 
-        if not image_data: return jsonify({'error': 'No image provided'}), 400
+    # try:
+    #     print("🚀 [Step 2] Animating Video...")
+    #     data = request.json
+    #     image_data = data.get('image') # Base64 Image
+    #     location_key = data.get('location_key')
+
+    #     if not image_data: return jsonify({'error': 'No image provided'}), 400
         
-        # Clean Base64 header
-        if "," in image_data: image_data = image_data.split(",")[1]
-        image_bytes = base64.b64decode(image_data)
+    #     # Clean Base64 header
+    #     if "," in image_data: image_data = image_data.split(",")[1]
+    #     image_bytes = base64.b64decode(image_data)
 
-        # 1. เรียก Runway ให้สร้างวิดีโอ
-        video_url = generate_video_runway(image_bytes, location_key)
+    #     # 1. เรียก Runway ให้สร้างวิดีโอ
+    #     video_url = generate_video_runway(image_bytes, location_key)
         
-        if video_url:
-            print(f"✅ Runway Success! URL: {video_url}")
+    #     if video_url:
+    #         print(f"✅ Runway Success! URL: {video_url}")
             
-            # 2. พยายามบันทึกลงเครื่อง (Local Save)
-            vid_filename, vid_path = save_generated_video(video_url, location_key)
+    #         # 2. พยายามบันทึกลงเครื่อง (Local Save)
+    #         vid_filename, vid_path = save_generated_video(video_url, location_key)
             
-            final_video_src = video_url # Default: ใช้ URL ตรงจาก Runway (เผื่อ Save พัง)
+    #         final_video_src = video_url # Default: ใช้ URL ตรงจาก Runway (เผื่อ Save พัง)
 
-            # 3. ถ้า Save สำเร็จ ให้แปลงเป็น Base64 (เพื่อความเร็วในการโหลด Local)
-            if vid_path and os.path.exists(vid_path):
-                try:
-                    with open(vid_path, "rb") as f:
-                        vid_b64 = base64.b64encode(f.read()).decode('utf-8')
-                        final_video_src = f"data:video/mp4;base64,{vid_b64}"
-                        print("📦 Sending Video as Base64")
-                except Exception as e:
-                    print(f"⚠️ Read File Error: {e} -> Sending Remote URL instead")
-            else:
-                print("⚠️ Save failed or File not found -> Sending Remote URL directly")
+    #         # 3. ถ้า Save สำเร็จ ให้แปลงเป็น Base64 (เพื่อความเร็วในการโหลด Local)
+    #         if vid_path and os.path.exists(vid_path):
+    #             try:
+    #                 with open(vid_path, "rb") as f:
+    #                     vid_b64 = base64.b64encode(f.read()).decode('utf-8')
+    #                     final_video_src = f"data:video/mp4;base64,{vid_b64}"
+    #                     print("📦 Sending Video as Base64")
+    #                 except Exception as e:
+    #                     print(f"⚠️ Read File Error: {e} -> Sending Remote URL instead")
+    #         else:
+    #             print("⚠️ Save failed or File not found -> Sending Remote URL directly")
 
-            # 4. ส่งผลลัพธ์กลับ Frontend (ไม่ว่า Save ได้หรือไม่ได้ User ต้องเห็นวิดีโอ)
-            return jsonify({
-                'status': 'success',
-                'video': final_video_src
-            })
-        else:
-            return jsonify({'error': 'Video generation failed (Runway returned None)'}), 500
+    #         # 4. ส่งผลลัพธ์กลับ Frontend (ไม่ว่า Save ได้หรือไม่ได้ User ต้องเห็นวิดีโอ)
+    #         return jsonify({
+    #             'status': 'success',
+    #             'video': final_video_src
+    #         })
+    #     else:
+    #         return jsonify({'error': 'Video generation failed (Runway returned None)'}), 500
 
-    except Exception as e:
-        print(f"❌ Critical Animate Error: {e}")
-        return jsonify({'error': str(e)}), 500
+    # except Exception as e:
+    #     print(f"❌ Critical Animate Error: {e}")
+    #     return jsonify({'error': str(e)}), 500
 
 @app.route('/videos/<path:filename>')
 def serve_video(filename):
