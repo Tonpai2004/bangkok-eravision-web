@@ -113,14 +113,14 @@ LOCATION_PROMPTS = {
           - **NO DEVIATION:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT SHIFT VIEW.** The geometry must align perfectly with the input image.
 
           **🎨 2. HISTORICAL COLOR PALETTE (STRICT ACCURACY):**
-          - **CONSTITUTION TRAY (PHAN):** The tray holding the constitution on the very top is **METALLIC BLACK / DARK BRONZE**.  It is **NOT** gold.
+          - **CONSTITUTION TRAY (PHAN):** The tray holding the constitution on the very top is **METALLIC BLACK / DARK BRONZE**.  It is **NOT** gold change the color of it to black**.
           - **TURRET DOORS:** The small doors embedded at the base of the central turret are **VIBRANT THAI RED (See-Daeng-Chad)**.
           - **WINGS & BODY:** The 4 wings and central tower are **WEATHERED CREAM / OFF-WHITE STUCCO**. They look aged and textured, not bright clean white.
           - **BASE:** The circular base is **Bare Grey Concrete** with **Black Iron Chains** looping around the perimeter (NO Cannons).
 
           **🏘️ 3. SURROUNDINGS (RETAIN STRUCTURE / CHANGE COLOR):**
           - **STRUCTURAL PRESERVATION:** **DO NOT REBUILD** the surrounding buildings. Keep the original building shapes and geometry found in the input image.
-          - **COLOR GRADING:** Change the paint/material of these buildings to **Light Brown / Brick Orange (Thai 60s Earth Tone)**.
+          - **COLOR GRADING:** Change the paint/material of these buildings to **Aged Terracotta/Brick Orange (Thai 60s Earth Tone)**.
           - **CLEAN UP:** Remove ONLY modern elements like air conditioners, LED signs, and glass facades. Keep the walls and windows in their original positions but apply the vintage color palette.
 
           **🛣️ 4. GRAND OPEN AVENUE (ZERO VEHICLES):**
@@ -129,25 +129,32 @@ LOCATION_PROMPTS = {
 
           **⛔ NEGATIVE PROMPT:** gold constitution, white doors, modern cars, traffic, skyscrapers, flowers on monument, cannons, fantasy elements, distortion, modern signs, air conditioners, glass buildings.
       """,
+      # Light Brown / Brick Orange เผื่อเปลี่ยนกลับ
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
         
-        **PERSPECTIVE LOCK:** Maintain exact camera angle from input image.
+        **📸 1. PERSPECTIVE & SKYLINE LOCK:**
+        - **BLUEPRINT:** Maintain the exact camera angle of [IMAGE 1].
+        - **SKYLINE PURGE (CRITICAL):** Identify all high-rise buildings, skyscrapers, and modern concrete towers and houses or big houses in the background of [IMAGE 1]. You MUST **DELETE and ERASE** them.
+        - **REPLACE BACKGROUND:** Replace the modern skyline and adjacent building like houses with a **clear, open tropical sky**. The theater must be the tallest, most prominent structure in the scene.
         
-        **CLEAN FOREGROUND:**
-        - **REMOVE** any wooden shophouses or obstructing buildings in the immediate foreground/opposite side. Keep the view of the theater open and grand.
+        **🚫 2. MODERN REMOVAL:**
+        - **ERASE INFRASTRUCTURE:** Remove all modern traffic lights, LED street lamps, concrete utility poles, and tangled black cables.
+        - **BRANDING:** Delete all modern bank logos like SCB, Kasikorn, Krungthep-Bank, ATM signs, and digital billboards.
         
-        **THE MOVIE POSTER (SPECIFIC):**
-        - **Visual:** Hand-painted cutout. Two men in white shirts standing back-to-back. One wears glasses, one doesn't. Both look smart/gentlemen.
-        - **Text (THAI ONLY - LEGIBLE):** Title "**บางกอกทวิกาล**". "**มาดามพงษ์ และ ณัฐภัทร**". Text: "**ฉายพฤษภาคมนี้ ที่เฉลิมกรุง**".
+        **🎭 3. THE MOVIE POSTER:**
+        - **Visual:** Large hand-painted cutout poster. Two men back-to-back. One in a sharp **black suit** (half-Chinese), one in a white shirt. Both look like 1960s gentlemen.
+        - **Text:** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**".
         
-        **CONTEXT (PEDESTRIAN ZONE):**
-        - **Street:** Wide asphalt avenue, but **COMPLETELY EMPTY OF CARS**.
-        - **Crowd:** Replace traffic with a **lively crowd of people**. Thai locals in 1960s fashion (white shirts, dark trousers, skirts) walking, standing, and chatting in front of the theater. The street belongs to the pedestrians.
-        - **Atmosphere:** Bustling movie premiere vibe
+        **🚶 4. PEDESTRIAN CONTEXT:**
+        - **STREET:** Wide asphalt avenue, **COMPLETELY EMPTY OF CARS**.
+        - **CROWD:** A lively, crowd of Thai locals in 1960s fashion (white shirts, skirts, slacks) walking and gathered for a premiere.
         
-        **NEGATIVE PROMPT:** cars, taxis, buses, tuk-tuks, vehicles, traffic jams.
+        **🎨 5. STYLE:**
+        - **Look:** 1960s Kodachrome film with warm natural light and soft grain.
+
+        **NEGATIVE PROMPT:** skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
 
     # "Giant Swing": """
@@ -193,22 +200,6 @@ LOCATION_PROMPTS = {
 
         **⛔ NEGATIVE PROMPT:** new buildings in sky, extra houses, modern cars, traffic, crowd in center, distortion, changing camera angle, cartoonish, low resolution, messy wires.
     """,
-    
-    # "Yaowarat": """
-    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
-        
-    #     **STRICT TEXT & SIGNS:**
-    #     - **Text:** Hand-painted signs. **LEGIBLE Thai & Chinese**. No gibberish.
-    #     - **Mandatory Texts:** "**ห้างทอง ฮั่วเซ่งเฮง**", "**ภัตตาคาร หูฉลาม**", "**ขายยาจีน**".
-    #     - **Lighting:** DAYLIGHT only. **NO NEON GLOW**. NO LED.
-        
-    #     **TRAM REALISM:**
-    #     - **Tram:** Weathered Yellow/Red wooden tram at the middle of the road.
-    #     - **Position:** Running on rails **HUGGING THE RIGHT CURB** (near houses). Not in the middle.
-        
-    #     **TRAFFIC:**
-    #     - **Vehicles:** **Samlors (Tricycles)** and **Round-nose Trucks (Isuzu TX)**. No modern sedans.
-    # """,
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
@@ -219,10 +210,13 @@ LOCATION_PROMPTS = {
         - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
         - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
 
-        **🔤 STRICT TEXT & SIGNS (HIGH PRECISION TYPOGRAPHY):**
-        - **LEGIBILITY IS KEY:** All Hand-painted signs must contain **CORRECT, READABLE Thai & Chinese characters**. Absolutely NO GIBBERISH or squiggly lines.
-        - **STYLE:** Vertical wooden signs attached to pillars. Matte finish paint (No Neon/LED).
-        - **CONTENT:** Use distinct names like "**ห้างทอง**" (Gold Shop), "**ยา**" (Medicine), "**ภัตตาคาร**" (Restaurant). Ensure the calligraphy looks authentic to the 1960s style.
+        **🔤 SIGNAGE & TYPOGRAPHY (ORGANIC CLUSTERING):**
+        - **NO REPETITIVE PILLARS:** Do NOT place signs on every single building pillar. Avoid neat, robotic rows of signs.
+        - **CANTILEVERED SIGNS (PRIORITY):** Most signs should be **large, hand-painted wooden signs hanging horizontally or vertically from brackets** attached to the second or third floors, jutting out over the street.
+        - **FACADE SIGNS:** Use flat, hand-painted signs mounted directly above the ground-floor shop entrances.
+        - **SPARING PILLAR SIGNS:** Only a few scattered vertical signs on pillars, placed irregularly. Most pillars should remain bare and weathered.
+        - **LEGIBILITY:** All text must be **CORRECT, READABLE Thai & Chinese characters**. Use distinct names like "**ห้างทอง**", "**ยา**", "**ภัตตาคาร**". Absolutely NO gibberish.
+        - **STYLE:** Matte, hand-painted finish. NO neon glow, NO internal lighting.
 
         **🚋 TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
         - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
@@ -289,7 +283,7 @@ LOCATION_PROMPTS = {
         - **NO MODERNITY:** No modern streetlights, no manicured lawns (unless in ref), no tourists.
 
         **⛔ NEGATIVE PROMPT:** modern park, restored roof, spire, gold leaf, perfect condition, cars, buses, modern buildings, fantasy forest.
-    """,
+    """, # คิดว่าต้องตัดหญ้าออก
 
     "Sanam Luang": """
         **TASK:** TRANSFORM [IMAGE 1] into a **VIBRANT & LIVELY** 1968 photograph of Sanam Luang.
@@ -317,21 +311,20 @@ LOCATION_PROMPTS = {
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** color photograph of the National Museum Bangkok.
 
-        **🧱 1. FENCE & PILLAR RECONSTRUCTION (STRICT OVERRIDE):**
-        - **CLOSE ALL SIDE GATES:** You MUST **ERASE and PAINT OVER** the small pedestrian side-gates visible in [IMAGE 1].
-        - **CONTINUOUS BARRIER:** Replace the gate openings with a **SOLID, UNBROKEN IRON FENCE** and a continuous low masonry wall base.
-        - **PILLAR FLATTENING:** Transform ALL pillars into **SIMPLE RECTANGULAR BLOCKS**. 
-        - **NO SPIRES/FINIALS:** Delete any pointed tops or decorative caps from the pillars. They MUST have **COMPLETELY FLAT, SQUARE TOPS**.
+        **🧱 1. FENCE & FLAT PILLARS (DESTRUCTION & RECONSTRUCTION):**
+        - **NO SIDE GATES (ABSOLUTE):** You MUST **ERASE and REMOVE** the two smaller pedestrian side-gates visible in [IMAGE 1]. 
+        - **CONTINUOUS FENCE:** Replace the areas where the side-gates were with a **SOLID, CONTINUOUS IRON FENCE** that matches the rest of the wall. There must be NO gaps or openings until the main central gate.
+        - **FLAT TOPS:** Every single pillar along the fence MUST be a **SIMPLE RECTANGULAR Slab** with a **COMPLETELY FLAT TOP**.
+        - **NO FINIALS:** Absolutely **NO spires, pointed tops, or decorative stone caps** on any pillar. If [IMAGE 1] has them, DELETE them.
 
-        **🚫 2. SIGNAGE & MODERN ELEMENT REMOVAL:**
-        - **ERASE ALL SIGNS:** Surgically remove the "พิพิธภัณฑสถานแห่งชาติ" and "NATIONAL MUSEUM" signs from the pillars. Replace them with **BLANK, STAINED WHITE STUCCO**.
-        - **CLEAN FACADE:** Remove any modern metal signs, CCTV, or notice boards attached to the fence or pillars.
+        **🚧 2. ROAD & CURB:**
+        - **SURFACE:** Clean, formal **DARK ASPHALT**. No raised curb, no paint markings.
 
-        **🚧 3. ROAD & ENVIRONMENT:**
-        - **SURFACE:** Clean, asphalt. No zebra crossings. No red-white paint.
-        - **VIBE:** Quiet, royal, and ancient.
+        **🏛️ 3. ATMOSPHERE:**
+        - **Vibe:** Quiet, Royal, and Prestigious.
+        - **Background:** Faded orange chapel roof visible through dense, messy tamarind trees.
 
-        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, text on pillars, signs, pointed pillar tops, spires, finials, stone caps, red and white curb, modern cars.
+        **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, fence openings, secondary gates, pointed pillars, spires, finials, stone caps, red and white curb, zebra crossing.
     """,
 }
 
@@ -473,6 +466,12 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
         """
 
+    elif location_key == "Yaowarat":
+        extra_instructions = """
+    - **SIGNAGE LOGIC:** Prioritize cantilevered signs that hang over the street. 
+    - **PILLAR OVERRIDE:** Do NOT treat every building pillar as a location for a sign. Keep at least 70 percent of the pillars bare to show the weathered stucco texture.
+        """
+
     elif location_key == "National Museum":
         extra_instructions = """
     - **GEOMETRY ANOMALY DETECTED:** Identify any small pedestrian gates or side openings in [IMAGE 1]. 
@@ -480,9 +479,6 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
     - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
     - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
-    - **PAINTING RULE:** Use the texture of the adjacent iron fence to **COMPLETELY FILL** the gaps of the side-gates. 
-    - **PILLAR OVERRIDE:** Ignore the pointed geometry on top of the pillars from [IMAGE 1]. Force them to be **FLAT SQUARE Slab**.
-    - **TEXT REMOVAL:** Ensure no Thai or English characters appear on any part of the fence or pillars.
         """
 
     # 3. ประกอบเป็น Global Style
