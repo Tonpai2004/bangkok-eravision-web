@@ -314,8 +314,8 @@ LOCATION_PROMPTS = {
         - **CLEAN FACADE:** Remove any modern metal signs, CCTV, or notice boards attached to the fence or pillars.
 
         **🚧 3. ROAD & ENVIRONMENT:**
-        - **SURFACE:** Clean, dark asphalt. No zebra crossings. No red-white paint.
-        - **VIBE:** Quiet, royal, and ancient with heavy weathering (black mold/moss) on all white walls.
+        - **SURFACE:** Clean, asphalt. No zebra crossings. No red-white paint.
+        - **VIBE:** Quiet, royal, and ancient.
 
         **⛔ NEGATIVE PROMPT:** side gates, pedestrian doors, text on pillars, signs, pointed pillar tops, spires, finials, stone caps, red and white curb, modern cars.
     """,
@@ -467,7 +467,7 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
     - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
     - **PAINTING RULE:** Use the texture of the adjacent iron fence to **COMPLETELY FILL** the gaps of the side-gates. 
-    - **PILLAR OVERRIDE:** Ignore the pointed geometry on top of the pillars from [IMAGE 1]. Force them to be **FLAT SQUARE BLOCKS**.
+    - **PILLAR OVERRIDE:** Ignore the pointed geometry on top of the pillars from [IMAGE 1]. Force them to be **FLAT SQUARE Slab**.
     - **TEXT REMOVAL:** Ensure no Thai or English characters appear on any part of the fence or pillars.
         """
 
