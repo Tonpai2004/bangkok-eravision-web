@@ -312,12 +312,17 @@ LOCATION_PROMPTS = {
 
         **📸 1. PERSPECTIVE LOCK:**
         - **STRICT MATCH:** Use [IMAGE 1] as the rigid layout. **Do NOT shift or change the camera angle**.
+        
+        - **BEYOND THE LENS:** Imagine the market stalls and tents are located **BEYOND the edges of the camera view**. You should only see a few stall edges peeking in from the very far left or right.
+        - **NO ENCLOSURE:** Do NOT create a "street" or "alley" of tents. This is a massive open field, not a market lane.
 
         **🎪 2. DEPTH-BASED ZONING (CRITICAL):**
         - **IMMEDIATE FOREGROUND (BOTTOM OF IMAGE):** This area MUST be **100% CLEAR** of any market stalls, umbrellas, tents, or permanent structures. It should only be dry red dirt, dust, and people walking, riding bicycles, or sitting.
         - **THE PERIMETER (FAR LEFT, FAR RIGHT, & DISTANCE):** All makeshift stalls, tent shanties, and disorganized clusters of umbrellas MUST be pushed to the **EXTREME LEFT and RIGHT EDGES** of the frame, and the far distant boundary near the trees.
         - **THE CENTRAL CORE:** Maintain a wide, open corridor from the bottom-center of the image all the way to the Wat Phra Kaew in the background. No stalls allowed in this central viewing lane.
-
+        
+        - **PERIPHERAL ONLY:** Any makeshift stalls or umbrellas must be pushed so far to the edges that they are almost **OFF-SCREEN**.
+        
         **🏃 3. POPULATION & ACTIVITY (MINIMAL KITES):**
         - **VIBRANT CENTER:** Fill the foreground and middle ground with **DOZENS of people scattered throughout**. Focus on activities like riding **vintage bicycles**, sitting in groups on mats, strolling, and socializing.
         - **KITE RESTRICTION:** **VERY FEW TO ZERO KITES.** If any are present, they must be small and distant in the background sky, not dominating the scene.
@@ -490,7 +495,10 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     # 2. เพิ่ม Conditional Logic (ตรวจสอบให้แน่ใจว่าทุกอัน += เข้า perspective_instr)
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **DELETION:** Identify and ERASE the upper watchtower room in [IMAGE 1]. Replace with clear blue sky.
+    - **DECAPITATION:** Surgically remove the top watchtower and roof. Replace with a jagged ruin edge and blue sky.
+    - **PARK REMOVAL:** Identify all manicured grass and park paths. **ERASE THEM**.
+    - **COMMUNITY INJECTION:** Fill the space besides the fort's base with **weathered wooden shanties and row houses**. These buildings must look old and crowded.
+    - **TEXTURE TRANSITION:** Ensure the transition between the fort's wall and the added wooden houses looks seamless and dirty.
         """
     
     elif location_key == "Yaowarat":
@@ -515,6 +523,14 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **SIDE GATE DELETION:** Completely DELETE the side entrance structures. Fill the resulting gap with **EMPTY SKY** or the **BACKGROUND BUILDING** to separate the pillars.
     - **LINEAR ALIGNMENT:** Force the fence into a **PERFECTLY STRAIGHT LINE**. Ignore the modern recessed curves from [IMAGE 1].
     - **FLATTEN TOPS:** All pillars must have FLAT SQUARE TOPS.
+        """
+
+    elif location_key == "Sanam Luang":
+        perspective_instr += """
+    - **VASTNESS ENFORCEMENT:** Treat the edges of [IMAGE 1] as "Infinite Borders". 
+    - **PERIPHERAL BIAS:** PUSH all market elements (tents, stalls) as far away from the center as possible. 
+    - **OFF-SCREEN LOGIC:** It is OKAY if some stalls listed in the prompt are NOT visible in the frame. Priority is a **CLEAR, WIDE OPEN RED DIRT FIELD**.
+    - **HORIZON CLEARANCE:** Ensure a direct, unobstructed line of sight to the temples in the background.
         """
 
     # 3. ประกอบ Global Style (ล็อคอารมณ์ภาพ)
