@@ -143,8 +143,10 @@ LOCATION_PROMPTS = {
         - **BRANDING:** Delete all modern bank logos like SCB, Kasikorn, Krungthep-Bank, ATM signs, and digital billboards.
         
         **🎭 3. THE MOVIE POSTER:**
-        - **Visual:** Large hand-painted cutout poster. Two men back-to-back. One in a sharp **black suit** (half-Chinese), one in a white shirt. Both look like 1960s gentlemen.
+        - **Visual:** Large hand-painted cutout poster. Two men back-to-back. One in a sharp **black suit** (half-Chinese), one in a white shirt. Both look like 1960s gentlemen. Cover the front of the theater area.
         - **Text:** Title "**บางกอกทวิกาล**". Starring "**มาดามพงษ์ และ ณัฐภัทร**".
+        - **Style:** Matte finish, hand-painted look. No neon glow or digital effects.
+        - **Remove ads:** Delete any modern ads, posters, banners or Thai banks logos around the theater entrance.
         
         **🚶 4. PEDESTRIAN CONTEXT:**
         - **STREET:** Wide asphalt avenue, **COMPLETELY EMPTY OF CARS**.
@@ -153,25 +155,8 @@ LOCATION_PROMPTS = {
         **🎨 5. STYLE:**
         - **Look:** 1960s Kodachrome film with warm natural light and soft grain.
 
-        **NEGATIVE PROMPT:** skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
+        **NEGATIVE PROMPT:** home, houses, skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
-
-    # "Giant Swing": """
-    #     **TASK:** Create an **AUTHENTIC 1965 KODACHROME SCAN** of The Giant Swing.
-
-    #     **🏘️ 1960s SHOPHOUSE ARCHITECTURE (STRICT):**
-    #     - **Structure:** Long, continuous rows of **two-story colonial-style shophouses**.
-    #     - **Ground Floor:** Features dark, weathered **Wooden Folding Doors (Ban-Fiam)**.
-    #     - **Upper Floor:** Symmetrical **Wooden Shuttered Windows**. NO glass modern windows.
-    #     - **Texture:** Walls are aged white or grey plaster with heavy **humidity stains, soot, and peeling paint**. NO clean modern white.
-    #     - **Roofs:** Slanted roofs with **weathered brown/terracotta tiles**.
-
-    #     **📍 PERSPECTIVE & ROUTE LOGIC:**
-    #     - **TRAM CHECK:** If the road next to Wat Suthat is visible, render the **Yellow-Red Wooden Tram** on embedded steel tracks.
-    #     - **ROAD SURFACE:** Replace modern pavement with **weathered grey concrete** and layers of tropical dust. Erase all traffic paint.
-
-    #     **NEGATIVE PROMPT:** modern glass windows, rolling steel shutters, clean white paint, plastic signage, air conditioners, 7-Eleven, traffic lines, red pavement tiles, digital sharpness.
-    # """,
 
     "Giant Swing": """
         **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation.
@@ -199,41 +184,73 @@ LOCATION_PROMPTS = {
         **⛔ NEGATIVE PROMPT:** modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
     """,
 
+    # "Yaowarat": """
+    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
+
+    #     **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
+    #     - **MASTER BLUEPRINT (THE STENCIL RULE):** The uploaded image is a rigid stencil. You must only change the *texture* and *content* within the existing geometric shapes.
+    #     - **CAMERA FREEZE (CRITICAL):** The camera position, angle, height, and focal length are **FROZEN** to match the input image exactly. **DO NOT ROTATE, DO NOT ZOOM, DO NOT PAN.**
+    #     - **VIEWPOINT DEPENDENCY:** Do NOT use a default generic angled street view. You MUST analyze the input's specific angle:
+    #         - If input is **Straight-on (Frontal view)** -> Output MUST be **Straight-on**.
+    #         - If input is **Angled from the Left** -> Output MUST be **Angled from the Left**.
+    #         - If input is **Angled from the Right** -> Output MUST be **Angled from the Right**.
+    #     - **HORIZON ALIGNMENT:** The horizon line and eye level must remain identical to the source image.
+
+    #     **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
+    #     - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
+    #     - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
+    #     - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
+
+    #     **🔤 2. SIGNAGE & BACKGROUND TYPOGRAPHY (CRITICAL):**
+    #     - **DEPTH LEGIBILITY:** Every sign, including those in the **FAR DISTANCE and BACKGROUND**, must maintain consistent, legible Thai and Chinese characters.
+    #     - **NO GIBBERISH:** Avoid any squiggly lines or fake characters. If a sign is too far to render perfectly, replace it with a **simple, solid-colored blank wooden board** instead of gibberish.
+    #     - **CONTENT:** Use only high-frequency, simple words: "**ยา**", "**ห้างทอง**", "**โรงแรม**", "**อาหาร**".
+    #     - **STYLE:** Vertical/Horizontal hand-painted signs hanging from brackets. NO neon.
+
+    #     **🚋 4. TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
+    #     - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
+    #     - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road (relative to the camera view).
+    #     - **SPACING:** Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
+    #     - **TRAM:** A weathered Yellow/Red wooden tram runs on this track.
+        
+    #     **🚦 5. ATMOSPHERE (MINIMAL TRAFFIC):**
+    #     - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS.
+    #     - **ALLOWED TRANSPORT:** Only a few **Pedal Samlors (Tricycles)** allowed.
+    #     - **Road Surface:** Worn asphalt with the embedded single rail.
+    #     - **Crowd:** A lively scene of pedestrians walking and shopping.
+
+    #     **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street.
+    # """,
+
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
+        **LOCK:** Maintain exact building geometry and camera height of [IMAGE 1].
 
-        **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
-        - **MASTER BLUEPRINT (THE STENCIL RULE):** The uploaded image is a rigid stencil. You must only change the *texture* and *content* within the existing geometric shapes.
-        - **CAMERA FREEZE (CRITICAL):** The camera position, angle, height, and focal length are **FROZEN** to match the input image exactly. **DO NOT ROTATE, DO NOT ZOOM, DO NOT PAN.**
-        - **VIEWPOINT DEPENDENCY:** Do NOT use a default generic angled street view. You MUST analyze the input's specific angle:
-            - If input is **Straight-on (Frontal view)** -> Output MUST be **Straight-on**.
-            - If input is **Angled from the Left** -> Output MUST be **Angled from the Left**.
-            - If input is **Angled from the Right** -> Output MUST be **Angled from the Right**.
-        - **HORIZON ALIGNMENT:** The horizon line and eye level must remain identical to the source image.
+        **🚫 1. THE MODERN PURGE (AGGRESSIVE REMOVAL - CRITICAL):**
+        - **IDENTIFY & DESTROY:** You must actively scan [IMAGE 1] for ANY modern materials and **ERASE THEM COMPLETELY**.
+        - **TARGET MATERIALS:** Look for and remove: Aluminum cladding, reflective glass curtain walls, exposed concrete facades, satellite dishes, and air conditioner compressor units (AC).
+        - **TARGET SIGNAGE:** Identify and DESTROY all electrically lit signage: **Neon tubes, LED screens, backlit plastic lightboxes, and digital scrolling displays**.
+        - **ACTION:** Replace these modern elements with blank, weathered stucco walls or dark wooden boards. Do not just re-texture them; eliminate their modern form.
 
-        **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
-        - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
-        - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
-        - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
+        **🏘️ 2. ARCHITECTURAL RECONSTRUCTION (HISTORICAL ONLY):**
+        - **MANDATORY RESET:** Any structure identified as modern (from step 1) must be **DOWNSIZED and RESKINNED** into a 2-4 story Chinese-Colonial shophouse.
+        - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains, mold, and humidity streaks**.
+        - **WINDOWS & DOORS:** Use exclusively dark **Wooden Folding Doors (Ban-Fiam)** on ground floors and **Wooden Louvered Shutters** on upper floors.
 
-        **🔤 3. SIGNAGE & TYPOGRAPHY (ORGANIC CLUSTERING):**
-        - **CANTILEVERED SIGNS (PRIORITY):** Most signs should be large, hand-painted wooden signs hanging horizontally or vertically from brackets, jutting out over the street.
-        - **LEGIBILITY:** All text must be **CORRECT, READABLE Thai & Chinese characters**. Absolutely NO gibberish.
-        - **STYLE:** Matte, hand-painted finish. NO neon glow, NO internal lighting.
+        **🔤 2. SIGNAGE & BACKGROUND TYPOGRAPHY (CRITICAL):**
+        - **DEPTH LEGIBILITY:** Every sign, including those in the **FAR DISTANCE and BACKGROUND**, must maintain consistent, legible Thai and Chinese characters.
+        - **NO GIBBERISH:** Avoid any squiggly lines or fake characters. If a sign is too far to render perfectly, replace it with a **simple, solid-colored blank wooden board** instead of gibberish.
+        - **CONTENT:** Use only high-frequency, simple words: "**ยา**", "**ห้างทอง**", "**โรงแรม**", "**อาหาร**".
+        - **STYLE:** Vertical/Horizontal hand-painted signs hanging from brackets. NO neon.
 
-        **🚋 4. TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
-        - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
-        - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road (relative to the camera view).
-        - **SPACING:** Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
-        - **TRAM:** A weathered Yellow/Red wooden tram runs on this track.
+        **🚋 4. TRAM & ROAD:**
+        - **TRACK & TRAM:** Single track on the right with a weathered Yellow/Red wooden tram.
         
-        **🚦 5. ATMOSPHERE (MINIMAL TRAFFIC):**
-        - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS.
-        - **ALLOWED TRANSPORT:** Only a few **Pedal Samlors (Tricycles)** allowed.
-        - **Road Surface:** Worn asphalt with the embedded single rail.
-        - **Crowd:** A lively scene of pedestrians walking and shopping.
+        **🚦 5. ATMOSPHERE:**
+        - **VEHICLE:** NO motorized tuk-tuks, NO cars. Only pedal samlors.
+        - **CROWD:** Lively pedestrians in 1960s fashion.
 
-        **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street.
+        **⛔ NEGATIVE PROMPT:** MODERN ARCHITECTURE, aluminum facade, glass curtain wall, air conditioners, satellite dishes, neon lights, LED signs, backlit boxes, plastic banners, motorized tuk-tuks, modern skyscrapers, gibberish text.
     """,
 
     "Khaosan Road": """
@@ -307,29 +324,52 @@ LOCATION_PROMPTS = {
         **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads, **many kites**, **large kites**.
     """,
 
+    # "National Museum": """
+    #     **TASK:** TRANSFORM [IMAGE 1] into a **CLEAN & MAJESTIC 1960s** view of the National Museum Bangkok.
+
+    #     **📸 1. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
+    #     - **MASTER BLUEPRINT:** [IMAGE 1] is the rigid geometric skeleton. You must map the 1960s textures directly onto the *exact* perspective of the input.
+    #     - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The eye level, horizon line, and object placement must be **IDENTICAL** to the source image. Do not create a new angle.
+
+    #     **🧱 2. HISTORICAL FENCE RECONSTRUCTION (FLAT PILLARS):**
+    #     - **TARGET STYLE:** Transform the fence to match the 1960s style: **Simple Masonry Pillars + Vertical Iron Bars**.
+    #     - **PILLAR SHAPE:** All fence pillars must be **MASSIVE RECTANGULAR BLOCKS**.
+    #     - **DECAPITATION (IMPORTANT):** **REMOVE ALL POINTED FINIALS, SPIRES, OR LOTUS BUDS** from the top of the pillars. The pillar tops must be **COMPLETELY FLAT** or very low-profile caps (Plain White/Cream Stucco).
+    #     - **INTEGRITY:** The fence line must be solid and continuous.
+
+    #     **🪓 3. VEGETATION CLEANUP (REVEAL THE BUILDING):**
+    #     - **DEFORESTATION:** **REMOVE** large, messy trees that obstruct the view of the museum building.
+    #     - **VISIBILITY:** The beautiful Thai architecture (roofs, gables) must be clearly visible, not hidden behind branches or dense leaves.
+    #     - **TIDY GROUNDS:** The area should look like a well-maintained royal ground, not a jungle. Keep only minimal, neat greenery if necessary.
+
+    #     **🚧 4. ROAD & SURFACE:**
+    #     - **ROAD:** Clean, dark asphalt or smooth concrete. No modern traffic lines (zebra crossings).
+    #     - **CLEANLINESS:** No rubble, no dirt piles. A civilized, prestigious atmosphere.
+
+    #     **⛔ NEGATIVE PROMPT:** pointed pillars, lotus bud finials, decorative spires on fence, overgrown jungle, tree blocking view, forest, mess, moss, modern cars, traffic cones, distortion, changing angle, grass on the floor.
+    # """,
+
     "National Museum": """
-        **TASK:** TRANSFORM [IMAGE 1] into a **CLEAN & MAJESTIC 1960s** view of the National Museum Bangkok.
+        **TASK:** Create a **VINTAGE 1960s** view of the National Museum Bangkok.
 
-        **📸 1. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
-        - **MASTER BLUEPRINT:** [IMAGE 1] is the rigid geometric skeleton. You must map the 1960s textures directly onto the *exact* perspective of the input.
-        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The eye level, horizon line, and object placement must be **IDENTICAL** to the source image. Do not create a new angle.
+        **🧱 1. PILLAR ISOLATION & GEOMETRY (CRITICAL):**
+        - **TWO STANDALONE COLUMNS:** The main gate MUST consist of **TWO INDEPENDENT, VERTICAL RECTANGULAR PILLARS**.
+        - **THE GAP / VOID:** You MUST create a clear, empty **NEGATIVE SPACE (AIR/SKY)** between these two pillars.
+        - **NO CONNECTION:** Absolutely **NO lintels, NO signs, and NO beams** connecting the two pillars. The space above the gate is **COMPLETELY EMPTY**.
+        - **PILLAR SCALE:** The gate pillars should be bigger than the fence pillars but not much and share the **SAME SLENDER WIDTH**. Do NOT make them thick or merged.
+        - **Fence:** The weathered iron fence on either side must connect directly to the sides of each pillar.
+        - **FLAT TOPS:** Every pillar must have a **COMPLETELY FLAT SQUARE TOP**.
 
-        **🧱 2. HISTORICAL FENCE RECONSTRUCTION (FLAT PILLARS):**
-        - **TARGET STYLE:** Transform the fence to match the 1960s style: **Simple Masonry Pillars + Vertical Iron Bars**.
-        - **PILLAR SHAPE:** All fence pillars must be **MASSIVE RECTANGULAR BLOCKS**.
-        - **DECAPITATION (IMPORTANT):** **REMOVE ALL POINTED FINIALS, SPIRES, OR LOTUS BUDS** from the top of the pillars. The pillar tops must be **COMPLETELY FLAT** or very low-profile caps (Plain White/Cream Stucco).
-        - **INTEGRITY:** The fence line must be solid and continuous.
+        **🚪 2. DOUBLE-SWING GATE MECHANISM:**
+        - **IRON GATE:** Render the gate as a **DOUBLE-SWING IRON GATE** made of thin black vertical bars.
+        - **CENTER SPLIT:** Draw a visible **vertical split line** down the center of the gate to show it is two separate leaves.
+        - **MATCHING FENCE:** The gate design must perfectly match the adjacent iron fence.
 
-        **🪓 3. VEGETATION CLEANUP (REVEAL THE BUILDING):**
-        - **DEFORESTATION:** **REMOVE** large, messy trees that obstruct the view of the museum building.
-        - **VISIBILITY:** The beautiful Thai architecture (roofs, gables) must be clearly visible, not hidden behind branches or dense leaves.
-        - **TIDY GROUNDS:** The area should look like a well-maintained royal ground, not a jungle. Keep only minimal, neat greenery if necessary.
+        **🚫 3. ERASURE & ROAD:**
+        - **ERASE SIGNS:** Surgically remove the "พิพิธภัณฑสถานแห่งชาติ" sign from [IMAGE 1]. Replace with **background buildings or sky**.
+        - **NO FOOTPATH:** The dark asphalt road meets the wall base directly. No raised curb.
 
-        **🚧 4. ROAD & SURFACE:**
-        - **ROAD:** Clean, dark asphalt or smooth concrete. No modern traffic lines (zebra crossings).
-        - **CLEANLINESS:** No rubble, no dirt piles. A civilized, prestigious atmosphere.
-
-        **⛔ NEGATIVE PROMPT:** pointed pillars, lotus bud finials, decorative spires on fence, overgrown jungle, tree blocking view, forest, mess, moss, modern cars, traffic cones, distortion, changing angle, grass on the floor.
+        **⛔ NEGATIVE PROMPT:** merged pillars, solid concrete block, white slab filling the gate, sign between pillars, overhead beam, connected gate towers, pointed pillars, finials.
     """,
 }
 
@@ -454,66 +494,83 @@ def step1_analyze(client, img_bytes):
 def step2_generate(client, structure_desc, location_key, original_img_bytes, ref_img_bytes=None):
     specific_prompt = LOCATION_PROMPTS.get(location_key, "")
     
-    # 1. สร้างฐานคำสั่งกลางสำหรับทุกสถานที่ (Standard Instruction)
+    # 1. สร้างฐานคำสั่งกลาง (เพิ่ม Spatial Integrity)
     perspective_instr = f"""
     **MANDATORY PERSPECTIVE INSTRUCTION:**
     - {structure_desc}
-    - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition and angle.
-    - **CONSTRAINT:** Do NOT rotate, shift, or zoom. The output MUST be a perfect overlay of [IMAGE 1].
+    - **GEOMETRY SOURCE:** Use [IMAGE 1] as the ONLY source for composition.
+    - **STRICT CONSTRAINT:** No rotation, zooming, or shifting. Perfect overlay required.
     """
     
-    # 2. เพิ่ม Logic พิเศษเฉพาะป้อมพระสุเมรุ (Conditional Deletion)
-    # ใช้ชื่อ Key ให้ตรงกับใน LOCATION_PROMPTS
+    # 2. เพิ่ม Conditional Logic (ตรวจสอบให้แน่ใจว่าทุกอัน += เข้า perspective_instr)
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **SPECIAL TASK (DELETION):** Look at the upper watchtower room on top of the fort in [IMAGE 1]. You MUST **ERASE and DELETE** it.
-    - **REPLACE:** Replace that specific upper area with **EMPTY BLUE SKY**. 
-    - **STRICT:** The base remains, but the tower part must be GONE to show the ruin state.
+    - **DELETION:** Identify and ERASE the upper watchtower room in [IMAGE 1]. Replace with clear blue sky.
+        """
+    
+    elif location_key == "Yaowarat":
+        perspective_instr += """
+    - **SIGNAGE LOGIC:** Prioritize cantilevered signs. 
+    - **PILLAR OVERRIDE:** Leave at least 70% of pillars bare (no signs) to show weathered stucco.
+    - **DISTANCE CLARITY:** If a distant sign cannot be rendered clearly, make it a blank wooden board.
         """
 
-    elif location_key == "Yaowarat":
-        extra_instructions = """
-    - **SIGNAGE LOGIC:** Prioritize cantilevered signs that hang over the street. 
-    - **PILLAR OVERRIDE:** Do NOT treat every building pillar as a location for a sign. Keep at least 70 percent of the pillars bare to show the weathered stucco texture.
-        """
+    # elif location_key == "National Museum":
+    #     perspective_instr += """
+    # - **PATTERN REPLICATION:** Identify the (Pillar-Iron Railing-Pillar) pattern. 
+    # - **ERASE SIDE GATES:** Paint over the side pedestrian gates using the IDENTICAL repeating pattern of the rest of the fence.
+    # - **NO SOLID SLABS:** Do NOT fill gate areas with solid white concrete. Must be see-through iron bars.
+    # - **FLATTEN TOPS:** Surgically flatten all pointed pillar tops to simple square slabs.
+    #     """
 
     elif location_key == "National Museum":
-        extra_instructions = """
-    - **GEOMETRY ANOMALY DETECTED:** Identify any small pedestrian gates or side openings in [IMAGE 1]. 
-    - **TASK:** You MUST **DELETE** these openings. Fill the gaps with a **SOLID MASONRY BASE** and a **CONTINUOUS IRON FENCE**.
-    - **WALL INTEGRITY:** The fence must be an unbroken line from the frame edge to the central gate.
-    - **PILLAR OVERRIDE:** Every pillar must be a simple rectangular block. **SURGICALLY REMOVE** any pointed finials or decorative caps.
-    - **Signage Removal:** Erase any modern signs or plaques on the wall pillars.
+        perspective_instr += """
+    - **PILLAR DISCONNECT:** Identify the modern sign connecting the pillars in [IMAGE 1]. You MUST **ERASE** this connection.
+    - **NEGATIVE SPACE GENERATION:** Force the creation of a **CLEAR GAP** between the gate pillars. Fill this gap with the **distant museum building facade or sky**.
+    - **GEOMETRY OVERRIDE:** Treat each gate pillar as an **INDIVIDUAL VERTICAL COLUMN**. Do NOT follow the "merged" geometry from [IMAGE 1].
+    - **FLATTEN TOPS:** All pillars must be simple rectangular blocks with **FLAT TOPS**.
         """
 
-    # 3. ประกอบเป็น Global Style
+    # elif location_key == "National Museum":
+    #     perspective_instr += """
+    # - **PILLAR ISOLATION (CRITICAL):** Identify the two main gate pillars in [IMAGE 1]. 
+    # - **TASK:** You MUST **SURGICALLY SEPARATE** these two pillars. Erase the green sign connecting them.
+    # - **THE VOID:** Create a clear, empty **GAP / NEGATIVE SPACE** between the two pillars. Fill this gap with the **background building or sky**, NOT with concrete.
+    # - **GEOMETRY:** Each pillar must be a standalone, vertical rectangular block.
+    # - **FLATTEN TOPS:** Ensure the tops are **COMPLETELY FLAT SQUARE SLABS**. Delete the pointed lantern-like tops from [IMAGE 1].
+    #     """
+
+    # 3. ประกอบ Global Style (ล็อคอารมณ์ภาพ)
     global_style = f"""
     {perspective_instr}
     
     **GLOBAL STYLE:**
-    - Output: Photorealistic color 1960s Kodachrome filter photograph.
-    - **IGNORE STRUCTURE:** If [IMAGE 2] is provided, DISCARD its architecture entirely.
-    - Remove all modern objects identified in the analysis.
+    - Output: Photorealistic color 1960s Kodachrome filter.
+    - **RECONSTRUCTION RULE:** Discard any modern architecture from [IMAGE 1] and replace with historical elements from [IMAGE 2] or Prompt.
+    - Remove all traffic lights, LED lamps, and digital signage.
     """
     
-    # ส่วนที่เหลือของฟังก์ชัน (การประกอบ parts และการเรียก AI) ให้คงเดิมไว้ครับ
-    parts = [f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT (PRIMARY):**"]
+    # ส่วนการประกอบ Parts และเรียก AI
+    parts = [f"{specific_prompt}\n{global_style}\n\n**[IMAGE 1] THE STRUCTURAL BLUEPRINT:**"]
     parts.append(types.Part.from_bytes(data=original_img_bytes, mime_type="image/jpeg"))
-    max_retries = 5
 
-    # ก้อนที่ 2: คำสั่งสำหรับภาพอ้างอิง (ถ้ามี)
     if ref_img_bytes:
         style_instruction = """
-        **[IMAGE 2] THE STYLE REFERENCE (SECONDARY):**
-        - USE ONLY for: Color grading, film grain, and 1960s lighting.
-        - **DANGER:** DO NOT follow the camera angle or building placement of [IMAGE 2]. 
-        - TASK: Apply the 'Skin' of [IMAGE 2] onto the 'Skeletal Structure' of [IMAGE 1].
+        **[IMAGE 2] THE STYLE REFERENCE:**
+        - USE ONLY for: Color grading, film grain, and 1960s atmosphere.
+        - **DANGER:** Do NOT follow the architecture or camera angle of [IMAGE 2].
         """
         parts.append(style_instruction)
         parts.append(types.Part.from_bytes(data=ref_img_bytes, mime_type="image/jpeg"))
 
+    # Config การเรนเดอร์ (แนะนำ temperature=0.1 เพื่อให้มีความยืดหยุ่นเล็กน้อยแต่ไม่หลุดกรอบ)
+    config = types.GenerateContentConfig(
+        response_modalities=["IMAGE"],
+        temperature=0.1 
+    )
     # 3. เรียกโมเดลด้วยค่าความสร้างสรรค์ต่ำที่สุด (Locking the result)
     model_name = "gemini-3-pro-image-preview" 
+    max_retries = 5
 
     for attempt in range(max_retries):
         try:
