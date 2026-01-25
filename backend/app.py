@@ -329,53 +329,32 @@ LOCATION_PROMPTS = {
 
         **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads, **many kites**, **large kites**.
     """,
-
-    # "National Museum": """
-    #     **TASK:** TRANSFORM [IMAGE 1] into a **CLEAN & MAJESTIC 1960s** view of the National Museum Bangkok.
-
-    #     **📸 1. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
-    #     - **MASTER BLUEPRINT:** [IMAGE 1] is the rigid geometric skeleton. You must map the 1960s textures directly onto the *exact* perspective of the input.
-    #     - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The eye level, horizon line, and object placement must be **IDENTICAL** to the source image. Do not create a new angle.
-
-    #     **🧱 2. HISTORICAL FENCE RECONSTRUCTION (FLAT PILLARS):**
-    #     - **TARGET STYLE:** Transform the fence to match the 1960s style: **Simple Masonry Pillars + Vertical Iron Bars**.
-    #     - **PILLAR SHAPE:** All fence pillars must be **MASSIVE RECTANGULAR BLOCKS**.
-    #     - **DECAPITATION (IMPORTANT):** **REMOVE ALL POINTED FINIALS, SPIRES, OR LOTUS BUDS** from the top of the pillars. The pillar tops must be **COMPLETELY FLAT** or very low-profile caps (Plain White/Cream Stucco).
-    #     - **INTEGRITY:** The fence line must be solid and continuous.
-
-    #     **🪓 3. VEGETATION CLEANUP (REVEAL THE BUILDING):**
-    #     - **DEFORESTATION:** **REMOVE** large, messy trees that obstruct the view of the museum building.
-    #     - **VISIBILITY:** The beautiful Thai architecture (roofs, gables) must be clearly visible, not hidden behind branches or dense leaves.
-    #     - **TIDY GROUNDS:** The area should look like a well-maintained royal ground, not a jungle. Keep only minimal, neat greenery if necessary.
-
-    #     **🚧 4. ROAD & SURFACE:**
-    #     - **ROAD:** Clean, dark asphalt or smooth concrete. No modern traffic lines (zebra crossings).
-    #     - **CLEANLINESS:** No rubble, no dirt piles. A civilized, prestigious atmosphere.
-
-    #     **⛔ NEGATIVE PROMPT:** pointed pillars, lotus bud finials, decorative spires on fence, overgrown jungle, tree blocking view, forest, mess, moss, modern cars, traffic cones, distortion, changing angle, grass on the floor.
-    # """,
-
+    
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** view of the National Museum Bangkok.
 
-        **🧱 1. PILLAR ISOLATION & GEOMETRY (CRITICAL):**
-        - **TWO STANDALONE COLUMNS:** The main gate MUST consist of **TWO INDEPENDENT, VERTICAL RECTANGULAR PILLARS**.
-        - **THE GAP / VOID:** You MUST create a clear, empty **NEGATIVE SPACE (AIR/SKY)** between these two pillars.
-        - **NO CONNECTION:** Absolutely **NO lintels, NO signs, and NO beams** connecting the two pillars. The space above the gate is **COMPLETELY EMPTY**.
-        - **PILLAR SCALE:** The gate pillars should be bigger than the fence pillars but not much and share the **SAME SLENDER WIDTH**. Do NOT make them thick or merged.
-        - **Fence:** The weathered iron fence on either side must connect directly to the sides of each pillar.
-        - **FLAT TOPS:** Every pillar must have a **COMPLETELY FLAT SQUARE TOP**.
+        **🧱 1. LINEAR FENCE GEOMETRY (THE SINGLE PLANE RULE - CRITICAL):**
+        - **SINGLE STRAIGHT LINE:** The entire fence line MUST exist on a **SINGLE FLAT GEOMETRIC PLANE** (180 degrees).
+        - **NO RECESS / NO LOOPS:** Absolutely **NO fences wrapping inward**, NO "L-shaped" or "U-shaped" fences, and NO internal loops. The gate area must NOT be recessed.
+        - **REPEATING PATTERN:** Follow a strict rhythm: **(One small masonry pillar -> One section of iron bars -> One small masonry pillar)**. Ensure intermediate pillars are visible along the entire line.
+        - **VISIBLE MASONRY BASE:** The iron fence must sit on a **SOLID WHITE MASONRY BASE** (Knee-high). Do NOT render it as a flat line.
+        - **SURGICAL DELETION:** Erase the side-door structures and the green signage beam from [IMAGE 1] entirely.
 
-        **🚪 2. DOUBLE-SWING GATE MECHANISM:**
-        - **IRON GATE:** Render the gate as a **DOUBLE-SWING IRON GATE** made of thin black vertical bars.
-        - **CENTER SPLIT:** Draw a visible **vertical split line** down the center of the gate to show it is two separate leaves.
-        - **MATCHING FENCE:** The gate design must perfectly match the adjacent iron fence.
+        **🚪 2. DOUBLE-SWING GATE & PILLARS:**
+        - **DESIGN:** A **DOUBLE-SWING weathered IRON GATE** with vertical bars and a visible center-split line.
+        - **THE GAP:** Create a clear **VOID OF AIR** between the standalone gate pillars. No horizontal connections allowed.
+        - **PILLAR STYLE:** All pillars must be rectangular blocks with **COMPLETELY FLAT SQUARE TOPS**.
+        - **LOW PROFILE:** Keep the structure **SHORT (Waist-high)** to reveal the museum architecture behind.
 
-        **🚫 3. ERASURE & ROAD:**
-        - **ERASE SIGNS:** Surgically remove the "พิพิธภัณฑสถานแห่งชาติ" sign from [IMAGE 1]. Replace with **background buildings or sky**.
-        - **NO FOOTPATH:** The dark asphalt road meets the wall base directly. No raised curb.
+        **🚧 3. ROAD & ENVIRONMENT:**
+        - **SURFACE:** Asphalt road meets the masonry base directly. No traffic markings. Zerbra crossings or painted lines.
+        - **CLEANUP:** Remove all flags, flagpoles, modern signs, and traffic markings.
+        
+        ** 4. People & Atmosphere:**
+        - **MINIMAL CROWD:** A few people walking on the curb and in the museum in 1960s attire.
+        - **NO VEHICLES:** The road and inside the museum is completely clear of cars and traffic.
 
-        **⛔ NEGATIVE PROMPT:** merged pillars, solid concrete block, white slab filling the gate, sign between pillars, overhead beam, connected gate towers, pointed pillars, finials.
+        **⛔ NEGATIVE PROMPT:** thin fence base, missing intermediate pillars, side gates, merged pillars, curved entrance, recessed gate, concrete sidewalk, raised curb, pointed pillars, flags.
     """,
 }
 
@@ -531,20 +510,12 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 
     elif location_key == "National Museum":
         perspective_instr += """
-    - **PILLAR DISCONNECT:** Identify the modern sign connecting the pillars in [IMAGE 1]. You MUST **ERASE** this connection.
-    - **NEGATIVE SPACE GENERATION:** Force the creation of a **CLEAR GAP** between the gate pillars. Fill this gap with the **distant museum building facade or sky**.
-    - **GEOMETRY OVERRIDE:** Treat each gate pillar as an **INDIVIDUAL VERTICAL COLUMN**. Do NOT follow the "merged" geometry from [IMAGE 1].
-    - **FLATTEN TOPS:** All pillars must be simple rectangular blocks with **FLAT TOPS**.
+    - **PATTERN REPLICATION:** Identify the (Pillar -> Iron Railing -> Pillar) rhythm. You MUST replicate this pattern across the entire fence, especially where side-gates were removed.
+    - **BASE ENFORCEMENT:** Ensure the masonry base has a clear, visible height (approx. 40cm). It should look like a solid wall base, not a flat line on the ground.
+    - **SIDE GATE DELETION:** Completely DELETE the side entrance structures. Fill the resulting gap with **EMPTY SKY** or the **BACKGROUND BUILDING** to separate the pillars.
+    - **LINEAR ALIGNMENT:** Force the fence into a **PERFECTLY STRAIGHT LINE**. Ignore the modern recessed curves from [IMAGE 1].
+    - **FLATTEN TOPS:** All pillars must have FLAT SQUARE TOPS.
         """
-
-    # elif location_key == "National Museum":
-    #     perspective_instr += """
-    # - **PILLAR ISOLATION (CRITICAL):** Identify the two main gate pillars in [IMAGE 1]. 
-    # - **TASK:** You MUST **SURGICALLY SEPARATE** these two pillars. Erase the green sign connecting them.
-    # - **THE VOID:** Create a clear, empty **GAP / NEGATIVE SPACE** between the two pillars. Fill this gap with the **background building or sky**, NOT with concrete.
-    # - **GEOMETRY:** Each pillar must be a standalone, vertical rectangular block.
-    # - **FLATTEN TOPS:** Ensure the tops are **COMPLETELY FLAT SQUARE SLABS**. Delete the pointed lantern-like tops from [IMAGE 1].
-    #     """
 
     # 3. ประกอบ Global Style (ล็อคอารมณ์ภาพ)
     global_style = f"""
