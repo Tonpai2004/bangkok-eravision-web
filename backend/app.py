@@ -202,19 +202,20 @@ LOCATION_PROMPTS = {
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
 
-        **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
-        - **MASTER BLUEPRINT (THE STENCIL RULE):** The uploaded image is a rigid stencil. You must only change the *texture* and *content* within the existing geometric shapes.
-        - **CAMERA FREEZE (CRITICAL):** The camera position, angle, height, and focal length are **FROZEN** to match the input image exactly. **DO NOT ROTATE, DO NOT ZOOM, DO NOT PAN.**
-        - **VIEWPOINT DEPENDENCY:** Do NOT use a default generic angled street view. You MUST analyze the input's specific angle:
-            - If input is **Straight-on (Frontal view)** -> Output MUST be **Straight-on**.
-            - If input is **Angled from the Left** -> Output MUST be **Angled from the Left**.
-            - If input is **Angled from the Right** -> Output MUST be **Angled from the Right**.
-        - **HORIZON ALIGNMENT:** The horizon line and eye level must remain identical to the source image.
+        **📸 1. THE "FROZEN TRIPOD" RULE & PIXEL-PERFECT PERSPECTIVE LOCK (NON-NEGOTIABLE):**
+        - **THE INPUT IS THE ONLY REALITY:** Treat the uploaded image as the absolute geometric truth. Imagine your camera is physically **NAILED TO THE EXACT SPOT** where the original photo was taken.
+        - **ZERO MOVEMENT POLICY (CRITICAL):**
+            - **NO SHIFTING:** Do not move the camera left, right, up, or down by even a millimeter.
+            - **NO ROTATION:** Do not tilt the camera, do not pan, do not change the angle.
+            - **NO MIRRORING/FLIPPING:** Absolutely DO NOT flip or mirror the perspective horizontally or vertically. The left side of the street MUST remain the left side.
+        - **LENS & OPTICAL LOCK:** You MUST use the **EXACT same lens focal length, distortion, and field of view (FOV)** as the input. Do not widen the shot to show more, do not zoom in to show less. The view through the lens must perfectly overlay the original.
+        - **HORIZON & EYE-LEVEL RIGIDITY:** The horizon line and the viewer's eye level are frozen in place. They must match the source image's coordinates precisely on the pixel grid.
 
         **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
         - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
         - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
         - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
+        - **STRUCTURAL INTEGRITY:** Do not change the spacing or distance between existing buildings. Do not add new buildings in empty spaces.
 
         **🔤 3. SIGNAGE & TYPOGRAPHY (ORGANIC CLUSTERING):**
         - **CANTILEVERED SIGNS (PRIORITY):** Most signs should be large, hand-painted wooden signs hanging horizontally or vertically from brackets, jutting out over the street.
@@ -233,7 +234,7 @@ LOCATION_PROMPTS = {
         - **Road Surface:** Worn asphalt with the embedded single rail.
         - **Crowd:** A lively scene of pedestrians walking and shopping.
 
-        **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street.
+        **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, **changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street, straightening road, mirroring image, flipping perspective, changing lens**.
     """,
 
     "Khaosan Road": """
@@ -263,7 +264,7 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] to match the historical ruined style of [IMAGE 2], but place it in a CLEANER urban setting.
+        **TASK:** TRANSFORM [IMAGE 1] to match the historical ruined style of [IMAGE 2], but place it in a CLEANER urban setting with NO modern park context.
 
         **🧠 1. VISUAL LEARNING (FORT TEXTURE & STATE ONLY):**
         - **SOURCE OF TRUTH:** Study [IMAGE 2] intently *only* for the fort's texture and structural ruin state.
@@ -277,11 +278,13 @@ LOCATION_PROMPTS = {
         - **ACTION:** **REMOVE THE ENTIRE UPPER HALF** of the fort structure.
         - **TARGET:** Delete the wooden pavilion, roof, spire, and the upper masonry section. The fort must be a massive, truncated stump with a jagged top edge.
 
-        **🧹 4. ENVIRONMENT CLEANUP (URBAN & TIDY):**
-        - **CLEAN ROAD:** The road or ground surface around the fort must be **clean, functional, and tidy** (e.g., smooth asphalt or compacted dirt). **NO MUD, NO RUBBLE, NO DEBRIS** on the street. It should look like a normal city road, not a disaster zone.
-        - **VEGETATION REDUCTION:** **DRASTICALLY REDUCE** trees and green plants. Remove overgrown grass and dense foliage. It should NOT look like a jungle or forest. It must feel like an urban street corner with minimal, controlled greenery.
+        **🧹 4. ENVIRONMENT CLEANUP (NO PARK - URBAN HARDSCAPE):**
+        - **NO PARKLAND ADJACENT:** The area immediately next to and surrounding the fort is **NOT a garden, park, or lawn**. There is no "Santichaiprakan Park" yet.
+        - **VEGETATION ELIMINATION:** **STERILIZE** the surroundings of greenery. Remove manicured grass, decorative bushes, and large park trees.
+        - **URBAN GROUND:** Replace any removed greenery with **bare dirt, gravel, or aged concrete pavement**. The setting must feel like a functional, somewhat barren urban street corner, matching the context of [IMAGE 1].
+        - **CLEAN ROAD:** The nearby road surface must be **clean and tidy** asphalt or dirt. NO rubble or disaster debris.
 
-        **⛔ NEGATIVE PROMPT:** modern park, restored roof, golden spire, modern cars, tourists, **jungle, forest, overgrown vegetation, heavy foliage, muddy road, dirty ground, rubble on street, broken pavement**.
+        **⛔ NEGATIVE PROMPT:** modern park, public garden, manicured lawn, restored roof, golden spire, modern cars, tourists, **jungle, forest, overgrown vegetation, heavy foliage, landscaping, flower beds**.
     """,
 
     "Sanam Luang": """
