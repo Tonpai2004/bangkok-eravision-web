@@ -167,8 +167,8 @@ LOCATION_PROMPTS = {
         - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The perspective must perfectly overlay the original image.
 
         **🔄 2. ARCHITECTURAL RE-SKINNING (LOW-RISE BUILDINGS):**
-        - **STRICT TRANSFORMATION:** Detect buildings currently present. Transform their **surfaces** to match the **1960s Phra Nakhon style** (Weathered Cream Stucco, Wooden Shutters, Clay Tiles, weathered corrugated iron roofs).
-        - **MODERN TO VINTAGE:** If a visible low-rise building looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
+        - **STRICT TRANSFORMATION:** Detect buildings currently present. Transform their **surfaces** to match the **1960s Phra Nakhon style** (Weathered Cream Stucco, Wooden Shutters, Clay Tiles, weathered continuous corrugated iron roofs, a continuous, synchronized row of shophouses).
+        - **MODERN TO VINTAGE:** If a visible building that is not the temple looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
 
         **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
         - **PILLARS:** Massive **Aged Red Teak** pillars.
@@ -181,13 +181,8 @@ LOCATION_PROMPTS = {
         - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
         - **SURFACE:** Reveal the road surface underneath. Render it as **Weathered Grey Asphalt**. No road markings like zebra crossings, lane markings and modern traffic signs.
 
-        **🏢 5. MODERN HIGH-RISE PURGE (NEW SECTION):**
-        - **IDENTIFY & DELETE:** Scan the background skyline for any tall, contemporary skyscrapers, glass towers, or modern high-rise residential blocks that do not fit the 1960s era. **DELETE THEM COMPLETELY.**
-        - **SKY REPLACEMENT:** Where tall modern buildings were removed, fill the space naturally with empty sky and clouds. (This is the *only* exception to the "Geometry Lock" rule).
-
         **⛔ NEGATIVE PROMPT:** modern skyscrapers, high-rise buildings, glass towers, modern city skyline, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
     """,
-    # Detect *only* the low-rise buildings
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
@@ -477,13 +472,23 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **STRICT CONSTRAINT:** No rotation, zooming, or shifting. Perfect overlay required.
     """
     
-    # 2. เพิ่ม Conditional Logic (ตรวจสอบให้แน่ใจว่าทุกอัน += เข้า perspective_instr)
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
     - **DECAPITATION:** Surgically remove the top watchtower and roof. Replace with a jagged ruin edge and blue sky.
     - **PARK REMOVAL:** Identify all manicured grass and park paths. **ERASE THEM**.
     - **COMMUNITY INJECTION:** Fill the space besides the fort's base with **weathered wooden shanties and row houses**. These buildings must look old and crowded.
     - **TEXTURE TRANSITION:** Ensure the transition between the fort's wall and the added wooden houses looks seamless and dirty.
+        """
+    
+    elif location_key == "Giant Swing":
+        perspective_instr += """
+    - **LANDMARK PROTECTION:** 1. Identify Wat Suthat and the Giant Swing. MAINTAIN their exact forms.
+    - **NON-LANDMARK TRANSFORMATION (CATCH-ALL):** Identify **EVERY OTHER** structure or silhouette in the background. 
+        - IF it is tall (High-rise): **DELETE** and replace with SKY.
+        - IF it is low (Shophouse/Unidentified structure): **FORCE-RESKIN** into a 1960s Colonial-style building. 
+    - **GEOMETRY LOCK:** Follow the heights and outlines of [IMAGE 1] exactly, except for deleted high-rises.
+    - **ILLUMINATION RULE:** Even in dark or night shots, identify building outlines and apply the 1960s reskin logic.
+    - **CLEANUP:** Remove all modern signage, cables, and AC units.
         """
     
     elif location_key == "Yaowarat":
@@ -497,14 +502,6 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **CROWD INJECTION:** Populate the scene with a high-density crowd. Ensure they look naturally integrated into the perspective of [IMAGE 1].
     - **INFRASTRUCTURE:** Add vintage utility poles and street-level clutter to fill visual gaps.
         """
-
-    # elif location_key == "National Museum":
-    #     perspective_instr += """
-    # - **PATTERN REPLICATION:** Identify the (Pillar-Iron Railing-Pillar) pattern. 
-    # - **ERASE SIDE GATES:** Paint over the side pedestrian gates using the IDENTICAL repeating pattern of the rest of the fence.
-    # - **NO SOLID SLABS:** Do NOT fill gate areas with solid white concrete. Must be see-through iron bars.
-    # - **FLATTEN TOPS:** Surgically flatten all pointed pillar tops to simple square slabs.
-    #     """
 
     elif location_key == "National Museum":
         perspective_instr += """
