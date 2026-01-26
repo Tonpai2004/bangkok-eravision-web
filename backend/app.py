@@ -284,27 +284,34 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] to match the historical ruined style of [IMAGE 2], but place it in a CLEANER urban setting with NO modern park context.
+        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene with **ZERO CREATIVE INVENTION**.
 
-        **🧠 1. VISUAL LEARNING (FORT TEXTURE & STATE ONLY):**
-        - **SOURCE OF TRUTH:** Study [IMAGE 2] intently *only* for the fort's texture and structural ruin state.
-        - **STYLE TRANSFER:** Apply the heavily weathered white plaster, black mold/soot stains, and jagged ruined edges visible in [IMAGE 2] onto the structure in [IMAGE 1].
+        **📸 1. ULTIMATE CAMERA & GEOMETRY LOCK (THE "MIRROR" RULE):**
+        - **STRICT ANGLE REPLICATION:** Analyze the input image's camera angle relative to the fort (e.g., Frontal, 45° Left, Low Angle). The output **MUST** use the exact same angle.
+        - **NO RE-ORIENTATION:**
+            - If the input view is **Straight-on**, keep it **Straight-on**.
+            - If the input view is **Angled from the Left**, keep it **Angled from the Left**.
+            - **DO NOT FLIP, ROTATE, or CENTRALIZE the view.**
+        - **LENS INTEGRITY:** Match the **Focal Length** and **Perspective Distortion** of the input. Do not correct converging lines or straighten the perspective.
+        - **SPATIAL ANCHOR:** The fort's silhouette in the output must overlap perfectly with the input.
 
-        **📸 2. ABSOLUTE PERSPECTIVE LOCK (CRITICAL & FROZEN):**
-        - **PIXEL-PERFECT MATCH:** The input image [IMAGE 1] is the immutable frame. The final output MUST perfectly overlay the input's geometry.
-        - **CAMERA FREEZE:** The camera angle, eye level, horizon line, and focal length are **FROZEN**. **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** Do not shift the view even slightly.
+        **🤖 2. DATA-DRIVEN RECONSTRUCTION (NO HALLUCINATIONS):**
+        - **SOURCE OF TRUTH:** [IMAGE 2] is your **ONLY** source for visual style. **DO NOT INVENT** new objects not implied by the reference.
+        - **NO "CREATIVE FILL":** **STOP** filling empty spaces with random props (statues, weird houses). If a space is empty in the reference, keep it empty.
+        - **LOGICAL PLACEMENT:** Follow the physics and perspective of [IMAGE 1] strictly. Objects must sit on the ground plane defined by the input image.
 
-        **✂️ 3. STRUCTURAL EDIT (DECAPITATION):**
-        - **ACTION:** **REMOVE THE ENTIRE UPPER HALF** of the fort structure.
-        - **TARGET:** Delete the wooden pavilion, roof, spire, and the upper masonry section. The fort must be a massive, truncated stump with a jagged top edge.
+        **🧠 3. VISUAL LEARNING (TEXTURE CLONING):**
+        - **TEXTURE SWAP:** Copy the black mold, soot, and heavily weathered white plaster directly from [IMAGE 2] onto the geometry of [IMAGE 1].
+        - **ATMOSPHERE:** The lighting and color grade must be a clone of [IMAGE 2].
 
-        **🧹 4. ENVIRONMENT CLEANUP (NO PARK - URBAN HARDSCAPE):**
-        - **NO PARKLAND ADJACENT:** The area immediately next to and surrounding the fort is **NOT a garden, park, or lawn**. There is no "Santichaiprakan Park" yet.
-        - **VEGETATION ELIMINATION:** **STERILIZE** the surroundings of greenery. Remove manicured grass, decorative bushes, and large park trees.
-        - **URBAN GROUND:** Replace any removed greenery with **bare dirt, gravel, or aged concrete pavement**. The setting must feel like a functional, somewhat barren urban street corner, matching the context of [IMAGE 1].
-        - **CLEAN ROAD:** The nearby road surface must be **clean and tidy** asphalt or dirt. NO rubble or disaster debris.
+        **✂️ 4. STRUCTURAL EDIT (DECAPITATION):**
+        - **ACTION:** **REMOVE THE ENTIRE UPPER HALF** of the fort (pavilion/roof/spire).
+        - **RESULT:** The fort must be a massive, truncated stump with a jagged top edge [Ref: IMAGE 2].
 
-        **⛔ NEGATIVE PROMPT:** modern park, public garden, manicured lawn, restored roof, golden spire, modern cars, tourists, **jungle, forest, overgrown vegetation, heavy foliage, landscaping, flower beds**.
+        **🛣️ 5. ROAD CONDITION (CLEAN & FUNCTIONAL):**
+        - **EXCEPTION:** While the surroundings follow the reference, the **ROAD SURFACE** must be **SMOOTH, CLEAN ASPHALT**. No rubble or mud on the street itself.
+
+        **⛔ NEGATIVE PROMPT:** changing camera angle, flipping perspective, mirroring image, straightening perspective, lens correction, creative additions, inventing new objects, random props, modern park, restored roof, golden spire, modern cars, tourists, **rubble on road**.
     """,
 
     "Sanam Luang": """
