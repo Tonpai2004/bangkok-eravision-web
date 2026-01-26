@@ -179,48 +179,10 @@ LOCATION_PROMPTS = {
 
         **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
         - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
-        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**.
+        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**. No road markings like zebra crossings lane markings.
 
         **⛔ NEGATIVE PROMPT:** modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
     """,
-
-    # "Yaowarat": """
-    #     **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
-
-    #     **📸 1. ABSOLUTE PERSPECTIVE & GEOMETRY LOCK (NON-NEGOTIABLE):**
-    #     - **MASTER BLUEPRINT (THE STENCIL RULE):** The uploaded image is a rigid stencil. You must only change the *texture* and *content* within the existing geometric shapes.
-    #     - **CAMERA FREEZE (CRITICAL):** The camera position, angle, height, and focal length are **FROZEN** to match the input image exactly. **DO NOT ROTATE, DO NOT ZOOM, DO NOT PAN.**
-    #     - **VIEWPOINT DEPENDENCY:** Do NOT use a default generic angled street view. You MUST analyze the input's specific angle:
-    #         - If input is **Straight-on (Frontal view)** -> Output MUST be **Straight-on**.
-    #         - If input is **Angled from the Left** -> Output MUST be **Angled from the Left**.
-    #         - If input is **Angled from the Right** -> Output MUST be **Angled from the Right**.
-    #     - **HORIZON ALIGNMENT:** The horizon line and eye level must remain identical to the source image.
-
-    #     **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
-    #     - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
-    #     - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
-    #     - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
-
-    #     **🔤 2. SIGNAGE & BACKGROUND TYPOGRAPHY (CRITICAL):**
-    #     - **DEPTH LEGIBILITY:** Every sign, including those in the **FAR DISTANCE and BACKGROUND**, must maintain consistent, legible Thai and Chinese characters.
-    #     - **NO GIBBERISH:** Avoid any squiggly lines or fake characters. If a sign is too far to render perfectly, replace it with a **simple, solid-colored blank wooden board** instead of gibberish.
-    #     - **CONTENT:** Use only high-frequency, simple words: "**ยา**", "**ห้างทอง**", "**โรงแรม**", "**อาหาร**".
-    #     - **STYLE:** Vertical/Horizontal hand-painted signs hanging from brackets. NO neon.
-
-    #     **🚋 4. TRAM & ROAD (SINGLE TRACK WITH SAFETY GAP):**
-    #     - **TRACK CONFIGURATION:** **ONE SINGLE TRAM TRACK ONLY.**
-    #     - **POSITIONING:** The track runs along the **RIGHT SIDE** of the road (relative to the camera view).
-    #     - **SPACING:** Leave a realistic **small safety gap** between the track and the sidewalk/building fronts.
-    #     - **TRAM:** A weathered Yellow/Red wooden tram runs on this track.
-        
-    #     **🚦 5. ATMOSPHERE (MINIMAL TRAFFIC):**
-    #     - **VEHICLE RESTRICTION:** **NO MOTORIZED TUK-TUKS.** NO CARS.
-    #     - **ALLOWED TRANSPORT:** Only a few **Pedal Samlors (Tricycles)** allowed.
-    #     - **Road Surface:** Worn asphalt with the embedded single rail.
-    #     - **Crowd:** A lively scene of pedestrians walking and shopping.
-
-    #     **⛔ NEGATIVE PROMPT:** motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street.
-    # """,
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
@@ -236,23 +198,31 @@ LOCATION_PROMPTS = {
         - **HORIZON & EYE-LEVEL RIGIDITY:** The horizon line and the viewer's eye level are frozen in place. They must match the source image's coordinates precisely on the pixel grid.
 
         **🏘️ 2. ARCHITECTURAL TRANSFORMATION (CRITICAL):**
-        - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses**.
+        - **REPLACE ALL MODERN BUILDINGS:** Turn all glass/modern concrete structures into **2-4 story Chinese-Colonial shophouses with slight soot and humidity streaks**.
         - **TEXTURE:** Walls must be off-white or faded grey with heavy **soot stains and humidity streaks**.
         - **WINDOWS & DOORS:** Use dark **Wooden Folding Doors (Ban-Fiam)** on the ground floor and **Wooden Louvered Shutters** on upper floors.
         - **STRUCTURAL INTEGRITY:** Do not change the spacing or distance between existing buildings. Do not add new buildings in empty spaces.
 
-        **🔤 2. SIGNAGE & BACKGROUND TYPOGRAPHY (CRITICAL):**
-        - **DEPTH LEGIBILITY:** Every sign, including those in the **FAR DISTANCE and BACKGROUND**, must maintain consistent, legible Thai and Chinese characters.
-        - **NO GIBBERISH:** Avoid any squiggly lines or fake characters. If a sign is too far to render perfectly, replace it with a **simple, solid-colored blank wooden board** instead of gibberish.
-        - **CONTENT:** Use only high-frequency, simple words: "**ยา**", "**ห้างทอง**", "**โรงแรม**", "**อาหาร**".
-        - **STYLE:** Vertical/Horizontal hand-painted signs hanging from brackets. NO neon.
+        - **UTILITY POLES (NEW):** Add vintage **weathered concrete utility poles** along the sidewalks **ONLY**. Include a **realistic tangle of black electrical wires** stretching between buildings.
+
+
+        **🔤 1. SIGNAGE ARTISTRY (THE "IMPRESSIONIST" RULE):**
+        - **FOREGROUND LEGIBILITY:** Use clear, bold Thai script for foreground signs: "**ห้างทอง**", "**ร้านยา**", "**โรงแรม**", "**อาหาร**".
+        - **BACKGROUND CHARACTER ISOLATION:** For distant signs, do NOT attempt full sentences. Instead, render **SINGLE, BOLD, HIGH-CONTRAST Chinese characters** (e.g., "**金**", "**福**", "**大**", "**吉**") or very short Thai words (e.g., "**ยา**", "**ทอง**").
+        - **COLOR CONTRAST:** Use strictly high-contrast combinations for distant signs: **Bright Red backgrounds with Gold text** or **Yellow backgrounds with Black text**. This prevents AI from blurring the characters into the background.
+        - **PATINA:** Signs must look aged with **peeling paint, sun-faded colors, and rust stains** on the metal brackets.
+
 
         **🚋 4. TRAM & ROAD:**
+        - **TEXTURE:** The asphalt road must look **used and worn**.
+        - **Trash & Debris:** Add small bits of scattered litter (paper scraps, leaves) and dust along the curb edges and road for realism.
         - **TRACK & TRAM:** Single track on the right with a weathered Yellow/Red wooden tram.
         
         **🚦 5. ATMOSPHERE:**
         - **VEHICLE:** NO motorized tuk-tuks, NO cars. Only pedal samlors.
         - **CROWD:** Lively pedestrians in 1960s fashion.
+        - **HIGH DENSITY:** Fill the sidewalks and street edges with a **thick crowd of pedestrians** in 1960s Thai-Chinese fashion (white shirts, slacks, traditional dresses). make some of them look like they are shopping, walking, chatting, or carrying goods. and make the crowd look dense and busy. make some of them walk on the road but not crossing the road.
+        - **STREET LIFE:** Include a few mobile street vendors with shoulder poles (Mae-Ka-Hab-Ray) weaving through the crowd.
 
         **⛔ NEGATIVE PROMPT:** MODERN ARCHITECTURE, aluminum facade, glass curtain wall, motorized tuk-tuks, taxi cars, traffic jams, modern skyscrapers, glass windows, LED signs, neon glow, plastic banners, air conditioners, traffic lights, modern street lamps, tourists, banks, modern building, double tracks, **changing perspective, zooming, shifting angle, Dutch angle, tilted camera, reorienting street, straightening road, mirroring image, flipping perspective, changing lens**.
     """,
@@ -309,7 +279,7 @@ LOCATION_PROMPTS = {
         - **RESULT:** The fort must be a massive, truncated stump with a jagged top edge [Ref: IMAGE 2].
 
         **🛣️ 5. ROAD CONDITION (CLEAN & FUNCTIONAL):**
-        - **EXCEPTION:** While the surroundings follow the reference, the **ROAD SURFACE** must be **SMOOTH, CLEAN ASPHALT**. No rubble or mud on the street itself.
+        - ROAD SURFACE: Phra Athit Road is asphalt, functionally smooth but showing signs of wear, dust, and lack of modern road markings.
 
         **⛔ NEGATIVE PROMPT:** changing camera angle, flipping perspective, mirroring image, straightening perspective, lens correction, creative additions, inventing new objects, random props, modern park, restored roof, golden spire, modern cars, tourists, **rubble on road**.
     """,
@@ -329,14 +299,17 @@ LOCATION_PROMPTS = {
         - **THE CENTRAL CORE:** Maintain a wide, open corridor from the bottom-center of the image all the way to the Wat Phra Kaew in the background. No stalls allowed in this central viewing lane.
         
         - **PERIPHERAL ONLY:** Any makeshift stalls or umbrellas must be pushed so far to the edges that they are almost **OFF-SCREEN**.
+
+        - **HAPHAZARD CLUSTERING:** Market stalls and umbrellas must be **disorganized and unevenly scattered**. Some should overlap, some should be tilted at odd angles, and they should **NOT** follow a straight line.
+        - **MAKESHIFT MATERIALS:** Use weathered materials: **stained canvas tents, worn-out wooden poles, aged bamboo sticks, and faded, multi-colored umbrellas** with visible patches or tears.
         
         **🏃 3. POPULATION & ACTIVITY (MINIMAL KITES):**
-        - **VIBRANT CENTER:** Fill the foreground and middle ground with **DOZENS of people scattered throughout**. Focus on activities like riding **vintage bicycles**, sitting in groups on mats, strolling, and socializing.
+        - **VIBRANT CENTER:** Fill the foreground and middle ground with **DOZENS of people scattered throughout**. Focus on activities like riding **vintage bicycles**, sitting in groups on mats, strolling, playing kites, selling things, and socializing.
         - **KITE RESTRICTION:** **VERY FEW TO ZERO KITES.** If any are present, they must be small and distant in the background sky, not dominating the scene.
         - **MOBILE VENDORS:** Include **Mobile Hawkers (Mae-Ka-Hab-Ray)** with shoulder poles walking in the foreground to add life without blocking the view.
 
         **🏜️ 4. TERRAIN & LIGHTING:**
-        - **SURFACE:** Dry red dirt and fine dust. Absolutely **NO ASPHALT, NO CONCRETE, and NO ROADS**.
+        - **SURFACE:** Dry dirt and fine dust with green-to-yellow grass. Absolutely **NO ASPHALT, NO CONCRETE, and NO ROADS**.
         - **DYNAMIC LIGHTING:** Strictly follow the lighting and time of day (Day/Night) from [IMAGE 1].
 
         **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads, **many kites**, **large kites**.
@@ -359,11 +332,11 @@ LOCATION_PROMPTS = {
         - **LOW PROFILE:** Keep the structure **SHORT (Waist-high)** to reveal the museum architecture behind.
 
         **🚧 3. ROAD & ENVIRONMENT:**
-        - **SURFACE:** Asphalt road meets the masonry base directly. No traffic markings. Zerbra crossings or painted lines.
+        - **SURFACE:** Asphalt road. No traffic markings. Zebra crossings or painted lines.
         - **CLEANUP:** Remove all flags, flagpoles, modern signs, and traffic markings.
         
         ** 4. People & Atmosphere:**
-        - **MINIMAL CROWD:** A few people walking on the curb and in the museum in 1960s attire.
+        - **MINIMAL CROWD:** A few people walking on the curb that meets the masonry base directly and also walk in the museum in 1960s attire.
         - **NO VEHICLES:** The road and inside the museum is completely clear of cars and traffic.
 
         **⛔ NEGATIVE PROMPT:** thin fence base, missing intermediate pillars, side gates, merged pillars, curved entrance, recessed gate, concrete sidewalk, raised curb, pointed pillars, flags.
@@ -510,9 +483,14 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     
     elif location_key == "Yaowarat":
         perspective_instr += """
-    - **SIGNAGE LOGIC:** Prioritize cantilevered signs. 
-    - **PILLAR OVERRIDE:** Leave at least 70% of pillars bare (no signs) to show weathered stucco.
-    - **DISTANCE CLARITY:** If a distant sign cannot be rendered clearly, make it a blank wooden board.
+    - **SIGNAGE DENSITY:** Allow a high density of signs. Do NOT leave pillars bare; fill them with vertical hand-painted signs.
+
+    - **CHARACTER BOLDNESS:** Force all distant typography to use **EXTRA BOLD STROKES**.
+    - **SYMBOLIC OVERRIDE:** If a distant word is failing to render, replace it with a **single, clear, large Chinese character** in Gold/Red color.
+
+    - **ROAD DETAIL:** Add heavy "surface grime" and tire marks to the asphalt.
+    - **CROWD INJECTION:** Populate the scene with a high-density crowd. Ensure they look naturally integrated into the perspective of [IMAGE 1].
+    - **INFRASTRUCTURE:** Add vintage utility poles and street-level clutter to fill visual gaps.
         """
 
     # elif location_key == "National Museum":
