@@ -206,8 +206,8 @@ LOCATION_PROMPTS = {
         - **UTILITY POLES (NEW):** Add vintage **weathered concrete utility poles** along the sidewalks **ONLY**. Include a **realistic tangle of black electrical wires** stretching between buildings.
 
 
-        **🔤 1. SIGNAGE ARTISTRY (THE "IMPRESSIONIST" RULE):**
-        - **FOREGROUND LEGIBILITY:** Use clear, bold Thai script for foreground signs: "**ห้างทอง**", "**ร้านยา**", "**โรงแรม**", "**อาหาร**".
+        **🔤 3. SIGNAGE ARTISTRY (THE "IMPRESSIONIST" RULE):**
+        - **FOREGROUND LEGIBILITY:** Use clear, bold Thai script for foreground signs like: "**ห้างทอง**", "**ร้านยา**", "**โรงแรม**", "**อาหาร**", "**บริษัท**", "**โรงรับจำนำ**".
         - **BACKGROUND CHARACTER ISOLATION:** For distant signs, do NOT attempt full sentences. Instead, render **SINGLE, BOLD, HIGH-CONTRAST Chinese characters** (e.g., "**金**", "**福**", "**大**", "**吉**") or very short Thai words (e.g., "**ยา**", "**ทอง**").
         - **COLOR CONTRAST:** Use strictly high-contrast combinations for distant signs: **Bright Red backgrounds with Gold text** or **Yellow backgrounds with Black text**. This prevents AI from blurring the characters into the background.
         - **PATINA:** Signs must look aged with **peeling paint, sun-faded colors, and rust stains** on the metal brackets.
