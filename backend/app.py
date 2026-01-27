@@ -250,7 +250,7 @@ LOCATION_PROMPTS = {
         - **TRAM TRACKS:** Create a weathered tram tracks that locate **in front of WAT SUTHAT temple** only.
 
         ** 5. LIGHTING & ATMOSPHERE:**
-        - **Crowd:** Add a few pedestrians in 1960s attire walking on the sidewalk or in front of the temple. No one should be on the road.
+        - **Crowd:** Add a few pedestrians in 1960s attire walking on the sidewalk or in front of the temple some standing on the island of giant swing. No one should be on the road.
 
         **⛔ NEGATIVE PROMPT:** modern architectural silhouettes, background blocks, distant urban noise, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle, **modern windows in distance, air conditioners in background.**
 
