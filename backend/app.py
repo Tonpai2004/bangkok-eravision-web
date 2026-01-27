@@ -158,31 +158,110 @@ LOCATION_PROMPTS = {
         **NEGATIVE PROMPT:** home, houses, skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
 
+    # "Giant Swing": """
+    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **STRICT SEMANTIC ZONING & UNIFORMITY**.
+
+    #     **🛡️ 1. LANDMARK PROTECTION ZONE (WAT SUTHAT):**
+    #     - **THE NO-BUILD ZONE:** Identify the temple structures (Wat Suthat), white temple walls, and ornate gates on the LEFT side of [IMAGE 1].
+    #     - **PROTECTION:** You MUST **PRESERVE** their exact architectural forms. Do NOT convert temple walls into houses. Do NOT add new roofs or balconies to the temple grounds.
+    #     - **WEATHERING ONLY:** Only apply 1960s-style soot, black mold stains, and weathered orange clay tiles to the temple.
+
+    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE ROW (UNINTERRUPTED PATINA):**
+    #     - **TARGET:** Transform background commercial blocks into a **SINGLE, UNBROKEN MASS** of 2-story Colonial shophouses.
+    #     - **SINGLE RIDGE LINE:** The roof MUST be one **SINGLE, SEAMLESS horizontal gable**.
+    #     - **WEATHERING LOGIC (CRITICAL):** Apply a **UNIFORM, CONTINUOUS WEATHERED PATINA** across the *entire* roof surface. 
+    #     - **ACTION:** Use heavy sun-fading, rain streaks, and moss textures, but they MUST flow across the roof as if it is **ONE GIANT PIECE OF CLAY**.
+    #     - **ERASE ALL DIVIDERS:** You MUST **Surgically DELETE** all vertical dividers, firewalls (กำแพงกันไฟ), and parapet walls. **Weathering must NOT create gaps or vertical lines.**
+    #     - **NO STEPPED ROOF:** The ridge line is a **PERFECTLY STRAIGHT HORIZONTAL LINE**.
+    #     - **ELEMENTS:** Continuous row of brown arched windows; dark wooden folding doors (Ban-Fiam).
+
+    #     **🔒 3. GEOMETRY & SKYLINE PURGE:**
+    #     - **SKYLINE DELETION:** Identify all modern skyscrapers/tall buildings. **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than the temple roof.
+    #     - **STENCIL LOCK:** Maintain the exact spacing between buildings as seen in [IMAGE 1].
+
+    #     **⛩️ 4. THE GIANT SWING:**
+    #     - Aged Red Teak pillars on a **BARE TWO-TIER CONCRETE BASE** (Plinths + Island platform). Absolutely NO flowers, NO garlands, and NO decorations.
+
+    #     **⛔ NEGATIVE PROMPT:** houses inside temple, shophouses over wat, vertical dividers between houses, gaps in roofline, skyscrapers, tall buildings, flowers on swing base, modern cars, changing camera angle.
+    # """,
+
+    # "Giant Swing": """
+    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **MONOLITHIC COLONIAL ARCHITECTURE**.
+
+    #     **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK:**
+    #     - **FIXED LAYOUT:** Use the input image as a rigid map for building positions.
+    #     - **CAMERA FREEZE:** DO NOT rotate, zoom, or pan. The output must perfectly overlay the original.
+
+    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE TRANSFORMATION (CRITICAL):**
+    #     - **ARCHITECTURAL MASSING:** Group all visible shophouses into a **SINGLE, UNBROKEN ARCHITECTURAL MASS**. 
+    #     - **MONOLITHIC ROOF:** The roof MUST be a **SINGLE, CONTINUOUS HORIZONTAL SLAB** of aged orange-brown clay tiles. 
+    #     - **THE RIDGE LINE:** Ensure there is one **PERFECTLY STRAIGHT, SEAMLESS ridge line** running across the entire row of buildings.
+    #     - **ZERO VERTICAL DIVIDERS:** You MUST **Surgically DELETE** all vertical firewalls (กำแพงกันไฟ), parapet walls, or gaps between individual units. The roof must look like one giant, unified piece of clay.
+    #     - **COLONIAL STYLE:** 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**. Ground floors must feature **Dark Wooden Folding Doors (Ban-Fiam)**.
+
+    #     **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
+    #     - **PILLARS:** Massive **Aged Red Teak** pillars.
+    #     - **DUAL-LAYER BASE:** Render the base with **TWO DISTINCT CONCRETE LEVELS**:
+    #         1. **The Plinths:** Concrete blocks supporting the red teak legs.
+    #         2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
+    #     - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely NO flowers and no garlands.
+
+    #     **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
+    #     - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Reveal the road surface as **Clean, Weathered Grey Asphalt**.
+
+    #     **⛔ NEGATIVE PROMPT:** individual roofs, gaps between houses, vertical dividers on roof, stepped rooflines, firewalls, modern roof tiles, modern cars, traffic, flowers on base, garlands, skyscrapers.
+    # """,
+
     "Giant Swing": """
-        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation, BUT removing anachronistic modern skyscrapers.
+
+        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation. **Apply these rules with equal strictness from the immediate foreground to the furthest visible pixel on the horizon.**
 
         **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK (THE "STENCIL" RULE):**
-        - **FIXED LAYOUT:** For historical low-rise buildings, the input image is a rigid map. **DO NOT CHANGE THE SPACING** between these buildings.
-        - **PRESERVE GAPS:** If there is empty sky or space between historical buildings in the source, **KEEP IT EMPTY**. Do not fill gaps with new shophouses.
-        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The perspective must perfectly overlay the original image.
+        - **FIXED LAYOUT:** The input image is a rigid map. **DO NOT CHANGE THE SPACING** between buildings.
+        - **PRESERVE GAPS:** If there is empty sky or space between buildings in the source, **KEEP IT EMPTY**. Do not fill gaps with new shophouses.
+        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN. OR ENLARGE THE IMAGE** The perspective must perfectly overlay the original image.
 
-        **🔄 2. ARCHITECTURAL RE-SKINNING (LOW-RISE BUILDINGS):**
-        - **STRICT TRANSFORMATION:** Detect buildings currently present. Transform their **surfaces** to match the **1960s Phra Nakhon style** (Weathered Cream Stucco, Wooden Shutters, Clay Tiles, weathered continuous corrugated iron roofs, a continuous, synchronized row of shophouses).
-        - **MODERN TO VINTAGE:** If a visible building that is not the temple looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
+        **🔄 2. ARCHITECTURAL RE-SKINNING (NO NEW BUILDINGS):**
+        - **DETECT SKYSCRAPERS:** Identify all modern builiding, skyscrapers/tall buildings in the image, from the nearest to the **farthest point on the horizon**. **Do NOT retain the modern silhouette of distant buildings.** **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than 2-story building.
+        - **STRICT TRANSFORMATION:** Detect ALL buildings present. Transform their **surfaces** to match the **1960s COLONIAL STYLE** (SINGLE MASSING of 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**, **Dark Wooden Folding Doors (Ban-Fiam)**, Dark brown **CLOSED HIPPED ROOF** with Clay Tiles. **The roof structure must be a continuous lid with closed triangular ends.**). 
+        - **HORIZON OVERRIDE:** You MUST **reconstruct the silhouette** of distant buildings; do not simply re-texture them. If a building at the horizon is taller than 2 stories, **You MUST overwrite these pixels with the sky and clouds.**.
+        - **NO GHOST SILHOUETTES: Do not attempt to re-texture distant tall buildings. If it is not a 2-story shophouse or the Giant Swing, it MUST NOT EXIST. Paint the sky over it completely.
+        - **VANISHING POINT CLEANUP: At the furthest point of the street, ensure there are NO vertical lines or box shapes peeking out. The sky must meet the shophouse roofline directly.
 
+        
+        **📍 THE SEMANTIC BOUNDARY RULE:
+        -TEMPLE ISOLATION: Identify the white masonry perimeter walls (Kamphaeng Kaeo) and the ornate gate structures. These white walls are an ABSOLUTE BARRIER.
+        -NO OVERLAP: Shophouses and wooden textures MUST NOT touch, cross, or overlap with any white temple walls or religious structures.
+        -BUFFER ZONE: If the boundary is unclear, leave a clear Empty Asphalt Gap between the temple and the shophouses. NEVER "fill" the temple grounds with houses.
+
+        - **CAREFULLY Identify the areas of Temple (Wat Suthat)** **PRESERVE that area** and only apply weathering effects. Do NOT convert temple walls into houses or add new structures or place the temple at the empty spaces.
+        -** IF IT IS A BLANK SPACE AREA ON THE GROUND, DO NOT ADD ANY BUILDINGS OR HOUSES. LEAVE IT AS OPEN SKY.**
+        
         **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
         - **PILLARS:** Massive **Aged Red Teak** pillars.
         - **DUAL-LAYER BASE (CRITICAL):** Render the base structure accurately with **TWO DISTINCT CONCRETE LEVELS**:
             1. **The Plinths:** Concrete blocks directly supporting the red teak legs.
-            2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
-        - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely **NO FLOWERS**, no garlands, no fabric wrappings, and no ornate carvings.
+            2. **The Island Platform:** A **Blank** wide, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
+        - **DECORATION BAN:** The base must be **BARE**, **BLANK**, CLEAN WHITE/GREY CONCRETE**. Absolutely **NO FLOWERS**, no garlands, no fabric wrappings, no pot, and no ornate carvings.
 
         **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
         - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
-        - **SURFACE:** Reveal the road surface underneath. Render it as **Weathered Grey Asphalt**. No road markings like zebra crossings, lane markings and modern traffic signs.
+        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**.
+        - **TRAM TRACKS:** Create a weathered tram tracks that locate **in front of WAT SUTHAT temple** only.
 
-        **⛔ NEGATIVE PROMPT:** modern skyscrapers, high-rise buildings, glass towers, modern city skyline, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
+        ** 5. LIGHTING & ATMOSPHERE:**
+        - **Crowd:** Add a few pedestrians in 1960s attire walking on the sidewalk or in front of the temple some standing on the island of giant swing. No one should be on the road.
+
+        **⛔ NEGATIVE PROMPT:** modern architectural silhouettes, background blocks, distant urban noise, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle, **modern windows in distance, air conditioners in background.**
+
     """,
+
+    # **Building Instructions to follow to transform into:**
+    #    - **ARCHITECTURAL STYLE:** Group all visible shophouses into a **SINGLE, UNBROKEN ARCHITECTURAL MASS**. 
+    #    - **MONOLITHIC ROOF:** The roof MUST be a **SINGLE, CONTINUOUS HORIZONTAL SLAB** of aged brown-black clay tiles. 
+    #    - **THE RIDGE LINE:** Ensure there is one **PERFECTLY STRAIGHT, SEAMLESS ridge line** running across the entire row of buildings.
+    #    - **ZERO VERTICAL DIVIDERS:** You MUST **Surgically DELETE** all vertical firewalls (กำแพงกันไฟ), parapet walls, or gaps between individual units. The roof must look like one giant, unified piece of clay.
+    #    - **COLONIAL STYLE:** 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**. Ground floors must feature **Dark Wooden Folding Doors (Ban-Fiam)**.
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
@@ -254,31 +333,43 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + REF-TEXTURE MAPPING.**
+        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + LATERAL REF-SCANNING.**
 
-        **📐 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
+        **🔒 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
         - **PRIMARY RULE:** The **Camera Angle, Eye Level, and Object Orientation** are DICTATED BY [IMAGE 1] ONLY.
         - **ANGLE ANALYSIS:**
             - **Step 1:** Analyze [IMAGE 1]. Is the fort facing Front? Left-Oblique? Right-Oblique? Is the camera Low or High?
-            - **Step 2:** Analyze [IMAGE 2] (Reference). Note that it might only show specific angles (e.g., Side View).
-            - **Step 3 (EXECUTION):** If [IMAGE 1] is Frontal but [IMAGE 2] is Side view, **IGNORE THE REFERENCE ANGLE.** You must paint the Reference's texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
-        - **PERSPECTIVE FREEZE:** The Vanishing Points and Horizon Line of the output must align **PERFECTLY** with [IMAGE 1].
+            - **Step 2 (EXECUTION):** Force the output to use **THAT EXACT ANGLE**. Even if [IMAGE 2] is a Side View, you must paint the texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
+        - **PIXEL FREEZE:** The fort's X/Y coordinates on the canvas must not shift. **LOCK THE PERSPECTIVE GRID.**
 
-        **✂️ 1. MANDATORY DECAPITATION (IMMEDIATE ACTION):**
-        - **TRIGGER:** As soon as you process [IMAGE 1], identify the upper wooden pavilion, roof, and spire.
-        - **EXECUTION:** **CUT THEM OFF IMMEDIATELY.**
-        - **REPLACEMENT:** The area where the roof exists in the input MUST become **EMPTY SKY**.
-        - **SILHOUETTE:** The fort must become a **"Headless Stump"** ending abruptly at the masonry rim, exactly matching the silhouette style of [IMAGE 2].
+        **✂️ 1. MANDATORY DECAPITATION (SKY MASKING):**
+        - **TRIGGER:** Identify the upper wooden pavilion, roof, and spire in [IMAGE 1].
+        - **ACTION:** **ERASE THEM COMPLETELY.**
+        - **REPLACEMENT:** Apply a **"Sky Mask"**. The area above the masonry rim must be **100% SKY**.
+        - **VERIFICATION:** If you see even a pixel of a roof, **DELETE IT**. The fort is a "Headless Stump."
 
-        **🎨 2. SMART DETAIL ADAPTATION (REALISM INJECTION):**
-        - **TEXTURE PROJECTION:** Take the *mold, soot, and peeling plaster details* from [IMAGE 2] and **PROJECT** them onto the specific surfaces of [IMAGE 1], respecting the input's lighting and depth.
-        - **CONTEXTUAL ELEMENTS:** Look for small details in [IMAGE 2] (fences, ground texture, wall stains). Add these elements to [IMAGE 1] to increase realism, but **PLACE THEM** according to [IMAGE 1]'s perspective grid.
+        **🔭 2. LATERAL SCANNING & STRICT REFERENCE MAPPING:**
+        - **LEFT/RIGHT FLANK ANALYSIS:** Look closely at the **LEFT and RIGHT edges** of [IMAGE 2].
+        - **MAPPING:** Transfer specific elements (walls, fences, ground type) to the corresponding sides of [IMAGE 1].
+        - **STRICT EXCLUSION:** **IF IT IS NOT IN [IMAGE 2], DO NOT RENDER IT.** Do not add random crowds, stalls, or extra buildings just to fill space.
 
-        **🛣️ 3. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
+        **🧩 2.5. INTELLIGENT TEXTURE SYNTHESIS (UNSEEN ANGLES):**
+        - **THE CHALLENGE:** If [IMAGE 1] shows an angle NOT seen in [IMAGE 2] (e.g., a rear corner or specific side wall).
+        - **THE SOLUTION (PATTERN DECODING):** Do not guess blindly. Instead, **LEARN THE LOGIC** from [IMAGE 2]:
+            - *How does the mold accumulate at the base?*
+            - *How does the plaster peel at the edges?*
+        - **APPLICATION:** Apply this **"Material Logic"** to the new angle in [IMAGE 1].
+        - **CONSTRAINT:** Synthesize the texture, but **DO NOT CHANGE THE GEOMETRY** of [IMAGE 1] to match the reference. The shape follows Input; the skin follows Reference.
+
+        **🎨 3. TEXTURE PROJECTION (REALISM):**
+        - **SURFACE:** Project the mold, soot, and peeling plaster from [IMAGE 2] onto the geometry of [IMAGE 1].
+        - **LIGHTING:** Match the lighting direction of [IMAGE 1] but use the color palette of [IMAGE 2].
+
+        **🛣️ 4. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
         - **SURFACE:** While the surroundings follow the reference, the **ROADWAY** itself must remain **SMOOTH, CLEAN ASPHALT**.
         - **NO MESS:** The road is functional. **NO RUBBLE. NO MUD.**
 
-        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, inventing buildings, adding houses, creative additions, rubble on road, **shifting angle**, **changing perspective**, **zooming**, **using reference angle instead of input angle**.
+        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, **inventing objects**, **random buildings**, **crowd**, **market stalls**, rubble on road, **shifting angle**, **changing perspective**, **using reference angle**.
     """,
     
     "Sanam Luang": """
@@ -469,27 +560,25 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **STRICT CONSTRAINT:** No rotation, zooming, or shifting. Perfect overlay required.
     """
     
-    # 2. เพิ่ม Conditional Logic (ตรวจสอบให้แน่ใจว่าทุกอัน += เข้า perspective_instr)
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **ANGLE MATCHING (CRITICAL):** Check the camera angle of the Input [IMAGE 1]. The Output MUST match it exactly. (e.g., If Input is Left-Oblique, Output MUST be Left-Oblique).
-    - **IMMEDIATE DECAPITATION:** The moment you see the roof/pavilion in the input, **TURN IT INTO SKY**. The fort is a headless stump.
-    - **REFERENCE DETAILS:** Fill the scene with the *texture and clutter details* seen in [IMAGE 2], but place them according to the perspective of [IMAGE 1].
+    - **ANGLE MATCHING (CRITICAL):** The Output Angle MUST match Input [IMAGE 1] exactly. Do not rotate the fort to match the reference.
+    - **STYLE EXTRAPOLATION:** If the input angle is different from the reference, extract the *texture pattern* from the reference and wrap it onto the input's geometry.
+    - **IMMEDIATE DECAPITATION:** The top pavilion MUST be gone. Replace with Sky.
+    - **PERIPHERAL CHECK:** Copy environment details from [IMAGE 2] to [IMAGE 1] only if they fit the perspective.
     - **NO PARK:** Remove all manicured grass/parks.
     - **CLEAN ROAD:** Keep the road surface **smooth and clean**.
         """
     
-    elif location_key == "Giant Swing":
-        perspective_instr += """
-    - **LANDMARK PROTECTION:** 1. Identify Wat Suthat and the Giant Swing. MAINTAIN their exact forms.
-    - **NON-LANDMARK TRANSFORMATION (CATCH-ALL):** Identify **EVERY OTHER** structure or silhouette in the background. 
-        - IF it is tall (High-rise): **DELETE** and replace with SKY.
-        - IF it is low (Shophouse/Unidentified structure): **FORCE-RESKIN** into a 1960s Colonial-style building. 
-    - **GEOMETRY LOCK:** Follow the heights and outlines of [IMAGE 1] exactly, except for deleted high-rises.
-    - **ILLUMINATION RULE:** Even in dark or night shots, identify building outlines and apply the 1960s reskin logic.
-    - **CLEANUP:** Remove all modern signage, cables, and AC units.
-        """
-    
+    # elif location_key == "Giant Swing":
+    #     perspective_instr += """
+    # - **SPATIAL ENFORCEMENT:** 1. LEFT OF SWING = Temple (No-Build Zone). 2. RIGHT OF SWING = 2-story Shophouses (No Temple Elements).
+    # - **ROAD PURGE:** Identify the road surface in the foreground and center. **ERASE** any structures generated on the asphalt. Keep it a clear, empty grey road.
+    # - **TEXTURE ISOLATION:** Do not bleed temple textures onto the right-side shophouses.
+    # - **MONOLITHIC ROOF:** Flatten the shophouse roofs into one continuous line.
+    # - **SKYLINE DELETION:** Replace skyscrapers with sky.
+    #     """
+        
     elif location_key == "Yaowarat":
         perspective_instr += """
     - **SIGNAGE DENSITY:** Allow a high density of signs. Do NOT leave pillars bare; fill them with vertical hand-painted signs.
