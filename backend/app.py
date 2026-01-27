@@ -214,7 +214,7 @@ LOCATION_PROMPTS = {
 
     "Giant Swing": """
 
-        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation.
+        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation. **Apply these rules with equal strictness from the immediate foreground to the furthest visible pixel on the horizon.**
 
         **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK (THE "STENCIL" RULE):**
         - **FIXED LAYOUT:** The input image is a rigid map. **DO NOT CHANGE THE SPACING** between buildings.
@@ -222,12 +222,21 @@ LOCATION_PROMPTS = {
         - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN. OR ENLARGE THE IMAGE** The perspective must perfectly overlay the original image.
 
         **🔄 2. ARCHITECTURAL RE-SKINNING (NO NEW BUILDINGS):**
-        - **DETECT SKYSCRAPERS:** Identify all modern skyscrapers/tall buildings in the image. from nearest to fartest. **Do NOT retain the modern silhouette of distant buildings.** **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than 2-story building.
-        - **STRICT TRANSFORMATION:** Detect the buildings currently present. Transform their **surfaces** to match the **1960s COLONIAL STYLE** (SINGLE MASSING of 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**, **Dark Wooden Folding Doors (Ban-Fiam)**, Dark brown **CLOSED HIPPED ROOF** with Clay Tiles. **The roof structure must be a continuous lid with closed triangular ends.**).
-        - **MODERN TO VINTAGE:** If a visible building looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
+        - **DETECT SKYSCRAPERS:** Identify all modern builiding, skyscrapers/tall buildings in the image, from the nearest to the **farthest point on the horizon**. **Do NOT retain the modern silhouette of distant buildings.** **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than 2-story building.
+        - **STRICT TRANSFORMATION:** Detect ALL buildings present. Transform their **surfaces** to match the **1960s COLONIAL STYLE** (SINGLE MASSING of 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**, **Dark Wooden Folding Doors (Ban-Fiam)**, Dark brown **CLOSED HIPPED ROOF** with Clay Tiles. **The roof structure must be a continuous lid with closed triangular ends.**). 
+        - **HORIZON OVERRIDE:** You MUST **reconstruct the silhouette** of distant buildings; do not simply re-texture them. If a building at the horizon is taller than 2 stories, **You MUST overwrite these pixels with the sky and clouds.**.
+        - **NO GHOST SILHOUETTES: Do not attempt to re-texture distant tall buildings. If it is not a 2-story shophouse or the Giant Swing, it MUST NOT EXIST. Paint the sky over it completely.
+        - **VANISHING POINT CLEANUP: At the furthest point of the street, ensure there are NO vertical lines or box shapes peeking out. The sky must meet the shophouse roofline directly.
+
+        
+        **📍 THE SEMANTIC BOUNDARY RULE:
+        -TEMPLE ISOLATION: Identify the white masonry perimeter walls (Kamphaeng Kaeo) and the ornate gate structures. These white walls are an ABSOLUTE BARRIER.
+        -NO OVERLAP: Shophouses and wooden textures MUST NOT touch, cross, or overlap with any white temple walls or religious structures.
+        -BUFFER ZONE: If the boundary is unclear, leave a clear Empty Asphalt Gap between the temple and the shophouses. NEVER "fill" the temple grounds with houses.
 
         - **CAREFULLY Identify the areas of Temple (Wat Suthat)** **PRESERVE that area** and only apply weathering effects. Do NOT convert temple walls into houses or add new structures or place the temple at the empty spaces.
-
+        -** IF IT IS A BLANK SPACE AREA ON THE GROUND, DO NOT ADD ANY BUILDINGS OR HOUSES. LEAVE IT AS OPEN SKY.**
+        
         **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
         - **PILLARS:** Massive **Aged Red Teak** pillars.
         - **DUAL-LAYER BASE (CRITICAL):** Render the base structure accurately with **TWO DISTINCT CONCRETE LEVELS**:
@@ -237,10 +246,13 @@ LOCATION_PROMPTS = {
 
         **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
         - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
-        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**. Also **create a straight tram track in front of the temple**.
+        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**.
+        - **TRAM TRACKS:** Create a weathered tram tracks that locate **in front of WAT SUTHAT temple** only.
 
+        ** 5. LIGHTING & ATMOSPHERE:**
+        - **Crowd:** Add a few pedestrians in 1960s attire walking on the sidewalk or in front of the temple. No one should be on the road.
 
-        **⛔ NEGATIVE PROMPT:** modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
+        **⛔ NEGATIVE PROMPT:** modern architectural silhouettes, background blocks, distant urban noise, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle, **modern windows in distance, air conditioners in background.**
 
     """,
 
