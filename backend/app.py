@@ -158,31 +158,98 @@ LOCATION_PROMPTS = {
         **NEGATIVE PROMPT:** home, houses, skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
 
+    # "Giant Swing": """
+    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **STRICT SEMANTIC ZONING & UNIFORMITY**.
+
+    #     **🛡️ 1. LANDMARK PROTECTION ZONE (WAT SUTHAT):**
+    #     - **THE NO-BUILD ZONE:** Identify the temple structures (Wat Suthat), white temple walls, and ornate gates on the LEFT side of [IMAGE 1].
+    #     - **PROTECTION:** You MUST **PRESERVE** their exact architectural forms. Do NOT convert temple walls into houses. Do NOT add new roofs or balconies to the temple grounds.
+    #     - **WEATHERING ONLY:** Only apply 1960s-style soot, black mold stains, and weathered orange clay tiles to the temple.
+
+    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE ROW (UNINTERRUPTED PATINA):**
+    #     - **TARGET:** Transform background commercial blocks into a **SINGLE, UNBROKEN MASS** of 2-story Colonial shophouses.
+    #     - **SINGLE RIDGE LINE:** The roof MUST be one **SINGLE, SEAMLESS horizontal gable**.
+    #     - **WEATHERING LOGIC (CRITICAL):** Apply a **UNIFORM, CONTINUOUS WEATHERED PATINA** across the *entire* roof surface. 
+    #     - **ACTION:** Use heavy sun-fading, rain streaks, and moss textures, but they MUST flow across the roof as if it is **ONE GIANT PIECE OF CLAY**.
+    #     - **ERASE ALL DIVIDERS:** You MUST **Surgically DELETE** all vertical dividers, firewalls (กำแพงกันไฟ), and parapet walls. **Weathering must NOT create gaps or vertical lines.**
+    #     - **NO STEPPED ROOF:** The ridge line is a **PERFECTLY STRAIGHT HORIZONTAL LINE**.
+    #     - **ELEMENTS:** Continuous row of brown arched windows; dark wooden folding doors (Ban-Fiam).
+
+    #     **🔒 3. GEOMETRY & SKYLINE PURGE:**
+    #     - **SKYLINE DELETION:** Identify all modern skyscrapers/tall buildings. **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than the temple roof.
+    #     - **STENCIL LOCK:** Maintain the exact spacing between buildings as seen in [IMAGE 1].
+
+    #     **⛩️ 4. THE GIANT SWING:**
+    #     - Aged Red Teak pillars on a **BARE TWO-TIER CONCRETE BASE** (Plinths + Island platform). Absolutely NO flowers, NO garlands, and NO decorations.
+
+    #     **⛔ NEGATIVE PROMPT:** houses inside temple, shophouses over wat, vertical dividers between houses, gaps in roofline, skyscrapers, tall buildings, flowers on swing base, modern cars, changing camera angle.
+    # """,
+
+    # "Giant Swing": """
+    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **MONOLITHIC COLONIAL ARCHITECTURE**.
+
+    #     **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK:**
+    #     - **FIXED LAYOUT:** Use the input image as a rigid map for building positions.
+    #     - **CAMERA FREEZE:** DO NOT rotate, zoom, or pan. The output must perfectly overlay the original.
+
+    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE TRANSFORMATION (CRITICAL):**
+    #     - **ARCHITECTURAL MASSING:** Group all visible shophouses into a **SINGLE, UNBROKEN ARCHITECTURAL MASS**. 
+    #     - **MONOLITHIC ROOF:** The roof MUST be a **SINGLE, CONTINUOUS HORIZONTAL SLAB** of aged orange-brown clay tiles. 
+    #     - **THE RIDGE LINE:** Ensure there is one **PERFECTLY STRAIGHT, SEAMLESS ridge line** running across the entire row of buildings.
+    #     - **ZERO VERTICAL DIVIDERS:** You MUST **Surgically DELETE** all vertical firewalls (กำแพงกันไฟ), parapet walls, or gaps between individual units. The roof must look like one giant, unified piece of clay.
+    #     - **COLONIAL STYLE:** 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**. Ground floors must feature **Dark Wooden Folding Doors (Ban-Fiam)**.
+
+    #     **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
+    #     - **PILLARS:** Massive **Aged Red Teak** pillars.
+    #     - **DUAL-LAYER BASE:** Render the base with **TWO DISTINCT CONCRETE LEVELS**:
+    #         1. **The Plinths:** Concrete blocks supporting the red teak legs.
+    #         2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
+    #     - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely NO flowers and no garlands.
+
+    #     **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
+    #     - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Reveal the road surface as **Clean, Weathered Grey Asphalt**.
+
+    #     **⛔ NEGATIVE PROMPT:** individual roofs, gaps between houses, vertical dividers on roof, stepped rooflines, firewalls, modern roof tiles, modern cars, traffic, flowers on base, garlands, skyscrapers.
+    # """,
+
     "Giant Swing": """
-        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation, BUT removing anachronistic modern skyscrapers.
+
+        **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene using strict structural preservation.
 
         **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK (THE "STENCIL" RULE):**
-        - **FIXED LAYOUT:** For historical low-rise buildings, the input image is a rigid map. **DO NOT CHANGE THE SPACING** between these buildings.
-        - **PRESERVE GAPS:** If there is empty sky or space between historical buildings in the source, **KEEP IT EMPTY**. Do not fill gaps with new shophouses.
-        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN.** The perspective must perfectly overlay the original image.
+        - **FIXED LAYOUT:** The input image is a rigid map. **DO NOT CHANGE THE SPACING** between buildings.
+        - **PRESERVE GAPS:** If there is empty sky or space between buildings in the source, **KEEP IT EMPTY**. Do not fill gaps with new shophouses.
+        - **CAMERA FREEZE:** **DO NOT ROTATE. DO NOT ZOOM. DO NOT PAN. OR ENLARGE THE IMAGE** The perspective must perfectly overlay the original image.
 
-        **🔄 2. ARCHITECTURAL RE-SKINNING (LOW-RISE BUILDINGS):**
-        - **STRICT TRANSFORMATION:** Detect buildings currently present. Transform their **surfaces** to match the **1960s Phra Nakhon style** (Weathered Cream Stucco, Wooden Shutters, Clay Tiles, weathered continuous corrugated iron roofs, a continuous, synchronized row of shophouses).
-        - **MODERN TO VINTAGE:** If a visible building that is not the temple looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
+        **🔄 2. ARCHITECTURAL RE-SKINNING (NO NEW BUILDINGS):**
+        - **DETECT SKYSCRAPERS:** Identify all modern skyscrapers/tall buildings in the image. from nearest to fartest. **Do NOT retain the modern silhouette of distant buildings.** **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than 2-story building.
+        - **STRICT TRANSFORMATION:** Detect the buildings currently present. Transform their **surfaces** to match the **1960s COLONIAL STYLE** (SINGLE MASSING of 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**, **Dark Wooden Folding Doors (Ban-Fiam)**, Dark brown **CLOSED HIPPED ROOF** with Clay Tiles. **The roof structure must be a continuous lid with closed triangular ends.**).
+        - **MODERN TO VINTAGE:** If a visible building looks modern, keep its size/shape but change its texture to old masonry/wood. **DO NOT ADD** extra floors or extensions.
+
+        - **CAREFULLY Identify the areas of Temple (Wat Suthat)** **PRESERVE that area** and only apply weathering effects. Do NOT convert temple walls into houses or add new structures or place the temple at the empty spaces.
 
         **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
         - **PILLARS:** Massive **Aged Red Teak** pillars.
         - **DUAL-LAYER BASE (CRITICAL):** Render the base structure accurately with **TWO DISTINCT CONCRETE LEVELS**:
             1. **The Plinths:** Concrete blocks directly supporting the red teak legs.
-            2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
-        - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely **NO FLOWERS**, no garlands, no fabric wrappings, and no ornate carvings.
+            2. **The Island Platform:** A **Blank** wide, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
+        - **DECORATION BAN:** The base must be **BARE**, **BLANK**, CLEAN WHITE/GREY CONCRETE**. Absolutely **NO FLOWERS**, no garlands, no fabric wrappings, no pot, and no ornate carvings.
 
         **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
         - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Remove all cars, tuk-tuks, and buses.
-        - **SURFACE:** Reveal the road surface underneath. Render it as **Weathered Grey Asphalt**. No road markings like zebra crossings, lane markings and modern traffic signs.
+        - **SURFACE:** Reveal the road surface underneath. Render it as **Clean, Weathered Grey Asphalt**. Also **create a straight tram track in front of the temple**.
 
-        **⛔ NEGATIVE PROMPT:** modern skyscrapers, high-rise buildings, glass towers, modern city skyline, modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
+
+        **⛔ NEGATIVE PROMPT:** modern cars, traffic, vehicles, people in middle of road, **added buildings**, **filling gaps**, **crowded skyline**, **flowers on base**, garlands, fantasy decorations, changing angle.
+
     """,
+
+    # **Building Instructions to follow to transform into:**
+    #    - **ARCHITECTURAL STYLE:** Group all visible shophouses into a **SINGLE, UNBROKEN ARCHITECTURAL MASS**. 
+    #    - **MONOLITHIC ROOF:** The roof MUST be a **SINGLE, CONTINUOUS HORIZONTAL SLAB** of aged brown-black clay tiles. 
+    #    - **THE RIDGE LINE:** Ensure there is one **PERFECTLY STRAIGHT, SEAMLESS ridge line** running across the entire row of buildings.
+    #    - **ZERO VERTICAL DIVIDERS:** You MUST **Surgically DELETE** all vertical firewalls (กำแพงกันไฟ), parapet walls, or gaps between individual units. The roof must look like one giant, unified piece of clay.
+    #    - **COLONIAL STYLE:** 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**. Ground floors must feature **Dark Wooden Folding Doors (Ban-Fiam)**.
 
     "Yaowarat": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Yaowarat Road (1968).
@@ -478,28 +545,15 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     - **CLEAN ROAD:** Keep the road surface **smooth and clean**.
         """
     
-    elif location_key == "Giant Swing":
-        perspective_instr += """
-    - **LANDMARK PROTECTION:** 1. Identify Wat Suthat and the Giant Swing. MAINTAIN their exact forms.
-    - **NON-LANDMARK TRANSFORMATION (CATCH-ALL):** Identify **EVERY OTHER** structure or silhouette in the background. 
-        - IF it is tall (High-rise): **DELETE** and replace with SKY.
-        - IF it is low (Shophouse/Unidentified structure): **FORCE-RESKIN** into a 1960s Colonial-style building. 
-    - **GEOMETRY LOCK:** Follow the heights and outlines of [IMAGE 1] exactly, except for deleted high-rises.
-    - **ILLUMINATION RULE:** Even in dark or night shots, identify building outlines and apply the 1960s reskin logic.
-    - **CLEANUP:** Remove all modern signage, cables, and AC units.
-        """
-    
-    elif location_key == "Giant Swing":
-        perspective_instr += """
-    - **LANDMARK PROTECTION:** 1. Identify Wat Suthat and the Giant Swing. MAINTAIN their exact forms.
-    - **NON-LANDMARK TRANSFORMATION (CATCH-ALL):** Identify **EVERY OTHER** structure or silhouette in the background. 
-        - IF it is tall (High-rise): **DELETE** and replace with SKY.
-        - IF it is low (Shophouse/Unidentified structure): **FORCE-RESKIN** into a 1960s Colonial-style building. 
-    - **GEOMETRY LOCK:** Follow the heights and outlines of [IMAGE 1] exactly, except for deleted high-rises.
-    - **ILLUMINATION RULE:** Even in dark or night shots, identify building outlines and apply the 1960s reskin logic.
-    - **CLEANUP:** Remove all modern signage, cables, and AC units.
-        """
-    
+    # elif location_key == "Giant Swing":
+    #     perspective_instr += """
+    # - **SPATIAL ENFORCEMENT:** 1. LEFT OF SWING = Temple (No-Build Zone). 2. RIGHT OF SWING = 2-story Shophouses (No Temple Elements).
+    # - **ROAD PURGE:** Identify the road surface in the foreground and center. **ERASE** any structures generated on the asphalt. Keep it a clear, empty grey road.
+    # - **TEXTURE ISOLATION:** Do not bleed temple textures onto the right-side shophouses.
+    # - **MONOLITHIC ROOF:** Flatten the shophouse roofs into one continuous line.
+    # - **SKYLINE DELETION:** Replace skyscrapers with sky.
+    #     """
+        
     elif location_key == "Yaowarat":
         perspective_instr += """
     - **SIGNAGE DENSITY:** Allow a high density of signs. Do NOT leave pillars bare; fill them with vertical hand-painted signs.
