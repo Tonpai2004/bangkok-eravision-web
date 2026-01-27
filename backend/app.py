@@ -254,36 +254,33 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene with **ZERO CREATIVE INVENTION**.
+        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + REF-TEXTURE MAPPING.**
 
-        **📸 1. ULTIMATE CAMERA & GEOMETRY LOCK (THE "MIRROR" RULE):**
-        - **STRICT ANGLE REPLICATION:** Analyze the input image's camera angle relative to the fort (e.g., Frontal, 45° Left, Low Angle). The output **MUST** use the exact same angle.
-        - **NO RE-ORIENTATION:**
-            - If the input view is **Straight-on**, keep it **Straight-on**.
-            - If the input view is **Angled from the Left**, keep it **Angled from the Left**.
-            - **DO NOT FLIP, ROTATE, or CENTRALIZE the view.**
-        - **LENS INTEGRITY:** Match the **Focal Length** and **Perspective Distortion** of the input. Do not correct converging lines or straighten the perspective.
-        - **SPATIAL ANCHOR:** The fort's silhouette in the output must overlap perfectly with the input.
+        **📐 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
+        - **PRIMARY RULE:** The **Camera Angle, Eye Level, and Object Orientation** are DICTATED BY [IMAGE 1] ONLY.
+        - **ANGLE ANALYSIS:**
+            - **Step 1:** Analyze [IMAGE 1]. Is the fort facing Front? Left-Oblique? Right-Oblique? Is the camera Low or High?
+            - **Step 2:** Analyze [IMAGE 2] (Reference). Note that it might only show specific angles (e.g., Side View).
+            - **Step 3 (EXECUTION):** If [IMAGE 1] is Frontal but [IMAGE 2] is Side view, **IGNORE THE REFERENCE ANGLE.** You must paint the Reference's texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
+        - **PERSPECTIVE FREEZE:** The Vanishing Points and Horizon Line of the output must align **PERFECTLY** with [IMAGE 1].
 
-        **🤖 2. DATA-DRIVEN RECONSTRUCTION (NO HALLUCINATIONS):**
-        - **SOURCE OF TRUTH:** [IMAGE 2] is your **ONLY** source for visual style. **DO NOT INVENT** new objects not implied by the reference.
-        - **NO "CREATIVE FILL":** **STOP** filling empty spaces with random props (statues, weird houses). If a space is empty in the reference, keep it empty.
-        - **LOGICAL PLACEMENT:** Follow the physics and perspective of [IMAGE 1] strictly. Objects must sit on the ground plane defined by the input image.
+        **✂️ 1. MANDATORY DECAPITATION (IMMEDIATE ACTION):**
+        - **TRIGGER:** As soon as you process [IMAGE 1], identify the upper wooden pavilion, roof, and spire.
+        - **EXECUTION:** **CUT THEM OFF IMMEDIATELY.**
+        - **REPLACEMENT:** The area where the roof exists in the input MUST become **EMPTY SKY**.
+        - **SILHOUETTE:** The fort must become a **"Headless Stump"** ending abruptly at the masonry rim, exactly matching the silhouette style of [IMAGE 2].
 
-        **🧠 3. VISUAL LEARNING (TEXTURE CLONING):**
-        - **TEXTURE SWAP:** Copy the black mold, soot, and heavily weathered white plaster directly from [IMAGE 2] onto the geometry of [IMAGE 1].
-        - **ATMOSPHERE:** The lighting and color grade must be a clone of [IMAGE 2].
+        **🎨 2. SMART DETAIL ADAPTATION (REALISM INJECTION):**
+        - **TEXTURE PROJECTION:** Take the *mold, soot, and peeling plaster details* from [IMAGE 2] and **PROJECT** them onto the specific surfaces of [IMAGE 1], respecting the input's lighting and depth.
+        - **CONTEXTUAL ELEMENTS:** Look for small details in [IMAGE 2] (fences, ground texture, wall stains). Add these elements to [IMAGE 1] to increase realism, but **PLACE THEM** according to [IMAGE 1]'s perspective grid.
 
-        **✂️ 4. STRUCTURAL EDIT (DECAPITATION):**
-        - **ACTION:** **REMOVE THE ENTIRE UPPER HALF** of the fort (pavilion/roof/spire).
-        - **RESULT:** The fort must be a massive, truncated stump with a jagged top edge [Ref: IMAGE 2].
+        **🛣️ 3. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
+        - **SURFACE:** While the surroundings follow the reference, the **ROADWAY** itself must remain **SMOOTH, CLEAN ASPHALT**.
+        - **NO MESS:** The road is functional. **NO RUBBLE. NO MUD.**
 
-        **🛣️ 5. ROAD CONDITION (CLEAN & FUNCTIONAL):**
-        - ROAD SURFACE: Phra Athit Road is asphalt, functionally smooth but showing signs of wear, dust, and lack of modern road markings.
-
-        **⛔ NEGATIVE PROMPT:** changing camera angle, flipping perspective, mirroring image, straightening perspective, lens correction, creative additions, inventing new objects, random props, modern park, restored roof, golden spire, modern cars, tourists, **rubble on road**.
+        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, inventing buildings, adding houses, creative additions, rubble on road, **shifting angle**, **changing perspective**, **zooming**, **using reference angle instead of input angle**.
     """,
-
+    
     "Sanam Luang": """
         **TASK:** TRANSFORM [IMAGE 1] into a **VIBRANT & LIVELY** 1968 photograph of Sanam Luang.
 
@@ -474,10 +471,22 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **DECAPITATION:** Surgically remove the top watchtower and roof. Replace with a jagged ruin edge and blue sky.
-    - **PARK REMOVAL:** Identify all manicured grass and park paths. **ERASE THEM**.
-    - **COMMUNITY INJECTION:** Fill the space besides the fort's base with **weathered wooden shanties and row houses**. These buildings must look old and crowded.
-    - **TEXTURE TRANSITION:** Ensure the transition between the fort's wall and the added wooden houses looks seamless and dirty.
+    - **ANGLE MATCHING (CRITICAL):** Check the camera angle of the Input [IMAGE 1]. The Output MUST match it exactly. (e.g., If Input is Left-Oblique, Output MUST be Left-Oblique).
+    - **IMMEDIATE DECAPITATION:** The moment you see the roof/pavilion in the input, **TURN IT INTO SKY**. The fort is a headless stump.
+    - **REFERENCE DETAILS:** Fill the scene with the *texture and clutter details* seen in [IMAGE 2], but place them according to the perspective of [IMAGE 1].
+    - **NO PARK:** Remove all manicured grass/parks.
+    - **CLEAN ROAD:** Keep the road surface **smooth and clean**.
+        """
+    
+    elif location_key == "Giant Swing":
+        perspective_instr += """
+    - **LANDMARK PROTECTION:** 1. Identify Wat Suthat and the Giant Swing. MAINTAIN their exact forms.
+    - **NON-LANDMARK TRANSFORMATION (CATCH-ALL):** Identify **EVERY OTHER** structure or silhouette in the background. 
+        - IF it is tall (High-rise): **DELETE** and replace with SKY.
+        - IF it is low (Shophouse/Unidentified structure): **FORCE-RESKIN** into a 1960s Colonial-style building. 
+    - **GEOMETRY LOCK:** Follow the heights and outlines of [IMAGE 1] exactly, except for deleted high-rises.
+    - **ILLUMINATION RULE:** Even in dark or night shots, identify building outlines and apply the 1960s reskin logic.
+    - **CLEANUP:** Remove all modern signage, cables, and AC units.
         """
     
     elif location_key == "Giant Swing":
