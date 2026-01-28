@@ -333,31 +333,43 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + REF-TEXTURE MAPPING.**
+        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + LATERAL REF-SCANNING.**
 
-        **📐 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
+        **🔒 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
         - **PRIMARY RULE:** The **Camera Angle, Eye Level, and Object Orientation** are DICTATED BY [IMAGE 1] ONLY.
         - **ANGLE ANALYSIS:**
             - **Step 1:** Analyze [IMAGE 1]. Is the fort facing Front? Left-Oblique? Right-Oblique? Is the camera Low or High?
-            - **Step 2:** Analyze [IMAGE 2] (Reference). Note that it might only show specific angles (e.g., Side View).
-            - **Step 3 (EXECUTION):** If [IMAGE 1] is Frontal but [IMAGE 2] is Side view, **IGNORE THE REFERENCE ANGLE.** You must paint the Reference's texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
-        - **PERSPECTIVE FREEZE:** The Vanishing Points and Horizon Line of the output must align **PERFECTLY** with [IMAGE 1].
+            - **Step 2 (EXECUTION):** Force the output to use **THAT EXACT ANGLE**. Even if [IMAGE 2] is a Side View, you must paint the texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
+        - **PIXEL FREEZE:** The fort's X/Y coordinates on the canvas must not shift. **LOCK THE PERSPECTIVE GRID.**
 
-        **✂️ 1. MANDATORY DECAPITATION (IMMEDIATE ACTION):**
-        - **TRIGGER:** As soon as you process [IMAGE 1], identify the upper wooden pavilion, roof, and spire.
-        - **EXECUTION:** **CUT THEM OFF IMMEDIATELY.**
-        - **REPLACEMENT:** The area where the roof exists in the input MUST become **EMPTY SKY**.
-        - **SILHOUETTE:** The fort must become a **"Headless Stump"** ending abruptly at the masonry rim, exactly matching the silhouette style of [IMAGE 2].
+        **✂️ 1. MANDATORY DECAPITATION (SKY MASKING):**
+        - **TRIGGER:** Identify the upper wooden pavilion, roof, and spire in [IMAGE 1].
+        - **ACTION:** **ERASE THEM COMPLETELY.**
+        - **REPLACEMENT:** Apply a **"Sky Mask"**. The area above the masonry rim must be **100% SKY**.
+        - **VERIFICATION:** If you see even a pixel of a roof, **DELETE IT**. The fort is a "Headless Stump."
 
-        **🎨 2. SMART DETAIL ADAPTATION (REALISM INJECTION):**
-        - **TEXTURE PROJECTION:** Take the *mold, soot, and peeling plaster details* from [IMAGE 2] and **PROJECT** them onto the specific surfaces of [IMAGE 1], respecting the input's lighting and depth.
-        - **CONTEXTUAL ELEMENTS:** Look for small details in [IMAGE 2] (fences, ground texture, wall stains). Add these elements to [IMAGE 1] to increase realism, but **PLACE THEM** according to [IMAGE 1]'s perspective grid.
+        **🔭 2. LATERAL SCANNING & STRICT REFERENCE MAPPING:**
+        - **LEFT/RIGHT FLANK ANALYSIS:** Look closely at the **LEFT and RIGHT edges** of [IMAGE 2].
+        - **MAPPING:** Transfer specific elements (walls, fences, ground type) to the corresponding sides of [IMAGE 1].
+        - **STRICT EXCLUSION:** **IF IT IS NOT IN [IMAGE 2], DO NOT RENDER IT.** Do not add random crowds, stalls, or extra buildings just to fill space.
 
-        **🛣️ 3. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
+        **🧩 2.5. INTELLIGENT TEXTURE SYNTHESIS (UNSEEN ANGLES):**
+        - **THE CHALLENGE:** If [IMAGE 1] shows an angle NOT seen in [IMAGE 2] (e.g., a rear corner or specific side wall).
+        - **THE SOLUTION (PATTERN DECODING):** Do not guess blindly. Instead, **LEARN THE LOGIC** from [IMAGE 2]:
+            - *How does the mold accumulate at the base?*
+            - *How does the plaster peel at the edges?*
+        - **APPLICATION:** Apply this **"Material Logic"** to the new angle in [IMAGE 1].
+        - **CONSTRAINT:** Synthesize the texture, but **DO NOT CHANGE THE GEOMETRY** of [IMAGE 1] to match the reference. The shape follows Input; the skin follows Reference.
+
+        **🎨 3. TEXTURE PROJECTION (REALISM):**
+        - **SURFACE:** Project the mold, soot, and peeling plaster from [IMAGE 2] onto the geometry of [IMAGE 1].
+        - **LIGHTING:** Match the lighting direction of [IMAGE 1] but use the color palette of [IMAGE 2].
+
+        **🛣️ 4. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
         - **SURFACE:** While the surroundings follow the reference, the **ROADWAY** itself must remain **SMOOTH, CLEAN ASPHALT**.
         - **NO MESS:** The road is functional. **NO RUBBLE. NO MUD.**
 
-        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, inventing buildings, adding houses, creative additions, rubble on road, **shifting angle**, **changing perspective**, **zooming**, **using reference angle instead of input angle**.
+        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, **inventing objects**, **random buildings**, **crowd**, **market stalls**, rubble on road, **shifting angle**, **changing perspective**, **using reference angle**.
     """,
     
     "Sanam Luang": """
@@ -550,9 +562,10 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **ANGLE MATCHING (CRITICAL):** Check the camera angle of the Input [IMAGE 1]. The Output MUST match it exactly. (e.g., If Input is Left-Oblique, Output MUST be Left-Oblique).
-    - **IMMEDIATE DECAPITATION:** The moment you see the roof/pavilion in the input, **TURN IT INTO SKY**. The fort is a headless stump.
-    - **REFERENCE DETAILS:** Fill the scene with the *texture and clutter details* seen in [IMAGE 2], but place them according to the perspective of [IMAGE 1].
+    - **ANGLE MATCHING (CRITICAL):** The Output Angle MUST match Input [IMAGE 1] exactly. Do not rotate the fort to match the reference.
+    - **STYLE EXTRAPOLATION:** If the input angle is different from the reference, extract the *texture pattern* from the reference and wrap it onto the input's geometry.
+    - **IMMEDIATE DECAPITATION:** The top pavilion MUST be gone. Replace with Sky.
+    - **PERIPHERAL CHECK:** Copy environment details from [IMAGE 2] to [IMAGE 1] only if they fit the perspective.
     - **NO PARK:** Remove all manicured grass/parks.
     - **CLEAN ROAD:** Keep the road surface **smooth and clean**.
         """
