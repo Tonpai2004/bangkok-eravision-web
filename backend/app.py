@@ -134,7 +134,7 @@ LOCATION_PROMPTS = {
         
         **📸 1. PERSPECTIVE & SKYLINE LOCK:**
         - **BLUEPRINT:** Maintain the exact camera angle of [IMAGE 1].
-        - **SKYLINE PURGE (CRITICAL):** Identify all high-rise buildings, skyscrapers, and modern concrete towers and houses or big houses in the background of [IMAGE 1]. You MUST **DELETE and ERASE** them.
+        - **SKYLINE PURGE (CRITICAL):** Identify all high-rise buildings, skyscrapers, and modern concrete towers and houses or big houses in the background of [IMAGE 1] that place on the right side of Sala Chalerm Krung. You MUST **DELETE and ERASE** them and replace with 1960s building style or sky.
         - **REPLACE BACKGROUND:** Replace the modern skyline and adjacent building like houses with a **clear, open tropical sky**. The theater must be the tallest, most prominent structure in the scene.
         
         **🚫 2. MODERN REMOVAL:**
@@ -148,8 +148,8 @@ LOCATION_PROMPTS = {
         - **Remove ads:** Delete any modern ads, posters, banners or Thai banks logos around the theater entrance.
         
         **🚶 4. PEDESTRIAN CONTEXT:**
-        - **STREET:** Wide asphalt avenue, **COMPLETELY EMPTY OF CARS**.
-        - **CROWD:** A lively, crowd of Thai locals in 1960s fashion (white shirts, skirts, slacks) walking and gathered for a premiere.
+        - **STREET:** Wide asphalt avenue, **COMPLETELY EMPTY OF CARS** no lane marking, zebra crossing or modern lane markings.
+        - **CROWD:** A few crowd of Thai locals in 1960s fashion (white shirts, skirts, slacks) walking and gathered for a premiere.
         
         **🎨 5. STYLE:**
         - **Look:** 1960s Kodachrome film with warm natural light and soft grain.
@@ -315,6 +315,7 @@ LOCATION_PROMPTS = {
         - **NO ENCLOSURE:** Do NOT create a "street" or "alley" of tents. This is a massive open field, not a market lane.
 
         **🎪 2. DEPTH-BASED ZONING (CRITICAL):**
+        - **BOTTOM HALF VOID (CRITICAL):** The entire bottom 50 percent of the image MUST be **100 percent EMPTY** of any stalls, tents, umbrellas, or man-made structures. This area is strictly reserved for dry grass, and pedestrians.
         - **IMMEDIATE FOREGROUND (BOTTOM OF IMAGE):** This area MUST be **100% CLEAR** of any market stalls, umbrellas, tents, or permanent structures. It should only be dry red dirt, dust, and people walking, riding bicycles, or sitting.
         - **THE PERIMETER (FAR LEFT, FAR RIGHT, & DISTANCE):** All makeshift stalls, tent shanties, and disorganized clusters of umbrellas MUST be pushed to the **EXTREME LEFT and RIGHT EDGES** of the frame, and the far distant boundary near the trees.
         - **THE CENTRAL CORE:** Maintain a wide, open corridor from the bottom-center of the image all the way to the Wat Phra Kaew in the background. No stalls allowed in this central viewing lane.
@@ -336,6 +337,7 @@ LOCATION_PROMPTS = {
         **⛔ NEGATIVE PROMPT:** stalls in foreground, umbrellas near camera, market structures at the bottom of the image, empty field, ghost town, asphalt, roads, **many kites**, **large kites**.
     """,
     
+    
     "National Museum": """
         **TASK:** Create a **VINTAGE 1960s** view of the National Museum Bangkok.
 
@@ -347,7 +349,7 @@ LOCATION_PROMPTS = {
         - **SURGICAL DELETION:** Erase the side-door structures and the green signage beam from [IMAGE 1] entirely.
 
         **🚪 2. DOUBLE-SWING GATE & PILLARS:**
-        - **DESIGN:** A **DOUBLE-SWING weathered IRON GATE** with vertical bars and a visible center-split line.
+        - **DESIGN:** A **DOUBLE-SWING weathered IRON GATE** with vertical bars and a visible center-split line. the structure is same like a fence.
         - **THE GAP:** Create a clear **VOID OF AIR** between the standalone gate pillars. No horizontal connections allowed.
         - **PILLAR STYLE:** All pillars must be rectangular blocks with **COMPLETELY FLAT SQUARE TOPS**.
         - **LOW PROFILE:** Keep the structure **SHORT (Waist-high)** to reveal the museum architecture behind.
@@ -638,24 +640,46 @@ def generate_video_runway(image_bytes, location_key):
         
         # 1. Image Pre-processing
         try:
+            print("🎬 Starting Runway Gen-3 Video Generation (Multi-Aspect Letterbox)...")
+            
+            # 1. Image Orientation & Ratio Logic
             img = Image.open(io.BytesIO(image_bytes))
             width, height = img.size
-            ratio = width / height
-            MAX_RATIO = 1.78
             
-            if ratio > MAX_RATIO:
-                print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
-                new_width = int(height * MAX_RATIO)
-                left = (width - new_width) / 2
-                top = 0
-                right = (width + new_width) / 2
-                bottom = height
-                img = img.crop((left, top, right, bottom))
+            # ✅ กำหนดค่ามาตรฐาน (Canvas) ตามทิศทางของภาพ
+            if width >= height:
+                print(f"📐 Detected: LANDSCAPE ({width}x{height})")
+                runway_ratio_str = "1280:768"
+                target_width, target_height = 1280, 768 # ประกาศค่าไว้ใช้ตรงนี้
+            else:
+                print(f"📐 Detected: PORTRAIT ({width}x{height})")
+                runway_ratio_str = "768:1280"
+                target_width, target_height = 768, 1280 # ประกาศค่าไว้ใช้ตรงนี้
+
+            target_ratio = target_width / target_height
+            current_ratio = width / height
+
+            # --- 🎬 SMART LETTERBOX: ถมดำแทนการ Crop เพื่อไม่ให้ภาพโดนซูม ---
+            if abs(current_ratio - target_ratio) > 0.05:
+                print("🎬 Using Letterbox mode to preserve full building view...")
                 
+                # ย่อรูปให้พอดีกับด้านที่ยาวที่สุด (Thumbnail จะรักษาสัดส่วนภาพเดิมไว้)
+                img.thumbnail((target_width, target_height), Image.Resampling.LANCZOS)
+                
+                # สร้างพื้นหลังสีดำขนาดเป๊ะๆ ตามที่ Runway ต้องการ (1280x768 หรือ 768x1280)
+                new_img = Image.new("RGB", (target_width, target_height), (0, 0, 0))
+                
+                # วางรูปต้นฉบับไว้ตรงกลางพื้นหลังสีดำ
+                offset = ((target_width - img.size[0]) // 2, (target_height - img.size[1]) // 2)
+                new_img.paste(img, offset)
+                img = new_img
+                
+                # บันทึกภาพที่จัดการแล้วกลับเป็น bytes
                 buffered = io.BytesIO()
                 img.save(buffered, format="PNG")
                 image_bytes = buffered.getvalue()
-                print(f"✅ Cropped to {img.size}")
+                print(f"✅ Letterboxed to: {img.size}")
+
         except Exception as crop_err:
             print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
 
@@ -672,13 +696,13 @@ def generate_video_runway(image_bytes, location_key):
 
         location_prompts = {
             "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
-            "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
+            "Sala Chalermkrung": "Keep the aspect the same. Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. A little movement of people but no walking.",
             "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
-            "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
-            "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
+            "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. No movement of vehicles or people at all.",
+            "Khaosan Road": "Calm and still residential atmosphere.",
             "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
-            "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
-            "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
+            "Sanam Luang": "Nothing moving in the video except a very gentle breeze rustling the leaves of distant trees. Subtle shifting of sunlight and shadows on the dry grass field. A crowd of people moving slowly but no walking or vehicles.",
+            "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree are swaying gently and slowly."
         }
 
         specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
