@@ -128,7 +128,6 @@ LOCATION_PROMPTS = {
           - **TRAFFIC REMOVAL (CRITICAL):** The wide avenue is **MAJESTICALLY EMPTY**. Absolutely **NO CARS, NO BUSES, NO TUK-TUKS**. The road must be clear, weathered asphalt.
           **⛔ NEGATIVE PROMPT:** gold constitution, white doors, modern cars, traffic, skyscrapers, flowers on monument, cannons, fantasy elements, distortion, modern signs, air conditioners, glass buildings.
       """,
-      # Light Brown / Brick Orange เผื่อเปลี่ยนกลับ
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
@@ -157,60 +156,6 @@ LOCATION_PROMPTS = {
 
         **NEGATIVE PROMPT:** home, houses, skyscrapers, high-rise buildings, modern towers, glass facades, urban sprawl, cars, traffic, street lights, electric wires.
     """,
-
-    # "Giant Swing": """
-    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **STRICT SEMANTIC ZONING & UNIFORMITY**.
-
-    #     **🛡️ 1. LANDMARK PROTECTION ZONE (WAT SUTHAT):**
-    #     - **THE NO-BUILD ZONE:** Identify the temple structures (Wat Suthat), white temple walls, and ornate gates on the LEFT side of [IMAGE 1].
-    #     - **PROTECTION:** You MUST **PRESERVE** their exact architectural forms. Do NOT convert temple walls into houses. Do NOT add new roofs or balconies to the temple grounds.
-    #     - **WEATHERING ONLY:** Only apply 1960s-style soot, black mold stains, and weathered orange clay tiles to the temple.
-
-    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE ROW (UNINTERRUPTED PATINA):**
-    #     - **TARGET:** Transform background commercial blocks into a **SINGLE, UNBROKEN MASS** of 2-story Colonial shophouses.
-    #     - **SINGLE RIDGE LINE:** The roof MUST be one **SINGLE, SEAMLESS horizontal gable**.
-    #     - **WEATHERING LOGIC (CRITICAL):** Apply a **UNIFORM, CONTINUOUS WEATHERED PATINA** across the *entire* roof surface. 
-    #     - **ACTION:** Use heavy sun-fading, rain streaks, and moss textures, but they MUST flow across the roof as if it is **ONE GIANT PIECE OF CLAY**.
-    #     - **ERASE ALL DIVIDERS:** You MUST **Surgically DELETE** all vertical dividers, firewalls (กำแพงกันไฟ), and parapet walls. **Weathering must NOT create gaps or vertical lines.**
-    #     - **NO STEPPED ROOF:** The ridge line is a **PERFECTLY STRAIGHT HORIZONTAL LINE**.
-    #     - **ELEMENTS:** Continuous row of brown arched windows; dark wooden folding doors (Ban-Fiam).
-
-    #     **🔒 3. GEOMETRY & SKYLINE PURGE:**
-    #     - **SKYLINE DELETION:** Identify all modern skyscrapers/tall buildings. **Surgically DELETE** them and replace with **clear blue sky or soft clouds**. No structure should be taller than the temple roof.
-    #     - **STENCIL LOCK:** Maintain the exact spacing between buildings as seen in [IMAGE 1].
-
-    #     **⛩️ 4. THE GIANT SWING:**
-    #     - Aged Red Teak pillars on a **BARE TWO-TIER CONCRETE BASE** (Plinths + Island platform). Absolutely NO flowers, NO garlands, and NO decorations.
-
-    #     **⛔ NEGATIVE PROMPT:** houses inside temple, shophouses over wat, vertical dividers between houses, gaps in roofline, skyscrapers, tall buildings, flowers on swing base, modern cars, changing camera angle.
-    # """,
-
-    # "Giant Swing": """
-    #     **TASK:** TRANSFORM [IMAGE 1] into a **1960s Phra Nakhon Era** scene with **MONOLITHIC COLONIAL ARCHITECTURE**.
-
-    #     **🔒 1. ABSOLUTE GEOMETRY & SPATIAL LOCK:**
-    #     - **FIXED LAYOUT:** Use the input image as a rigid map for building positions.
-    #     - **CAMERA FREEZE:** DO NOT rotate, zoom, or pan. The output must perfectly overlay the original.
-
-    #     **🏘️ 2. THE MONOLITHIC SHOPHOUSE TRANSFORMATION (CRITICAL):**
-    #     - **ARCHITECTURAL MASSING:** Group all visible shophouses into a **SINGLE, UNBROKEN ARCHITECTURAL MASS**. 
-    #     - **MONOLITHIC ROOF:** The roof MUST be a **SINGLE, CONTINUOUS HORIZONTAL SLAB** of aged orange-brown clay tiles. 
-    #     - **THE RIDGE LINE:** Ensure there is one **PERFECTLY STRAIGHT, SEAMLESS ridge line** running across the entire row of buildings.
-    #     - **ZERO VERTICAL DIVIDERS:** You MUST **Surgically DELETE** all vertical firewalls (กำแพงกันไฟ), parapet walls, or gaps between individual units. The roof must look like one giant, unified piece of clay.
-    #     - **COLONIAL STYLE:** 2-story masonry structures with **rectangle Windows** and **Weathered Cream Stucco**. Ground floors must feature **Dark Wooden Folding Doors (Ban-Fiam)**.
-
-    #     **⛩️ 3. THE GIANT SWING (HISTORICAL TWO-TIER BASE):**
-    #     - **PILLARS:** Massive **Aged Red Teak** pillars.
-    #     - **DUAL-LAYER BASE:** Render the base with **TWO DISTINCT CONCRETE LEVELS**:
-    #         1. **The Plinths:** Concrete blocks supporting the red teak legs.
-    #         2. **The Island Platform:** A wider, raised **curbed concrete island (Traffic Island)** that the whole structure sits upon.
-    #     - **DECORATION BAN:** The base must be **BARE, CLEAN WHITE/GREY CONCRETE**. Absolutely NO flowers and no garlands.
-
-    #     **🛣️ 4. CLEAN ROAD (ZERO VEHICLES):**
-    #     - **REMOVE TRAFFIC:** The road must be **MAJESTICALLY EMPTY**. Reveal the road surface as **Clean, Weathered Grey Asphalt**.
-
-    #     **⛔ NEGATIVE PROMPT:** individual roofs, gaps between houses, vertical dividers on roof, stepped rooflines, firewalls, modern roof tiles, modern cars, traffic, flowers on base, garlands, skyscrapers.
-    # """,
 
     "Giant Swing": """
 
@@ -333,43 +278,31 @@ LOCATION_PROMPTS = {
     """,
 
     "Phra Sumen Fort": """
-        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + LATERAL REF-SCANNING.**
+        **TASK:** TRANSFORM [IMAGE 1] into a historical 1960s scene. **CRITICAL: INPUT-ANGLE LOCK + REF-TEXTURE MAPPING.**
 
-        **🔒 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
+        **📐 0. ABSOLUTE GEOMETRY & ANGLE LOCK (INPUT DOMINANCE):**
         - **PRIMARY RULE:** The **Camera Angle, Eye Level, and Object Orientation** are DICTATED BY [IMAGE 1] ONLY.
         - **ANGLE ANALYSIS:**
             - **Step 1:** Analyze [IMAGE 1]. Is the fort facing Front? Left-Oblique? Right-Oblique? Is the camera Low or High?
-            - **Step 2 (EXECUTION):** Force the output to use **THAT EXACT ANGLE**. Even if [IMAGE 2] is a Side View, you must paint the texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
-        - **PIXEL FREEZE:** The fort's X/Y coordinates on the canvas must not shift. **LOCK THE PERSPECTIVE GRID.**
+            - **Step 2:** Analyze [IMAGE 2] (Reference). Note that it might only show specific angles (e.g., Side View).
+            - **Step 3 (EXECUTION):** If [IMAGE 1] is Frontal but [IMAGE 2] is Side view, **IGNORE THE REFERENCE ANGLE.** You must paint the Reference's texture onto the **FRONTAL GEOMETRY** of [IMAGE 1].
+        - **PERSPECTIVE FREEZE:** The Vanishing Points and Horizon Line of the output must align **PERFECTLY** with [IMAGE 1].
 
-        **✂️ 1. MANDATORY DECAPITATION (SKY MASKING):**
-        - **TRIGGER:** Identify the upper wooden pavilion, roof, and spire in [IMAGE 1].
-        - **ACTION:** **ERASE THEM COMPLETELY.**
-        - **REPLACEMENT:** Apply a **"Sky Mask"**. The area above the masonry rim must be **100% SKY**.
-        - **VERIFICATION:** If you see even a pixel of a roof, **DELETE IT**. The fort is a "Headless Stump."
+        **✂️ 1. MANDATORY DECAPITATION (IMMEDIATE ACTION):**
+        - **TRIGGER:** As soon as you process [IMAGE 1], identify the upper wooden pavilion, roof, and spire.
+        - **EXECUTION:** **CUT THEM OFF IMMEDIATELY.**
+        - **REPLACEMENT:** The area where the roof exists in the input MUST become **EMPTY SKY**.
+        - **SILHOUETTE:** The fort must become a **"Headless Stump"** ending abruptly at the masonry rim, exactly matching the silhouette style of [IMAGE 2].
 
-        **🔭 2. LATERAL SCANNING & STRICT REFERENCE MAPPING:**
-        - **LEFT/RIGHT FLANK ANALYSIS:** Look closely at the **LEFT and RIGHT edges** of [IMAGE 2].
-        - **MAPPING:** Transfer specific elements (walls, fences, ground type) to the corresponding sides of [IMAGE 1].
-        - **STRICT EXCLUSION:** **IF IT IS NOT IN [IMAGE 2], DO NOT RENDER IT.** Do not add random crowds, stalls, or extra buildings just to fill space.
+        **🎨 2. SMART DETAIL ADAPTATION (REALISM INJECTION):**
+        - **TEXTURE PROJECTION:** Take the *mold, soot, and peeling plaster details* from [IMAGE 2] and **PROJECT** them onto the specific surfaces of [IMAGE 1], respecting the input's lighting and depth.
+        - **CONTEXTUAL ELEMENTS:** Look for small details in [IMAGE 2] (fences, ground texture, wall stains). Add these elements to [IMAGE 1] to increase realism, but **PLACE THEM** according to [IMAGE 1]'s perspective grid.
 
-        **🧩 2.5. INTELLIGENT TEXTURE SYNTHESIS (UNSEEN ANGLES):**
-        - **THE CHALLENGE:** If [IMAGE 1] shows an angle NOT seen in [IMAGE 2] (e.g., a rear corner or specific side wall).
-        - **THE SOLUTION (PATTERN DECODING):** Do not guess blindly. Instead, **LEARN THE LOGIC** from [IMAGE 2]:
-            - *How does the mold accumulate at the base?*
-            - *How does the plaster peel at the edges?*
-        - **APPLICATION:** Apply this **"Material Logic"** to the new angle in [IMAGE 1].
-        - **CONSTRAINT:** Synthesize the texture, but **DO NOT CHANGE THE GEOMETRY** of [IMAGE 1] to match the reference. The shape follows Input; the skin follows Reference.
-
-        **🎨 3. TEXTURE PROJECTION (REALISM):**
-        - **SURFACE:** Project the mold, soot, and peeling plaster from [IMAGE 2] onto the geometry of [IMAGE 1].
-        - **LIGHTING:** Match the lighting direction of [IMAGE 1] but use the color palette of [IMAGE 2].
-
-        **🛣️ 4. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
+        **🛣️ 3. ROAD CONDITION (CLEAN ASPHALT EXCEPTION):**
         - **SURFACE:** While the surroundings follow the reference, the **ROADWAY** itself must remain **SMOOTH, CLEAN ASPHALT**.
         - **NO MESS:** The road is functional. **NO RUBBLE. NO MUD.**
 
-        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, **inventing objects**, **random buildings**, **crowd**, **market stalls**, rubble on road, **shifting angle**, **changing perspective**, **using reference angle**.
+        **⛔ NEGATIVE PROMPT:** **roof**, **pavilion**, **spire**, **golden top**, **wooden structure**, restored condition, modern park, garden, inventing buildings, adding houses, creative additions, rubble on road, **shifting angle**, **changing perspective**, **zooming**, **using reference angle instead of input angle**.
     """,
     
     "Sanam Luang": """
@@ -562,10 +495,9 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
     
     if location_key == "Phra Sumen Fort":
         perspective_instr += """
-    - **ANGLE MATCHING (CRITICAL):** The Output Angle MUST match Input [IMAGE 1] exactly. Do not rotate the fort to match the reference.
-    - **STYLE EXTRAPOLATION:** If the input angle is different from the reference, extract the *texture pattern* from the reference and wrap it onto the input's geometry.
-    - **IMMEDIATE DECAPITATION:** The top pavilion MUST be gone. Replace with Sky.
-    - **PERIPHERAL CHECK:** Copy environment details from [IMAGE 2] to [IMAGE 1] only if they fit the perspective.
+    - **ANGLE MATCHING (CRITICAL):** Check the camera angle of the Input [IMAGE 1]. The Output MUST match it exactly. (e.g., If Input is Left-Oblique, Output MUST be Left-Oblique).
+    - **IMMEDIATE DECAPITATION:** The moment you see the roof/pavilion in the input, **TURN IT INTO SKY**. The fort is a headless stump.
+    - **REFERENCE DETAILS:** Fill the scene with the *texture and clutter details* seen in [IMAGE 2], but place them according to the perspective of [IMAGE 1].
     - **NO PARK:** Remove all manicured grass/parks.
     - **CLEAN ROAD:** Keep the road surface **smooth and clean**.
         """
@@ -687,250 +619,129 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 # 🎬 RUNWAY ML INTEGRATION (STRICT & REALISTIC)
 # ==========================================
 
-# import os
-# import io
-# import time
-# import base64
-# import datetime
-# import requests
-# from PIL import Image
+import os
+import io
+import time
+import base64
+import datetime
+import requests
+from PIL import Image
 
-# def generate_video_runway(image_bytes, location_key):
-#     runway_key = os.getenv("RUNWAYML_API_KEY")
-#     if not runway_key:
-#         print("❌ Error: ไม่เจอ RUNWAYML_API_KEY ในไฟล์ .env")
-#         return None
-
-#     try:
-#         print("🎬 Starting Runway Video Generation (V.17 - Ultimate Polishing)...")
-        
-#         # 1. Image Pre-processing
-#         try:
-#             img = Image.open(io.BytesIO(image_bytes))
-#             width, height = img.size
-#             ratio = width / height
-#             MAX_RATIO = 1.78
-            
-#             if ratio > MAX_RATIO:
-#                 print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
-#                 new_width = int(height * MAX_RATIO)
-#                 left = (width - new_width) / 2
-#                 top = 0
-#                 right = (width + new_width) / 2
-#                 bottom = height
-#                 img = img.crop((left, top, right, bottom))
-                
-#                 buffered = io.BytesIO()
-#                 img.save(buffered, format="PNG")
-#                 image_bytes = buffered.getvalue()
-#                 print(f"✅ Cropped to {img.size}")
-#         except Exception as crop_err:
-#             print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
-
-#         base64_str = base64.b64encode(image_bytes).decode('utf-8')
-        
-#         # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
-#         # Goal: Static camera, realistic physics, no filters, no glitches.
-#         base_prompt = """
-#         Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation.
-#         Hyper-realistic 8k video, high fidelity.
-#         Subtle environmental motion only. Stable structures, no morphing buildings.
-#         Natural 1960s lighting with very subtle film grain. No visual glitches.
-#         """
-
-#         location_prompts = {
-#             "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
-#             "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
-#             "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
-#             "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
-#             "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
-#             "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
-#             "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
-#             "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
-#         }
-
-#         specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
-#         final_prompt = f"{base_prompt} {specific_action}"
-#         print(f"📝 Video Prompt: {final_prompt}")
-
-#         url = "https://api.dev.runwayml.com/v1/image_to_video"
-#         payload = {
-#             "promptImage": f"data:image/png;base64,{base64_str}",
-#             "model": "gen3a_turbo",
-#             "promptText": final_prompt,
-#             "duration": 5,
-#             "ratio": "1280:768"
-#         }
-#         headers = {
-#             "Authorization": f"Bearer {runway_key}",
-#             "X-Runway-Version": "2024-11-06",
-#             "Content-Type": "application/json"
-#         }
-        
-#         # 3. Send Request
-#         response = requests.post(url, json=payload, headers=headers)
-#         if response.status_code != 200:
-#             print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
-#             return None
-            
-#         task_id = response.json().get('id')
-#         print(f"⏳ Runway Task ID: {task_id}")
-        
-#         # 4. Polling
-#         for i in range(30):
-#             time.sleep(3)
-#             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
-#             if status_res.status_code == 200:
-#                 data = status_res.json()
-#                 status = data.get('status')
-                
-#                 if status == "SUCCEEDED":
-#                     print("✅ Video Generation Complete!")
-#                     return data.get('output', [None])[0]
-#                 elif status == "FAILED":
-#                     print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
-#                     return None
-#                 else:
-#                     print(f" ...processing ({i+1}/30)")
-#             else:
-#                 print(f"⚠️ Polling Error: {status_res.status_code}")
-
-#         print("❌ Timeout: Runway took too long.")
-#         return None
-
-#     except Exception as e:
-#         print(f"❌ Critical Runway Error: {e}")
-#         return None
-
-# def save_generated_image(image_bytes, location_name_th):
-#     try:
-#         if not os.path.exists(HISTORY_FOLDER):
-#             os.makedirs(HISTORY_FOLDER)
-
-#         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
-#         safe_name = "place"
-        
-#         if "Democracy" in file_prefix: safe_name = "democracymonument"
-#         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
-#         elif "Swing" in file_prefix: safe_name = "giantswing"
-#         elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
-#         elif "Khao San" in file_prefix: safe_name = "khaosan"
-#         elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
-#         elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
-#         elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
-        
-#         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-#         filename = f"{safe_name}_1960s_{timestamp}.png"
-#         filepath = os.path.join(HISTORY_FOLDER, filename)
-
-#         with open(filepath, "wb") as f:
-#             f.write(image_bytes)
-        
-#         print(f"💾 Auto-saved result to: {filename}")
-#         return filepath 
-
-#     except Exception as e:
-#         print(f"⚠️ Failed to auto-save image: {e}")
-#         return None
-
-# ==========================================
-# ปิดการใช้งาน RUNWAY ML ไว้แปป
-# ==========================================
 def generate_video_runway(image_bytes, location_key):
-    # --- 🔴 ปิดการใช้งานชั่วคราว ---
-    print("⚠️ Runway Video Generation is currently DISABLED.")
-    return None
+    runway_key = os.getenv("RUNWAYML_API_KEY")
+    if not runway_key:
+        print("❌ Error: ไม่เจอ RUNWAYML_API_KEY ในไฟล์ .env")
+        return None
 
-    # runway_key = os.getenv("RUNWAYML_API_KEY")
-    # if not runway_key:
-    #     print("❌ Error: RUNWAYML_API_KEY not found in .env")
-    #     return None
-
-    # try:
-    #     print("🎬 Starting Runway Gen-3 Video Generation (Strict Living Photo)...")
+    try:
+        print("🎬 Starting Runway Video Generation (V.17 - Ultimate Polishing)...")
         
-    #     # 1. Prepare Base64
-    #     base64_str = base64.b64encode(image_bytes).decode('utf-8')
-
-    #     # 2. UNIVERSAL PROMPT (Living Photo / Motion Graphic Style)
-    #     final_prompt = """
-    #     Style: High-end Motion Graphic / Living Photo. Extreme slow motion (0.25x speed).
-    #     CAMERA: Smooth, constant, slow horizontal pan. NO ZOOM.
-        
-    #     CRITICAL CONSTRAINTS (ZERO TOLERANCE):
-    #     - ANIMATE ONLY EXISTING PIXELS: Use only the visual data provided in the source image.
-    #     - DO NOT ADD ANYTHING: Absolutely NO new people, NO new cars, NO new trees, and NO new leaves.
-    #     - IF IT'S NOT THERE, DON'T MOVE IT: If the image is empty, keep it empty.
-
-    #     MOVEMENT DYNAMICS:
-    #     - STATIC WORLD: Architecture, text, ground, and background must remain 100% RIGID and FROZEN. No warping or morphing.
-    #     - MICRO-MOTION: Only IF living beings or vehicles are ALREADY present, apply very subtle breathing or slight shifting movements.
-        
-    #     Atmosphere: Realistic, frozen moment in time, high fidelity.
-    #     """
-        
-    #     # ตรวจสอบความยาว Prompt
-    #     if len(final_prompt) > 990:
-    #         print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
-
-    #     print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
-
-    #     # 3. Call Runway API directly
-    #     url = "https://api.dev.runwayml.com/v1/image_to_video"
-    #     payload = {
-    #         "promptImage": f"data:image/png;base64,{base64_str}",
-    #         "model": "gen3a_turbo", 
-    #         "promptText": final_prompt.strip(),
-    #         "duration": 5,
-    #         "ratio": "1280:768"
-    #     }
-        
-    #     headers = {
-    #         "Authorization": f"Bearer {runway_key}",
-    #         "X-Runway-Version": "2024-11-06",
-    #         "Content-Type": "application/json"
-    #     }
-        
-    #     # Send Request
-    #     response = requests.post(url, json=payload, headers=headers)
-        
-    #     if response.status_code != 200:
-    #         print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
-    #         return None
+        # 1. Image Pre-processing
+        try:
+            img = Image.open(io.BytesIO(image_bytes))
+            width, height = img.size
+            ratio = width / height
+            MAX_RATIO = 1.78
             
-    #     task_id = response.json().get('id')
-    #     print(f"⏳ Runway Task ID: {task_id}")
-        
-    #     # Polling Loop
-    #     for i in range(30):
-    #         time.sleep(3)
-    #         status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
-    #         if status_res.status_code == 200:
-    #             data = status_res.json()
-    #             if data.get('status') == "SUCCEEDED":
-    #                 print("✅ Video Generation Complete!")
-    #                 return data.get('output', [None])[0]
-    #             elif data.get('status') == "FAILED":
-    #                 print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
-    #                 return None
-    #         else:
-    #             print(f"⚠️ Polling Error: {status_res.status_code}")
+            if ratio > MAX_RATIO:
+                print(f"⚠️ Image ratio {ratio:.2f} is too wide (Limit {MAX_RATIO}). Auto-cropping center...")
+                new_width = int(height * MAX_RATIO)
+                left = (width - new_width) / 2
+                top = 0
+                right = (width + new_width) / 2
+                bottom = height
+                img = img.crop((left, top, right, bottom))
                 
-    #     print("❌ Timeout: Runway took too long.")
-    #     return None
+                buffered = io.BytesIO()
+                img.save(buffered, format="PNG")
+                image_bytes = buffered.getvalue()
+                print(f"✅ Cropped to {img.size}")
+        except Exception as crop_err:
+            print(f"⚠️ Warning: Auto-crop failed ({crop_err}). Sending original image.")
 
-    # except Exception as e:
-    #     print(f"❌ Critical Runway Error: {e}")
-    #     return None
-    
+        base64_str = base64.b64encode(image_bytes).decode('utf-8')
+
+        # 2. RUNWAY PROMPT ENGINEERING (FLAWLESS & GLITCH-FREE)
+        # Goal: Static camera, realistic physics, no filters, no glitches.
+        base_prompt = """
+        Static tripod camera shot, absolutely NO panning, NO zooming, NO rotation.
+        Hyper-realistic 8k video, high fidelity.
+        Subtle environmental motion only. Stable structures, no morphing buildings.
+        Natural 1960s lighting with very subtle film grain. No visual glitches.
+        """
+
+        location_prompts = {
+            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
+            "Sala Chalermkrung": "Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. Flags on the roof swaying very gently in the breeze.",
+            "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
+            "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. Very slow cloud movement overhead.",
+            "Khaosan Road": "Leaves of trees sways gently in the breeze. Natural shadows of trees moving slowly on the wooden house fronts. Calm and still residential atmosphere.",
+            "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
+            "Sanam Luang": "Canvas umbrellas fluttering very subtly in the wind. Kites in the far distance moving slightly against the clouds. The ground remains stable and clear.",
+            "National Museum": "A very calm, Zen-like atmosphere. Dappled sunlight and shadows shifting slowly on the white walls and gravel ground. Tree branches swaying gently."
+        }
+
+        specific_action = location_prompts.get(location_key, "Natural lighting changes, realistic texture rendering.")
+        final_prompt = f"{base_prompt} {specific_action}"
+        print(f"📝 Video Prompt: {final_prompt}")
+
+        url = "https://api.dev.runwayml.com/v1/image_to_video"
+        payload = {
+            "promptImage": f"data:image/png;base64,{base64_str}",
+            "model": "gen3a_turbo",
+            "promptText": final_prompt,
+            "duration": 5,
+            "ratio": "1280:768"
+        }
+        headers = {
+            "Authorization": f"Bearer {runway_key}",
+            "X-Runway-Version": "2024-11-06",
+            "Content-Type": "application/json"
+        }
+        
+        # 3. Send Request
+        response = requests.post(url, json=payload, headers=headers)
+        if response.status_code != 200:
+            print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
+            return None
+            
+        task_id = response.json().get('id')
+        print(f"⏳ Runway Task ID: {task_id}")
+        
+        # 4. Polling
+        for i in range(30):
+            time.sleep(3)
+            status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
+            if status_res.status_code == 200:
+                data = status_res.json()
+                status = data.get('status')
+                
+                if status == "SUCCEEDED":
+                    print("✅ Video Generation Complete!")
+                    return data.get('output', [None])[0]
+                elif status == "FAILED":
+                    print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
+                    return None
+                else:
+                    print(f" ...processing ({i+1}/30)")
+            else:
+                print(f"⚠️ Polling Error: {status_res.status_code}")
+
+        print("❌ Timeout: Runway took too long.")
+        return None
+
+    except Exception as e:
+        print(f"❌ Critical Runway Error: {e}")
+        return None
+
 def save_generated_image(image_bytes, location_name_th):
     try:
         if not os.path.exists(HISTORY_FOLDER):
             os.makedirs(HISTORY_FOLDER)
 
         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
-        
         safe_name = "place"
+        
         if "Democracy" in file_prefix: safe_name = "democracymonument"
         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
         elif "Swing" in file_prefix: safe_name = "giantswing"
@@ -948,11 +759,127 @@ def save_generated_image(image_bytes, location_name_th):
             f.write(image_bytes)
         
         print(f"💾 Auto-saved result to: {filename}")
-        return filepath
+        return filepath 
 
     except Exception as e:
         print(f"⚠️ Failed to auto-save image: {e}")
         return None
+
+
+# def generate_video_runway(image_bytes, location_key):
+#     # ✅ ลบส่วน "ปิดการใช้งานชั่วคราว" ออกเพื่อให้โค้ดด้านล่างทำงาน
+#     runway_key = os.getenv("RUNWAYML_API_KEY")
+#     if not runway_key:
+#         print("❌ Error: RUNWAYML_API_KEY not found in .env")
+#         return None
+
+#     try:
+#         print("🎬 Starting Runway Gen-3 Video Generation (Strict Living Photo)...")
+        
+#         # 1. Prepare Base64
+#         base64_str = base64.b64encode(image_bytes).decode('utf-8')
+
+#         # 2. UNIVERSAL PROMPT (Living Photo / Motion Graphic Style)
+#         final_prompt = """
+#         Style: High-end Motion Graphic / Living Photo. Extreme slow motion (0.25x speed).
+#         CAMERA: Smooth, constant, slow horizontal pan. NO ZOOM.
+        
+#         CRITICAL CONSTRAINTS (ZERO TOLERANCE):
+#         - ANIMATE ONLY EXISTING PIXELS: Use only the visual data provided in the source image.
+#         - DO NOT ADD ANYTHING: Absolutely NO new people, NO new cars, NO new trees, and NO new leaves.
+#         - IF IT'S NOT THERE, DON'T MOVE IT: If the image is empty, keep it empty.
+
+#         MOVEMENT DYNAMICS:
+#         - STATIC WORLD: Architecture, text, ground, and background must remain 100% RIGID and FROZEN. No warping or morphing.
+#         - MICRO-MOTION: Only IF living beings or vehicles are ALREADY present, apply very subtle breathing or slight shifting movements.
+        
+#         Atmosphere: Realistic, frozen moment in time, high fidelity.
+#         """
+        
+#         # ตรวจสอบความยาว Prompt
+#         if len(final_prompt) > 990:
+#             print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
+
+#         print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
+
+#         # 3. Call Runway API directly
+#         url = "https://api.dev.runwayml.com/v1/image_to_video"
+#         payload = {
+#             "promptImage": f"data:image/png;base64,{base64_str}",
+#             "model": "gen3a_turbo", 
+#             "promptText": final_prompt.strip(),
+#             "duration": 5,
+#             "ratio": "1280:768"
+#         }
+        
+#         headers = {
+#             "Authorization": f"Bearer {runway_key}",
+#             "X-Runway-Version": "2024-11-06",
+#             "Content-Type": "application/json"
+#         }
+        
+#         # Send Request
+#         response = requests.post(url, json=payload, headers=headers)
+        
+#         if response.status_code != 200:
+#             print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
+#             return None
+            
+#         task_id = response.json().get('id')
+#         print(f"⏳ Runway Task ID: {task_id}")
+        
+#         # Polling Loop (รอให้วิดีโอเจนเสร็จ)
+#         for i in range(30):
+#             time.sleep(3)
+#             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
+#             if status_res.status_code == 200:
+#                 data = status_res.json()
+#                 if data.get('status') == "SUCCEEDED":
+#                     print("✅ Video Generation Complete!")
+#                     return data.get('output', [None])[0]
+#                 elif data.get('status') == "FAILED":
+#                     print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
+#                     return None
+#             else:
+#                 print(f"⚠️ Polling Error: {status_res.status_code}")
+                
+#         print("❌ Timeout: Runway took too long.")
+#         return None
+
+#     except Exception as e:
+#         print(f"❌ Critical Runway Error: {e}")
+#         return None
+    
+# def save_generated_image(image_bytes, location_name_th):
+#     try:
+#         if not os.path.exists(HISTORY_FOLDER):
+#             os.makedirs(HISTORY_FOLDER)
+
+#         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
+        
+#         safe_name = "place"
+#         if "Democracy" in file_prefix: safe_name = "democracymonument"
+#         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
+#         elif "Swing" in file_prefix: safe_name = "giantswing"
+#         elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
+#         elif "Khao San" in file_prefix: safe_name = "khaosan"
+#         elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
+#         elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
+#         elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
+        
+#         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+#         filename = f"{safe_name}_1960s_{timestamp}.png"
+#         filepath = os.path.join(HISTORY_FOLDER, filename)
+
+#         with open(filepath, "wb") as f:
+#             f.write(image_bytes)
+        
+#         print(f"💾 Auto-saved result to: {filename}")
+#         return filepath
+
+#     except Exception as e:
+#         print(f"⚠️ Failed to auto-save image: {e}")
+#         return None
 
 def save_generated_video(video_url, location_key):
     try:
@@ -1065,55 +992,55 @@ def generate_image_route():
 # ENDPOINT 2: ANIMATE VIDEO
 @app.route('/animate', methods=['POST'])
 def animate_video_route():
-    # --- 🔴 ส่งคืนค่าว่างทันที เพื่อไม่ให้โปรแกรมพัง ---
-    return jsonify({'status': 'skipped', 'message': 'Video generation is temporarily disabled.'})
+    # ✅ ลบ return jsonify ตัวเก่าออกเพื่อให้โค้ดด้านล่างทำงานจริง
+    try:
+        print("🚀 [Step 2] Animating Video...")
+        data = request.json
+        image_data = data.get('image') # Base64 Image
+        location_key = data.get('location_key')
 
-    # try:
-    #     print("🚀 [Step 2] Animating Video...")
-    #     data = request.json
-    #     image_data = data.get('image') # Base64 Image
-    #     location_key = data.get('location_key')
-
-    #     if not image_data: return jsonify({'error': 'No image provided'}), 400
+        if not image_data: 
+            return jsonify({'error': 'No image provided'}), 400
         
-    #     # Clean Base64 header
-    #     if "," in image_data: image_data = image_data.split(",")[1]
-    #     image_bytes = base64.b64decode(image_data)
+        # Clean Base64 header
+        if "," in image_data: 
+            image_data = image_data.split(",")[1]
+        image_bytes = base64.b64decode(image_data)
 
-    #     # 1. เรียก Runway ให้สร้างวิดีโอ
-    #     video_url = generate_video_runway(image_bytes, location_key)
+        # 1. เรียก Runway ให้สร้างวิดีโอ
+        video_url = generate_video_runway(image_bytes, location_key)
         
-    #     if video_url:
-    #         print(f"✅ Runway Success! URL: {video_url}")
+        if video_url:
+            print(f"✅ Runway Success! URL: {video_url}")
             
-    #         # 2. พยายามบันทึกลงเครื่อง (Local Save)
-    #         vid_filename, vid_path = save_generated_video(video_url, location_key)
+            # 2. พยายามบันทึกลงเครื่อง (Local Save)
+            vid_filename, vid_path = save_generated_video(video_url, location_key)
             
-    #         final_video_src = video_url # Default: ใช้ URL ตรงจาก Runway (เผื่อ Save พัง)
+            final_video_src = video_url # Default: ใช้ URL ตรงจาก Runway (เผื่อ Save พัง)
 
-    #         # 3. ถ้า Save สำเร็จ ให้แปลงเป็น Base64 (เพื่อความเร็วในการโหลด Local)
-    #         if vid_path and os.path.exists(vid_path):
-    #             try:
-    #                 with open(vid_path, "rb") as f:
-    #                     vid_b64 = base64.b64encode(f.read()).decode('utf-8')
-    #                     final_video_src = f"data:video/mp4;base64,{vid_b64}"
-    #                     print("📦 Sending Video as Base64")
-    #                 except Exception as e:
-    #                     print(f"⚠️ Read File Error: {e} -> Sending Remote URL instead")
-    #         else:
-    #             print("⚠️ Save failed or File not found -> Sending Remote URL directly")
+            # 3. ถ้า Save สำเร็จ ให้แปลงเป็น Base64 (เพื่อความเร็วในการโหลด Local)
+            if vid_path and os.path.exists(vid_path):
+                try:
+                    with open(vid_path, "rb") as f:
+                        vid_b64 = base64.b64encode(f.read()).decode('utf-8')
+                        final_video_src = f"data:video/mp4;base64,{vid_b64}"
+                        print("📦 Sending Video as Base64")
+                except Exception as e: # ✅ เลื่อน except ออกมาให้ตรงกับ try:
+                    print(f"⚠️ Read File Error: {e} -> Sending Remote URL instead")
+            else:
+                print("⚠️ Save failed or File not found -> Sending Remote URL directly")
 
-    #         # 4. ส่งผลลัพธ์กลับ Frontend (ไม่ว่า Save ได้หรือไม่ได้ User ต้องเห็นวิดีโอ)
-    #         return jsonify({
-    #             'status': 'success',
-    #             'video': final_video_src
-    #         })
-    #     else:
-    #         return jsonify({'error': 'Video generation failed (Runway returned None)'}), 500
+            # 4. ส่งผลลัพธ์กลับ Frontend
+            return jsonify({
+                'status': 'success',
+                'video': final_video_src
+            })
+        else:
+            return jsonify({'error': 'Video generation failed (Runway returned None)'}), 500
 
-    # except Exception as e:
-    #     print(f"❌ Critical Animate Error: {e}")
-    #     return jsonify({'error': str(e)}), 500
+    except Exception as e: # บล็อกนี้คุมทั้ง Route
+        print(f"❌ Critical Animate Error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/videos/<path:filename>')
 def serve_video(filename):

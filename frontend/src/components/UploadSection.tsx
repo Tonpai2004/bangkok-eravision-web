@@ -124,7 +124,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   const [failReason, setFailReason] = useState<string>("");
   const [passDetails, setPassDetails] = useState<{score: number, place: string} | null>(null);
 
-  const [result, setResult] = useState<{image: string, video?: string, desc: string, location: string} | null>(null);
+  const [result, setResult] = useState<{image: string, video?: string, desc: string, location_key: string, location: string} | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showInputWarning, setShowInputWarning] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -198,9 +198,117 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
   // ------------------------------------------------------------------
   // 🚀 MAIN LOGIC: Chain Requests (Verify -> Image -> Video)
   // ------------------------------------------------------------------
+  // const handleGenerate = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+    
+  //   if (!file || !selectedLocation) {
+  //       setShowInputWarning(true);
+  //       return;
+  //   }
+
+  //   let currentStep: 'verifying' | 'generating' | 'animating' = 'verifying'; 
+  //   setStatus('verifying'); 
+    
+  //   const formData = new FormData();
+  //   formData.append('image', file);
+  //   formData.append('location', selectedLocation);
+  //   formData.append('language', currentLang); 
+
+  //   try {
+  //     // === STEP 1: Verify ===
+  //     const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
+  //     const verifyData = await verifyRes.json();
+
+  //     if (!verifyRes.ok || verifyData.status === 'rejected') {
+  //       setFailReason(verifyData.details || verifyData.error || "Unknown Error");
+  //       setStatus('verified_fail'); 
+  //       return; 
+  //     }
+
+  //     setPassDetails({
+  //       score: verifyData.analysis_report?.score || 0,
+  //       place: verifyData.analysis_report?.detected_place || "Confirmed"
+  //     });
+  //     setStatus('verified_pass');
+
+  //     await new Promise(r => setTimeout(r, 1500));
+
+  //     // === STEP 2: Generate Image (Gemini/Imagen) ===
+  //     currentStep = 'generating';
+  //     setStatus('generating');
+
+  //     const genFormData = new FormData();
+  //     genFormData.append('image', file);
+  //     genFormData.append('location', selectedLocation);
+
+  //     const genRes = await fetch('http://127.0.0.1:5000/generate', {
+  //         method: 'POST',
+  //         body: genFormData,
+  //     });
+  //     if (!genRes.ok) {
+  //         const errData = await genRes.json().catch(() => ({})); // กัน JSON parse พัง
+  //         // ถ้าเป็น 503 ให้โยนคำว่า 503 เพื่อให้ตัวแปลภาษาจับได้
+  //         if (genRes.status === 503) throw new Error("503 Service Unavailable (Model Busy)");
+  //         throw new Error(errData.error || `Server Error: ${genRes.status}`);
+  //     }
+  //     const genData = await genRes.json();
+
+  //     if (!genData.image) throw new Error(genData.error || "Image generation failed");
+
+  //     // ได้รูปมาแล้ว! ต่อไปส่งไปทำวิดีโอ (Runway)
+  //     // เปลี่ยนสถานะเป็น animating เพื่อโชว์ UI ใหม่
+  //     currentStep = 'animating';
+  //     setStatus('animating'); 
+
+  //     let finalVideo = null;
+  //     try {
+  //         // เรียก Endpoint /animate ที่แยกออกมา
+  //         const animRes = await fetch('http://127.0.0.1:5000/animate', {
+  //             method: 'POST',
+  //             headers: { 'Content-Type': 'application/json' },
+  //             body: JSON.stringify({ 
+  //                 image: genData.image, // ส่งรูป base64 กลับไป
+  //                 location_key: genData.location_key // ส่ง key สถานที่ไปให้ Backend เลือก prompt
+  //             }),
+  //         });
+  //         const animData = await animRes.json();
+          
+  //         if (animData.video) {
+  //             finalVideo = animData.video;
+  //         }
+  //     } catch (videoErr) {
+  //         console.warn("Video generation failed (Runway), but Image is OK.", videoErr);
+  //         // ถ้าวิดีโอพัง ไม่ต้อง Error ทั้งหมด ให้โชว์รูปอย่างเดียว
+  //     }
+
+  //     // === FINISH: Set Result ===
+  //     setResult({
+  //       image: genData.image,
+  //       video: finalVideo || undefined, // ถ้ามีวิดีโอก็ใส่ ถ้าไม่มีก็ undefined
+  //       desc: genData.description,
+  //       location: genData.location_name
+  //     });
+  //     setStatus('finished');
+
+  //   } catch (err: any) {
+  //       console.error("Process Error:", err);
+  //       // แปลงข้อความ Error ให้คนอ่านไม่งง
+  //       const friendlyMsg = getFriendlyErrorMessage(err.message || "Unknown Error", currentLang);
+  //       setFailReason(friendlyMsg);
+        
+  //       if (currentStep === 'verifying') {
+  //            setStatus('verified_fail'); 
+  //       } else {
+  //            setStatus('error'); 
+  //       }
+  //   }
+  // };
+
+
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // ตรวจสอบข้อมูลก่อนเริ่ม
     if (!file || !selectedLocation) {
         setShowInputWarning(true);
         return;
@@ -215,7 +323,7 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
     formData.append('language', currentLang); 
 
     try {
-      // === STEP 1: Verify ===
+      // === STEP 1: Verify (ตรวจสอบความถูกต้องของรูปถ่าย) ===
       const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
       const verifyData = await verifyRes.json();
 
@@ -225,15 +333,17 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         return; 
       }
 
+      // แสดงสถานะเมื่อผ่านการตรวจสอบ
       setPassDetails({
         score: verifyData.analysis_report?.score || 0,
         place: verifyData.analysis_report?.detected_place || "Confirmed"
       });
       setStatus('verified_pass');
 
+      // หน่วงเวลาเล็กน้อยเพื่อให้ User เห็นว่าผ่านแล้ว
       await new Promise(r => setTimeout(r, 1500));
 
-      // === STEP 2: Generate Image (Gemini/Imagen) ===
+      // === STEP 2: Generate Image (ส่งไปให้ Gemini/Imagen สร้างภาพ 1960s) ===
       currentStep = 'generating';
       setStatus('generating');
 
@@ -245,54 +355,32 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
           method: 'POST',
           body: genFormData,
       });
+
       if (!genRes.ok) {
-          const errData = await genRes.json().catch(() => ({})); // กัน JSON parse พัง
-          // ถ้าเป็น 503 ให้โยนคำว่า 503 เพื่อให้ตัวแปลภาษาจับได้
+          const errData = await genRes.json().catch(() => ({}));
           if (genRes.status === 503) throw new Error("503 Service Unavailable (Model Busy)");
           throw new Error(errData.error || `Server Error: ${genRes.status}`);
       }
+
       const genData = await genRes.json();
 
       if (!genData.image) throw new Error(genData.error || "Image generation failed");
 
-      // ได้รูปมาแล้ว! ต่อไปส่งไปทำวิดีโอ (Runway)
-      // เปลี่ยนสถานะเป็น animating เพื่อโชว์ UI ใหม่
-      currentStep = 'animating';
-      setStatus('animating'); 
-
-      let finalVideo = null;
-      try {
-          // เรียก Endpoint /animate ที่แยกออกมา
-          const animRes = await fetch('http://127.0.0.1:5000/animate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ 
-                  image: genData.image, // ส่งรูป base64 กลับไป
-                  location_key: genData.location_key // ส่ง key สถานที่ไปให้ Backend เลือก prompt
-              }),
-          });
-          const animData = await animRes.json();
-          
-          if (animData.video) {
-              finalVideo = animData.video;
-          }
-      } catch (videoErr) {
-          console.warn("Video generation failed (Runway), but Image is OK.", videoErr);
-          // ถ้าวิดีโอพัง ไม่ต้อง Error ทั้งหมด ให้โชว์รูปอย่างเดียว
-      }
-
-      // === FINISH: Set Result ===
+      // === FINISH (STOP AT IMAGE) ===
+      // เราจะไม่เรียกฟังก์ชัน animate อัตโนมัติที่นี่แล้ว เพื่อประหยัด Credit Runway
+      // แต่จะเก็บข้อมูลใส่ result เพื่อให้ User เลือกกดปุ่มสร้างวิดีโอเองในหน้า Modal
       setResult({
         image: genData.image,
-        video: finalVideo || undefined, // ถ้ามีวิดีโอก็ใส่ ถ้าไม่มีก็ undefined
+        video: undefined, // ยังไม่มีวิดีโอในตอนนี้
         desc: genData.description,
-        location: genData.location_name
+        location: genData.location_name,
+        location_key: genData.location_key // เก็บ key ไว้ใช้เรียก /animate ทีหลัง
       });
       setStatus('finished');
 
     } catch (err: any) {
         console.error("Process Error:", err);
-        // แปลงข้อความ Error ให้คนอ่านไม่งง
+        // แปลงข้อความ Error ให้เป็นภาษาที่อ่านง่าย
         const friendlyMsg = getFriendlyErrorMessage(err.message || "Unknown Error", currentLang);
         setFailReason(friendlyMsg);
         
@@ -301,6 +389,33 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
         } else {
              setStatus('error'); 
         }
+    }
+  };
+
+  const handleAnimate = async () => {
+    if (!result?.image || !result?.location_key) return;
+
+    setStatus('animating');
+    try {
+      const animRes = await fetch('http://127.0.0.1:5000/animate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          image: result.image, 
+          location_key: result.location_key 
+        }),
+      });
+      const animData = await animRes.json();
+      
+      if (animData.video) {
+        setResult(prev => prev ? { ...prev, video: animData.video } : null);
+        setStatus('finished');
+      } else {
+        throw new Error(animData.error || "Video failed");
+      }
+    } catch (err: any) {
+      setFailReason(getFriendlyErrorMessage(err.message, currentLang));
+      setStatus('error');
     }
   };
 
@@ -456,6 +571,16 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
                         <img src={result.image} alt="Generated" className="w-full h-auto block" />
                     )}
                 </div>
+
+                {/* ✅ เพิ่มปุ่มนี้: แสดงเฉพาะเมื่อยังไม่มีวิดีโอ */}
+                {!result.video && (
+                    <button 
+                        onClick={handleAnimate}
+                        className="w-full mb-3 bg-gold text-dark py-4 font-bold border-2 border-dark hover:bg-yellow-400 transition-all uppercase tracking-widest flex justify-center items-center gap-2"
+                    >
+                        🎬 {currentLang === 'ENG' ? "Bring Image to Life (Runway)" : "เนรมิตชีวิตให้ภาพ (Runway)"}
+                    </button>
+                )}
                 
                 <button 
                     onClick={() => {
