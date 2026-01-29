@@ -695,9 +695,8 @@ def generate_video_runway(image_bytes, location_key):
         """
 
         location_prompts = {
-            "Democracy Monument": "Static shot. Cars are parked still on the road. ONLY clouds in the sky move slowly. Subtle heat haze on the asphalt. No car movement at all. **CRITICAL: The monument structure MUST REMAIN PERFECTLY STATIC and RIGID. No morphing, warping, twisting, or glitching of the concrete wings or base throughout the video.**",
-            "Sala Chalermkrung": "Keep the aspect the same. Atmospheric dust motes dancing in the sunlight. Subtle shadows shifting on the theater facade. A little movement of people but no walking.",
-            "Giant Swing": "The red pillars remain perfectly still and solid. Background tree leaves rustling gently. Atmospheric haze in the distance. No movement on the swing itself.",
+            "Democracy Monument": "Static tripod shot, filmed in HIGH-FRAMERATE SLOW MOTION (smooth, dreamy, absolutely NO timelapse). **CRITICAL: The Democracy Monument is an IMMOVABLE CONCRETE OBJECT. It must remain STONE-STILL and RIGID.** Zero warping. **ABSOLUTE PROHIBITION ON ADDITIONS:** It is STRICTLY FORBIDDEN to spawn, generate, or add cars, buses, people, or debris. The road must remain completely DESERTED. **NO VEHICLES ALLOWED.** **PRESERVE BLACK BORDERS/BARS:** If the input has black space, KEEP IT EXACTLY AS IS. Do not fill, inpaint, or crop. Motion is limited strictly to lazy, slow-drifting clouds and heat haze only.",
+            "Giant Swing": "Static tripod shot. Red pillars and all surrounding buildings MUST REMAIN PERFECTLY RIGID and STILL. DO NOT ADD any vehicles or new objects. People walk slowly and naturally, realistically. Gentle leaf rustle and atmospheric haze. No strange deformations or glitches.",
             "Yaowarat": "Heat haze shimmering slightly above the asphalt. Subtle flickering of sunlight reflecting off aged glass windows. No movement of vehicles or people at all.",
             "Khaosan Road": "Calm and still residential atmosphere.",
             "Phra Sumen Fort": "Sunlight filtering through trees, creating moving dappled shadows on the white stone ruins. Overgrown grass on top of the ruin swaying slightly. No reconstruction of the fort.",
