@@ -1,3 +1,4 @@
+from xmlrpc import client
 from flask import Flask, request, jsonify, send_from_directory
 import os
 import base64
@@ -43,7 +44,8 @@ def load_ai_memory():
     global SEARCH_MODEL, LOCATION_INDICES
     try:
         print("👁️  Loading CLIP Vision Model...")
-        SEARCH_MODEL = SentenceTransformer('clip-ViT-L-14')
+        # SEARCH_MODEL = SentenceTransformer('clip-ViT-L-14')
+        SEARCH_MODEL = SentenceTransformer('clip-ViT-B-32')
         
         indices_path = os.path.join(os.path.dirname(__file__), 'indices')
         if os.path.exists(indices_path):
@@ -118,16 +120,23 @@ LOCATION_PROMPTS = {
           - **WINGS & BODY:** The 4 wings and central tower are **WEATHERED CREAM / OFF-WHITE STUCCO**. They look aged and textured, not bright clean white.
           - **BASE:** The circular base is **Bare Grey Concrete** with **Black Iron Chains** looping around the perimeter (NO Cannons).
 
+          **🔄 2. SURGICAL DELETION (DELETE FIRST):**
+          - **MODERN PURGE:** Identify every modern building, skyscraper, and high-rise visible in [IMAGE 1].
+          - **ERASE TO BLANK:** You MUST **Surgically DELETE** these structures. Treat their current space as **EMPTY AIR or BLANK SKY** before proceeding.
+          - **NO RESIDUE:** Do not leave any modern window frames, AC units, or glass silhouettes behind.
+
           **🏘️ 3. SURROUNDINGS & CONTEXT (ADAPT WHAT IS SEEN):**
-          - **VISIBILITY RULE (CRITICAL):** Analyze the input image. **ONLY** transform the buildings, road medians, and pavement *actually visible* in the frame. **DO NOT invent new structures or background elements that are not currently there.**
-          - **BUILDING TRANSFORMATION:** Identify modern building facades in the background/foreground. Transform their surfaces into **1960s Ratchadamnoen Style architecture** (weathered stucco, Art Deco influence). Apply the **Aged Terracotta/Brick Orange** color palette.
+          - **VISIBILITY RULE (CRITICAL):** Erase the buildings, road medians, and pavement *actually visible* in the frame. **DO NOT invent new structures or background elements that are not currently there.**
+          - **Rounabout Detection:** Identify the building inside the roundabout area. Transform it into **1960s Ratchadamnoen 1-Story Low-rise commercial rows**.
+          - **BUILDING TRANSFORMATION:** Identify modern building facades in the background/foreground. Transform their surfaces into **1960s Thai Art Deco/Early Modernist building** (weathered stucco, Art Deco influence). Apply the **Aged Terracotta/Brick Orange** color palette.
           - **MEDIANS & HARDSCAPE:** If road medians, footpaths, or curbs are visible in the input, change modern concrete to **aged, weathered stone or simple concrete curbs** appropriate for the era.
           - **CLEAN UP:** Erase modern air conditioners, large billboards, and LED signs from the visible buildings.
 
           **🛣️ 4. GRAND OPEN AVENUE (ZERO VEHICLES):**
-          - **TRAFFIC REMOVAL (CRITICAL):** The wide avenue is **MAJESTICALLY EMPTY**. Absolutely **NO CARS, NO BUSES, NO TUK-TUKS**. The road must be clear, weathered asphalt.
+          - **TRAFFIC REMOVAL (CRITICAL):** The wide avenue has No lane markings. No Zebra crossings. No modern road signs. and only has a few vintage cars (1960s models) driving around roundabout.
           **⛔ NEGATIVE PROMPT:** gold constitution, white doors, modern cars, traffic, skyscrapers, flowers on monument, cannons, fantasy elements, distortion, modern signs, air conditioners, glass buildings.
       """,
+      
 
     "Sala Chalermkrung": """
         **TASK:** Create a **PHOTOREALISTIC COLOR PHOTOGRAPH** of Sala Chalermkrung Theatre (1967).
@@ -621,6 +630,10 @@ def step2_generate(client, structure_desc, location_key, original_img_bytes, ref
 # 🎬 RUNWAY ML INTEGRATION (STRICT & REALISTIC)
 # ==========================================
 
+# ==========================================
+# 🎬 RUNWAY ML INTEGRATION (STRICT & REALISTIC)
+# ==========================================
+
 import os
 import io
 import time
@@ -788,122 +801,6 @@ def save_generated_image(image_bytes, location_name_th):
         print(f"⚠️ Failed to auto-save image: {e}")
         return None
 
-
-# def generate_video_runway(image_bytes, location_key):
-#     # ✅ ลบส่วน "ปิดการใช้งานชั่วคราว" ออกเพื่อให้โค้ดด้านล่างทำงาน
-#     runway_key = os.getenv("RUNWAYML_API_KEY")
-#     if not runway_key:
-#         print("❌ Error: RUNWAYML_API_KEY not found in .env")
-#         return None
-
-#     try:
-#         print("🎬 Starting Runway Gen-3 Video Generation (Strict Living Photo)...")
-        
-#         # 1. Prepare Base64
-#         base64_str = base64.b64encode(image_bytes).decode('utf-8')
-
-#         # 2. UNIVERSAL PROMPT (Living Photo / Motion Graphic Style)
-#         final_prompt = """
-#         Style: High-end Motion Graphic / Living Photo. Extreme slow motion (0.25x speed).
-#         CAMERA: Smooth, constant, slow horizontal pan. NO ZOOM.
-        
-#         CRITICAL CONSTRAINTS (ZERO TOLERANCE):
-#         - ANIMATE ONLY EXISTING PIXELS: Use only the visual data provided in the source image.
-#         - DO NOT ADD ANYTHING: Absolutely NO new people, NO new cars, NO new trees, and NO new leaves.
-#         - IF IT'S NOT THERE, DON'T MOVE IT: If the image is empty, keep it empty.
-
-#         MOVEMENT DYNAMICS:
-#         - STATIC WORLD: Architecture, text, ground, and background must remain 100% RIGID and FROZEN. No warping or morphing.
-#         - MICRO-MOTION: Only IF living beings or vehicles are ALREADY present, apply very subtle breathing or slight shifting movements.
-        
-#         Atmosphere: Realistic, frozen moment in time, high fidelity.
-#         """
-        
-#         # ตรวจสอบความยาว Prompt
-#         if len(final_prompt) > 990:
-#             print(f"⚠️ Warning: Prompt length {len(final_prompt)} is close to limit!")
-
-#         print(f"📝 Video Prompt ({len(final_prompt)} chars): {final_prompt.strip()}")
-
-#         # 3. Call Runway API directly
-#         url = "https://api.dev.runwayml.com/v1/image_to_video"
-#         payload = {
-#             "promptImage": f"data:image/png;base64,{base64_str}",
-#             "model": "gen3a_turbo", 
-#             "promptText": final_prompt.strip(),
-#             "duration": 5,
-#             "ratio": "1280:768"
-#         }
-        
-#         headers = {
-#             "Authorization": f"Bearer {runway_key}",
-#             "X-Runway-Version": "2024-11-06",
-#             "Content-Type": "application/json"
-#         }
-        
-#         # Send Request
-#         response = requests.post(url, json=payload, headers=headers)
-        
-#         if response.status_code != 200:
-#             print(f"❌ Runway API Failed ({response.status_code}): {response.text}")
-#             return None
-            
-#         task_id = response.json().get('id')
-#         print(f"⏳ Runway Task ID: {task_id}")
-        
-#         # Polling Loop (รอให้วิดีโอเจนเสร็จ)
-#         for i in range(30):
-#             time.sleep(3)
-#             status_res = requests.get(f"https://api.dev.runwayml.com/v1/tasks/{task_id}", headers=headers)
-#             if status_res.status_code == 200:
-#                 data = status_res.json()
-#                 if data.get('status') == "SUCCEEDED":
-#                     print("✅ Video Generation Complete!")
-#                     return data.get('output', [None])[0]
-#                 elif data.get('status') == "FAILED":
-#                     print(f"❌ Video Generation FAILED: {data.get('failure', 'Unknown error')}")
-#                     return None
-#             else:
-#                 print(f"⚠️ Polling Error: {status_res.status_code}")
-                
-#         print("❌ Timeout: Runway took too long.")
-#         return None
-
-#     except Exception as e:
-#         print(f"❌ Critical Runway Error: {e}")
-#         return None
-    
-# def save_generated_image(image_bytes, location_name_th):
-#     try:
-#         if not os.path.exists(HISTORY_FOLDER):
-#             os.makedirs(HISTORY_FOLDER)
-
-#         file_prefix = LOCATION_MAPPING_TH_TO_EN.get(location_name_th, "unknown_location")
-        
-#         safe_name = "place"
-#         if "Democracy" in file_prefix: safe_name = "democracymonument"
-#         elif "Sala" in file_prefix: safe_name = "salachalermkrung"
-#         elif "Swing" in file_prefix: safe_name = "giantswing"
-#         elif "Yaowarat" in file_prefix: safe_name = "yaowarat"
-#         elif "Khao San" in file_prefix: safe_name = "khaosan"
-#         elif "Phra Sumen" in file_prefix: safe_name = "phrasumenfort"
-#         elif "Sanam Luang" in file_prefix: safe_name = "sanamluang"
-#         elif "National Museum" in file_prefix: safe_name = "nationalmuseum"
-        
-#         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-#         filename = f"{safe_name}_1960s_{timestamp}.png"
-#         filepath = os.path.join(HISTORY_FOLDER, filename)
-
-#         with open(filepath, "wb") as f:
-#             f.write(image_bytes)
-        
-#         print(f"💾 Auto-saved result to: {filename}")
-#         return filepath
-
-#     except Exception as e:
-#         print(f"⚠️ Failed to auto-save image: {e}")
-#         return None
-
 def save_generated_video(video_url, location_key):
     try:
         if not os.path.exists(VIDEO_FOLDER):
@@ -930,6 +827,39 @@ def save_generated_video(video_url, location_key):
     except Exception as e:
         print(f"⚠️ Save Video Failed: {e}")
         return None, None
+    
+def translate_error_with_gemini(raw_reason, lang='TH'):
+    """ใช้ Gemini แปลผลเทคนิคหรือ Error ให้เป็นภาษามนุษย์ที่สุภาพและเข้าใจง่าย"""
+    try:
+        client = get_client() # เรียกใช้ client จากฟังก์ชันที่มีอยู่แล้ว
+        target_lang = "Thai" if lang == 'TH' else "English"
+        
+        # ปรับ Prompt ให้คุมโทนย้อนยุคและสุภาพ
+        prompt = f"""
+        Objective: Return a 3-6 word COMMAND in {target_lang} based on "{raw_reason}".
+        Constraint: NO English characters. NO introductory text. NO apologies.
+        
+        RULES:
+        - If input is about 'car' or 'vehicle' -> "กรุณาหามุมใหม่ ที่ไม่มีสิ่งกีดขวาง"
+        - If input is 'dark' or 'night' -> "ภาพมืดไป กรุณาถ่ายตอนกลางวัน"
+        - If input is 'server' or 'busy' -> "ระบบกำลังมีปัญหา กรุณาลองใหม่"
+        - If input mentions a specific place (e.g., 'Detected Yaowarat but user selected...') 
+          -> Tell the user what was detected briefly, like "ระบบระบุได้ว่าเป็น "[ชื่อสถานที่]" กรุณาเลือกสถานที่ให้ถูกต้อง"
+        - If input is anything else (including "{raw_reason}") -> "รูปภาพไม่ชัดเจน กรุณาอัปโหลดใหม่"
+
+        Final Output must be ONLY the {target_lang} string.
+        """
+        
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-001",
+            contents=prompt,
+            config=types.GenerateContentConfig(temperature=0.0, max_output_tokens=40)
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"⚠️ Gemini Translation Failed: {e}")
+        # ถ้า AI แปลพัง ให้กลับไปใช้ Dictionary พื้นฐานที่เราทำไว้
+        return get_friendly_error_message(raw_reason, lang)
 
 # ==========================================
 # 🚀 ROUTES
@@ -941,7 +871,7 @@ def verify_image_route():
         if 'image' not in request.files: return jsonify({'error': 'No image'}), 400
         file = request.files['image']
         location_th = request.form['location']
-        lang = request.form.get('language', 'TH').upper() # รับค่าภาษามาด้วย
+        lang = request.form.get('language', 'TH').upper()
         
         with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
             file.save(temp.name)
@@ -951,7 +881,6 @@ def verify_image_route():
         os.remove(temp_path)
         
         expected_en = LOCATION_MAPPING_TH_TO_EN.get(location_th)
-        
         analysis_report = {
             "status": "success" if is_valid else "rejected",
             "detected_place": detected_place,
@@ -959,34 +888,34 @@ def verify_image_route():
             "is_valid": is_valid
         }
         
-        if not is_valid: 
-            friendly_message = get_friendly_error_message(detected_place, lang)
+        # ❌ กรณีภาพไม่ผ่านเกณฑ์ (เช่น มืดไป, มีรถบัง)
+        if not is_valid:
+            # ✅ ใช้ Gemini แปลเหตุผลให้ User เข้าใจง่าย
+            friendly_message = translate_error_with_gemini(detected_place, lang)
             return jsonify({'status': 'rejected', 'details': friendly_message, 'analysis_report': analysis_report}), 200
             
+        # ❌ กรณีถ่ายถูกที่ แต่เลือกสถานที่ในแอปผิด
         if detected_place != expected_en: 
-             if lang == 'ENG':
-                 detected_name = detected_place
-                 selected_name = LOCATION_MAPPING_TH_TO_EN.get(location_th, location_th)
-                 msg = f"AI detected: '{detected_name}'\nwhich does not match your selection ({selected_name})"
-             else:
-                 detected_name = LOCATION_MAPPING_EN_TO_TH.get(detected_place, detected_place)
-                 msg = f"AI ตรวจพบ: '{detected_name}'\nซึ่งไม่ตรงกับที่คุณเลือก ({location_th})"
-             return jsonify({'status': 'rejected', 'details': msg, 'analysis_report': analysis_report}), 200
+             # ส่งข้อความที่มีชื่อสถานที่ที่ตรวจเจอ (detected_place) ไปให้ Gemini แปล
+             msg_raw = f"Detected {detected_place} but user selected {location_th}"
+             friendly_message = translate_error_with_gemini(msg_raw, lang)
+             return jsonify({'status': 'rejected', 'details': friendly_message, 'analysis_report': analysis_report}), 200
+             
 
         return jsonify({'status': 'success', 'analysis_report': analysis_report})
-    except Exception as e: return jsonify({'error': str(e)}), 500
+    except Exception as e: 
+        return jsonify({'error': str(e)}), 500
 
-# ENDPOINT 1: GENERATE IMAGE
 @app.route('/generate', methods=['POST'])
 def generate_image_route():
     try:
         print("🚀 [Step 1] Generative Image...")
         file = request.files['image']
         location_th = request.form['location']
+        lang = request.form.get('language', 'TH').upper()
         img_bytes = file.read()
         
         ref_bytes = get_best_match_reference(location_th, img_bytes)
-        
         client = get_client()
         structure = step1_analyze(client, img_bytes)
         
@@ -998,7 +927,6 @@ def generate_image_route():
             result_b64 = base64.b64encode(result_bytes).decode('utf-8')
             desc = LOCATION_INFO.get(location_th, {}).get('desc_60s', "")
             
-            # ✅ คืนค่า location_key ไปด้วย เพื่อให้ Frontend ส่งไปทำ Video ต่อได้
             return jsonify({
                 'status': 'success',
                 'image': f"data:image/png;base64,{result_b64}",
@@ -1007,63 +935,43 @@ def generate_image_route():
                 'description': desc
             })
         else:
-            return jsonify({'error': 'AI Model Busy. Please try again.'}), 503
+            # ✅ ถ้า AI Busy ให้ Gemini ช่วยบอกขอโทษแบบสุภาพ
+            err_msg = translate_error_with_gemini("AI Model Busy", lang)
+            return jsonify({'error': err_msg}), 503
     except Exception as e:
-        print(f"❌ Gen Error: {e}")
-        return jsonify({'error': str(e)}), 500
+        friendly_err = translate_error_with_gemini(str(e), lang)
+        return jsonify({'error': friendly_err}), 500
 
-# ENDPOINT 2: ANIMATE VIDEO
 @app.route('/animate', methods=['POST'])
 def animate_video_route():
-    # ✅ ลบ return jsonify ตัวเก่าออกเพื่อให้โค้ดด้านล่างทำงานจริง
     try:
         print("🚀 [Step 2] Animating Video...")
         data = request.json
-        image_data = data.get('image') # Base64 Image
+        image_data = data.get('image')
         location_key = data.get('location_key')
+        lang = data.get('language', 'TH') # รับภาษามาจาก Frontend
 
-        if not image_data: 
-            return jsonify({'error': 'No image provided'}), 400
-        
-        # Clean Base64 header
-        if "," in image_data: 
-            image_data = image_data.split(",")[1]
+        if "," in image_data: image_data = image_data.split(",")[1]
         image_bytes = base64.b64decode(image_data)
 
-        # 1. เรียก Runway ให้สร้างวิดีโอ
         video_url = generate_video_runway(image_bytes, location_key)
         
         if video_url:
-            print(f"✅ Runway Success! URL: {video_url}")
-            
-            # 2. พยายามบันทึกลงเครื่อง (Local Save)
             vid_filename, vid_path = save_generated_video(video_url, location_key)
-            
-            final_video_src = video_url # Default: ใช้ URL ตรงจาก Runway (เผื่อ Save พัง)
-
-            # 3. ถ้า Save สำเร็จ ให้แปลงเป็น Base64 (เพื่อความเร็วในการโหลด Local)
+            final_video_src = video_url 
             if vid_path and os.path.exists(vid_path):
-                try:
-                    with open(vid_path, "rb") as f:
-                        vid_b64 = base64.b64encode(f.read()).decode('utf-8')
-                        final_video_src = f"data:video/mp4;base64,{vid_b64}"
-                        print("📦 Sending Video as Base64")
-                except Exception as e: # ✅ เลื่อน except ออกมาให้ตรงกับ try:
-                    print(f"⚠️ Read File Error: {e} -> Sending Remote URL instead")
-            else:
-                print("⚠️ Save failed or File not found -> Sending Remote URL directly")
+                with open(vid_path, "rb") as f:
+                    vid_b64 = base64.b64encode(f.read()).decode('utf-8')
+                    final_video_src = f"data:video/mp4;base64,{vid_b64}"
 
-            # 4. ส่งผลลัพธ์กลับ Frontend
-            return jsonify({
-                'status': 'success',
-                'video': final_video_src
-            })
+            return jsonify({'status': 'success', 'video': final_video_src})
         else:
-            return jsonify({'error': 'Video generation failed (Runway returned None)'}), 500
-
-    except Exception as e: # บล็อกนี้คุมทั้ง Route
-        print(f"❌ Critical Animate Error: {e}")
-        return jsonify({'error': str(e)}), 500
+            # ✅ แปล Error จาก Runway ให้ดูเป็นมิตร
+            err_msg = translate_error_with_gemini("Video generation failed", lang)
+            return jsonify({'error': err_msg}), 500
+    except Exception as e:
+        friendly_err = translate_error_with_gemini(str(e), lang)
+        return jsonify({'error': friendly_err}), 500
 
 @app.route('/videos/<path:filename>')
 def serve_video(filename):
