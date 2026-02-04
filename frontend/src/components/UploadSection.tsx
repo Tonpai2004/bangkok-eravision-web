@@ -109,7 +109,6 @@ const UI_TEXT = {
   }
 };
 
-// ✅ เพิ่ม 'animating' ใน Type
 type ProcessStatus = 'idle' | 'verifying' | 'verified_pass' | 'verified_fail' | 'generating' | 'animating' | 'finished' | 'error';
 
 interface UploadSectionProps {
@@ -167,6 +166,21 @@ export default function UploadSection({ currentLang }: UploadSectionProps) {
        }
     }
   }, [searchParams]);
+
+  // แสดง Modal แบบประเมินผลหลังจากกระบวนการเสร็จสิ้น + หน่วงเวลา //
+  useEffect(() => {
+    if (status === 'finished' && result && !hasShownAssessment) {
+        
+        const delay = result.video ? 8000 : 5000; 
+        
+        const timer = setTimeout(() => {
+            console.log(`⏰ Time's up (${delay/1000}s) - Showing Assessment Modal`);
+            triggerAssessment();
+        }, delay);
+
+        return () => clearTimeout(timer);
+    }
+  }, [status, result, hasShownAssessment]);
   
   const processFile = (f: File | undefined) => {
     if (f) {
@@ -285,7 +299,12 @@ const handleGenerate = async (e: React.FormEvent) => {
               }),
           });
           const animData = await animRes.json();
-          if (animData.video) finalVideo = animData.video;
+          if (animData.video) {
+              finalVideo = animData.video;
+          } else {
+              // 📢 แจ้งเตือนเบาๆ ว่าวิดีโอขัดข้องแต่ดูรูปได้
+              console.warn("Video Credit Exhausted or Error:", animData.error);
+          }
       } catch (videoErr) {
           console.warn("Video generation failed, but Image is OK.", videoErr);
       }
