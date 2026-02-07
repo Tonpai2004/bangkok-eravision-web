@@ -7,9 +7,9 @@ import pickle
 import numpy as np
 import tempfile
 import datetime
-import requests # จำเป็นสำหรับการยิง Runway
-from scipy.spatial.distance import cdist
-from sentence_transformers import SentenceTransformer
+import requests 
+# from scipy.spatial.distance import cdist             # <--- ❌ ปิดบรรทัดนี้
+# from sentence_transformers import SentenceTransformer # <--- ❌ ปิดบรรทัดนี้ (ตัวกิน RAM)
 from PIL import Image
 import io
 from dotenv import load_dotenv
@@ -42,21 +42,20 @@ LOCATION_INDICES = {}
 def load_ai_memory():
     global SEARCH_MODEL, LOCATION_INDICES
     try:
-        print("👁️  Loading CLIP Vision Model...")
-        SEARCH_MODEL = SentenceTransformer('clip-ViT-L-14')
+        # -------------------------------------------------------
+        # ⚠️ แก้ไขเพื่อใช้ Free Tier: ปิดการโหลดโมเดลหนักๆ
+        # -------------------------------------------------------
+        # print("👁️  Loading CLIP Vision Model...")
+        # SEARCH_MODEL = SentenceTransformer('clip-ViT-L-14') 
         
+        print("⚠️ Lite Mode: Smart Match Disabled (Save RAM for Render Free Tier)")
+        SEARCH_MODEL = None # ตั้งเป็น None แทน
+        
+        # ส่วนโหลดไฟล์ Indices เก็บไว้ได้ (กิน RAM น้อย) เผื่ออนาคต
         indices_path = os.path.join(os.path.dirname(__file__), 'indices')
         if os.path.exists(indices_path):
-            print("🧠 Loading Location Indices...")
-            for filename in os.listdir(indices_path):
-                if filename.endswith('.pkl'):
-                    location_key = filename.replace('.pkl', '')
-                    with open(os.path.join(indices_path, filename), 'rb') as f:
-                        LOCATION_INDICES[location_key] = pickle.load(f)
-                    print(f"  - Loaded Memory: {location_key}")
-            print("✅ AI System Ready: Smart Match Enabled!")
-        else:
-            print("⚠️ 'indices' folder not found. ML features will be disabled.")
+            print("🧠 Loading Location Indices (Skipped usage)...")
+            # ... (โค้ดเดิมปล่อยไว้ได้ ไม่กระทบ RAM มาก) ...
             
     except Exception as e:
         print(f"⚠️ Warning: AI System Failed. ({e})")
@@ -401,36 +400,52 @@ def get_friendly_error_message(raw_reason, lang='TH'):
 SIMILARITY_THRESHOLD = 0.6
 # --- CLIP Logic ---
 def get_best_match_reference(location_th, user_img_bytes):
-    # ✅ เพิ่ม "เสาชิงช้า & วัดสุทัศน์" ลงไปในเงื่อนไขนี้ เพื่อไม่ต้องใช้ไฟล์ .pkl
+    # 1. เช็คข้อยกเว้นเดิม
     if location_th == "ถนนข้าวสาร" or location_th == "เสาชิงช้า & วัดสุทัศน์":
         return None
 
     mapped_key = LOCATION_KEY_MAP.get(location_th)
-    if not mapped_key or not SEARCH_MODEL or mapped_key not in LOCATION_INDICES:
-        return None
-    
+    if not mapped_key: return None
+
+    # =========================================================
+    # 🟢 LITE MODE (สำหรับ Render Free Tier)
+    # =========================================================
+    # ถ้าเราตั้งค่า SEARCH_MODEL เป็น None (ใน load_ai_memory) ให้เข้าเงื่อนไขนี้
+    if SEARCH_MODEL is None:
+        print(f"ℹ️ Lite Mode: Smart Match Disabled for {mapped_key}. Using Random Reference.")
+        # เรียกใช้ฟังก์ชันสุ่มรูปแทน (ต้องมีฟังก์ชัน get_random_reference อยู่ในไฟล์ด้วยนะ)
+        return get_random_reference(mapped_key)
+
+    # =========================================================
+    # 🔴 PRO MODE (ใช้ RAM เยอะ - จะไม่ทำงานถ้าข้างบนเป็น None)
+    # =========================================================
+    # ใส่ try catch ไว้กันเหนียว เผื่อเผลอเปิด Model แต่ลืม import library
     try:
-        data = LOCATION_INDICES[mapped_key]
-        user_img = Image.open(io.BytesIO(user_img_bytes))
-        user_vector = SEARCH_MODEL.encode(user_img)
-        
-        distances = cdist([user_vector], data['vectors'], metric='cosine')[0]
-        best_idx = np.argmin(distances)
-        min_distance = distances[best_idx]
-        
-        # --- เพิ่ม Logic ตรงนี้ ---
-        if min_distance > SIMILARITY_THRESHOLD:
-            print(f"⚠️ No close match found (Dist: {min_distance:.2f}). Skipping Reference Image.")
+        if mapped_key not in LOCATION_INDICES:
             return None
+
+        # บรรทัดพวกนี้ต้อง import scipy, sentence_transformers ถึงจะรันได้
+        # data = LOCATION_INDICES[mapped_key]
+        # user_img = Image.open(io.BytesIO(user_img_bytes))
+        # user_vector = SEARCH_MODEL.encode(user_img)
+        
+        # distances = cdist([user_vector], data['vectors'], metric='cosine')[0]
+        # best_idx = np.argmin(distances)
+        # min_distance = distances[best_idx]
+        
+        # if min_distance > SIMILARITY_THRESHOLD:
+        #     print(f"⚠️ No close match found (Dist: {min_distance:.2f}).")
+        #     return None
             
-        best_filename = data['filenames'][best_idx]
-        print(f"🎯 Smart Match ({mapped_key}): Dist {min_distance:.2f} -> {best_filename}")
-        file_path = os.path.join(os.path.dirname(__file__), "reference_images", mapped_key, best_filename)
-        with open(file_path, "rb") as f:
-            return f.read()
-            
+        # best_filename = data['filenames'][best_idx]
+        # print(f"🎯 Smart Match ({mapped_key}): {best_filename}")
+        # file_path = os.path.join(os.path.dirname(__file__), "reference_images", mapped_key, best_filename)
+        # with open(file_path, "rb") as f:
+        #     return f.read()
+        pass # ข้ามไปเพราะเราใช้ Lite Mode
+
     except Exception as e:
-        print(f"❌ Smart Match Error: {e}")
+        print(f"❌ Smart Match Logic Error: {e}")
         return None
 
 def get_random_reference(folder_name):
@@ -1070,4 +1085,5 @@ def serve_video(filename):
     return send_from_directory(VIDEO_FOLDER, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

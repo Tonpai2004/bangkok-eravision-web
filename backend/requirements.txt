@@ -1,5 +1,11 @@
 flask
 flask-cors
+requests
 python-dotenv
 google-genai
-google-cloud-aiplatform
+google-cloud-vision
+sentence-transformers
+scipy
+numpy
+Pillow
+gunicorn

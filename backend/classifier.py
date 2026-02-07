@@ -1,10 +1,30 @@
 # classifier.py
 import os
+import json # ✅ เพิ่ม import json
 from google.cloud import vision
 
-# --- 1. Setup Credentials ---
+# --- 1. Setup Credentials (Cloud-Ready Version) ---
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 CREDENTIALS_PATH = os.path.join(CURRENT_DIR, "credentials.json")
+
+# ☁️ CLOUD LOGIC: ถ้าหาไฟล์ json ไม่เจอ (แปลว่าอยู่บน Render) 
+# ให้พยายามสร้างไฟล์ขึ้นมาจาก Environment Variable
+if not os.path.exists(CREDENTIALS_PATH):
+    # ชื่อตัวแปรนี้ เดี๋ยวเราไปตั้งในหน้า Setting ของ Render
+    json_content = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+    
+    if json_content:
+        print("☁️ Detected Cloud Environment: Creating credentials.json from Env Var...")
+        try:
+            # เขียนเนื้อหา JSON ลงไฟล์ credentials.json ชั่วคราวบน Server
+            with open(CREDENTIALS_PATH, "w") as f:
+                f.write(json_content)
+        except Exception as e:
+            print(f"❌ Error creating credentials file: {e}")
+    else:
+        print("⚠️ Warning: No local credentials file AND no Cloud Env Var found.")
+
+# บอก Google Library ว่ากุญแจอยู่ที่ไหน
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = CREDENTIALS_PATH
 
 client = None
