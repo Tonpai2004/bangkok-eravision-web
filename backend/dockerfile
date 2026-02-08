@@ -1,0 +1,23 @@
+# ใช้ Python 3.10-slim เพื่อความเบา
+FROM python:3.10-slim
+
+# แก้ไข Warning: Legacy key/value format โดยใช้เครื่องหมาย =
+ENV PYTHONUNBUFFERED=True
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
+
+# ติดตั้ง dependencies ที่จำเป็นสำหรับระบบ
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements และติดตั้ง
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy โค้ดทั้งหมดเข้า Container
+COPY . .
+
+# แก้ไข Warning: JSON arguments recommended สำหรับ CMD
+# ใช้รูปแบบ ["executable", "param1", "param2"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "1", "--threads", "8", "--timeout", "0", "app:app"]
