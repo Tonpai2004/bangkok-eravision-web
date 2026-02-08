@@ -14,6 +14,8 @@ const LOCATIONS_DATA = [
   { id: "พิพิธภัณฑสถานแห่งชาติ", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
 ];
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
+
 // ฟังก์ชันแปลง Error ภาษาต่างดาว ให้เป็นภาษาคน (ไทย/อังกฤษ)
 const getFriendlyErrorMessage = (rawError: string, lang: 'TH' | 'ENG'): string => {
   if (lang === 'ENG') return rawError; // ถ้าโหมดอังกฤษ ให้ส่งค่าเดิมกลับไป
@@ -245,7 +247,7 @@ const handleGenerate = async (e: React.FormEvent) => {
 
     try {
       // === STEP 1: Verify ===
-      const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
+      const verifyRes = await fetch(`${API_BASE_URL}/verify`, { method: 'POST', body: formData });
       const verifyData = await verifyRes.json();
 
       if (!verifyRes.ok || verifyData.status === 'rejected') {
@@ -270,10 +272,10 @@ const handleGenerate = async (e: React.FormEvent) => {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      const genRes = await fetch('http://127.0.0.1:5000/generate', {
-          method: 'POST',
-          body: genFormData,
-      });
+      const genRes = await fetch(`${API_BASE_URL}/generate`, {
+        method: 'POST',
+        body: genFormData,
+    });
 
       if (!genRes.ok) {
           const errData = await genRes.json().catch(() => ({}));
@@ -290,9 +292,9 @@ const handleGenerate = async (e: React.FormEvent) => {
 
       let finalVideo = null;
       try {
-          const animRes = await fetch('http://127.0.0.1:5000/animate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+          const animRes = await fetch(`${API_BASE_URL}/animate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
                   image: genData.image, 
                   location_key: genData.location_key 

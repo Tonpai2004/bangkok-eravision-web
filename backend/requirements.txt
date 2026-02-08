@@ -2,4 +2,10 @@ flask
 flask-cors
 python-dotenv
 google-genai
-google-cloud-aiplatform
+google-cloud-vision
+sentence-transformers
+numpy
+scipy
+pillow
+requests
+gunicorn

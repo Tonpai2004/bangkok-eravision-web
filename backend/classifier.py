@@ -1,19 +1,32 @@
 # classifier.py
 import os
+import json
 from google.cloud import vision
+from google.oauth2 import service_account  # เพิ่มบรรทัดนี้
 
-# --- 1. Setup Credentials ---
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-CREDENTIALS_PATH = os.path.join(CURRENT_DIR, "credentials.json")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = CREDENTIALS_PATH
-
+# --- 1. Setup Credentials (ปรับปรุงให้รองรับทั้ง Local และ Production) ---
+creds_json = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 client = None
+
 try:
-    if os.path.exists(CREDENTIALS_PATH):
-        client = vision.ImageAnnotatorClient()
-        print("✅ Google Vision Client Ready!")
+    if creds_json:
+        # กรณีรันบน Production (Railway/Vercel) โดยใช้ Environment Variable
+        creds_dict = json.loads(creds_json)
+        credentials = service_account.Credentials.from_service_account_info(creds_dict)
+        client = vision.ImageAnnotatorClient(credentials=credentials)
+        print("✅ Google Vision Client Ready via Env Var!")
     else:
-        print(f"❌ CRITICAL: Credentials file not found at {CREDENTIALS_PATH}")
+        # กรณีรันบน Local โดยใช้ไฟล์ credentials.json
+        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+        CREDENTIALS_PATH = os.path.join(CURRENT_DIR, "credentials.json")
+        
+        if os.path.exists(CREDENTIALS_PATH):
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = CREDENTIALS_PATH
+            client = vision.ImageAnnotatorClient()
+            print("✅ Google Vision Client Ready via Local File!")
+        else:
+            print("❌ CRITICAL: No credentials found (ENV or File)")
+
 except Exception as e:
     print(f"❌ Error initializing client: {e}")
 
