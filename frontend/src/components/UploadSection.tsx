@@ -4,17 +4,15 @@ import { useSearchParams } from 'next/navigation';
 import AssessmentModal from './AssessmentModal';
 
 const LOCATIONS_DATA = [
-  { id: "อนุสาวรีย์ประชาธิปไตย", th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument" },
-  { id: "ศาลาเฉลิมกรุง", th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung" },
-  { id: "เสาชิงช้า & วัดสุทัศน์", th: "เสาชิงช้า & วัดสุทัศน์", en: "Giant Swing & Wat Suthat" },
-  { id: "เยาวราช", th: "เยาวราช", en: "Yaowarat (Chinatown)" },
-  { id: "ถนนข้าวสาร", th: "ถนนข้าวสาร", en: "Khaosan Road" },
-  { id: "ป้อมพระสุเมรุ", th: "ป้อมพระสุเมรุ", en: "Phra Sumen Fort" },
-  { id: "สนามหลวง", th: "สนามหลวง", en: "Sanam Luang" },
-  { id: "พิพิธภัณฑสถานแห่งชาติ", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
+  { id: "อนุสาวรีย์ประชาธิปไตย", api_match: "Ratchadamnoen Avenue – Democracy Monument", th: "อนุสาวรีย์ประชาธิปไตย", en: "Democracy Monument" },
+  { id: "ศาลาเฉลิมกรุง", api_match: "Sala Chalermkrung Royal Theatre", th: "ศาลาเฉลิมกรุง", en: "Sala Chalermkrung" },
+  { id: "เสาชิงช้า & วัดสุทัศน์", api_match: "Giant Swing – Wat Suthat", th: "เสาชิงช้า & วัดสุทัศน์", en: "Giant Swing & Wat Suthat" },
+  { id: "เยาวราช", api_match: "Yaowarat (Chinatown)", th: "เยาวราช", en: "Yaowarat (Chinatown)" },
+  { id: "ถนนข้าวสาร", api_match: "Khao San Road", th: "ถนนข้าวสาร", en: "Khaosan Road" },
+  { id: "ป้อมพระสุเมรุ", api_match: "Phra Sumen Fort – Santichaiprakan Park", th: "ป้อมพระสุเมรุ", en: "Phra Sumen Fort" },
+  { id: "สนามหลวง", api_match: "Sanam Luang (Royal Field)", th: "สนามหลวง", en: "Sanam Luang" },
+  { id: "พิพิธภัณฑสถานแห่งชาติ", api_match: "National Museum Bangkok", th: "พิพิธภัณฑสถานแห่งชาติ", en: "Bangkok National Museum" }
 ];
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
 
 // ฟังก์ชันแปลง Error ภาษาต่างดาว ให้เป็นภาษาคน (ไทย/อังกฤษ)
 const getFriendlyErrorMessage = (rawError: string, lang: 'TH' | 'ENG'): string => {
@@ -69,13 +67,14 @@ const UI_TEXT = {
     status_analyzing: "กำลังวิเคราะห์โครงสร้าง...",
     sub_analyzing: "ตรวจสอบความถูกต้องของรูปภาพ", // เพิ่ม text ที่ขาด
     status_verify_pass: "ผ่านการตรวจสอบ",
+    confidence_score: "คะแนนความมั่นใจ",
     status_verify_fail: "การตรวจสอบไม่ผ่าน",
     status_tech_error: "เกิดข้อผิดพลาดทางเทคนิค",
     
-    status_reconstructing: "เตรียมหวนสู่ความวิจิตรในวันวานแห่ง 1960s",
+    status_reconstructing: "เตรียมหวนสู่ความวิจิตร ในวันวานแห่ง 1960s",
     sub_reconstructing: "กำลังสร้างภาพจำลอง (AI)...",
     
-    status_animating: "กำลังทำให้ภาพดูมีชีวิตชีวา",
+    status_animating: "กำลังทำให้ภาพ\nดูมีชีวิตชีวา",
     sub_animating: "กำลังสร้างภาพเคลื่อนไหว...",
     
     error_desc_prefix: "ระบบขัดข้อง: ",
@@ -95,6 +94,7 @@ const UI_TEXT = {
     status_analyzing: "ANALYZING SCENE",
     sub_analyzing: "Verifying photo compatibility...",
     status_verify_pass: "VERIFICATION PASSED",
+    confidence_score: "Confidence Score",
     status_verify_fail: "VERIFICATION REJECTED",
     status_tech_error: "TECHNICAL ERROR",
     
@@ -247,7 +247,7 @@ const handleGenerate = async (e: React.FormEvent) => {
 
     try {
       // === STEP 1: Verify ===
-      const verifyRes = await fetch(`${API_BASE_URL}/verify`, { method: 'POST', body: formData });
+      const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
       const verifyData = await verifyRes.json();
 
       if (!verifyRes.ok || verifyData.status === 'rejected') {
@@ -272,10 +272,10 @@ const handleGenerate = async (e: React.FormEvent) => {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      const genRes = await fetch(`${API_BASE_URL}/generate`, {
-        method: 'POST',
-        body: genFormData,
-    });
+      const genRes = await fetch('http://127.0.0.1:5000/generate', {
+          method: 'POST',
+          body: genFormData,
+      });
 
       if (!genRes.ok) {
           const errData = await genRes.json().catch(() => ({}));
@@ -292,9 +292,9 @@ const handleGenerate = async (e: React.FormEvent) => {
 
       let finalVideo = null;
       try {
-          const animRes = await fetch(`${API_BASE_URL}/animate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const animRes = await fetch('http://127.0.0.1:5000/animate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
                   image: genData.image, 
                   location_key: genData.location_key 
@@ -538,8 +538,28 @@ const handleGenerate = async (e: React.FormEvent) => {
                 <>
                     <div className="text-6xl mb-4 text-green-500">✓</div>
                     <div className="text-3xl md:text-5xl font-bold mb-4 serif-font text-green-400">{text.status_verify_pass}</div>
-                    <div className=" text-xl mb-2">{passDetails?.place}</div>
-                    <div className=" text-sm opacity-70 mb-8">Confidence Score: {passDetails?.score.toFixed(1)}%</div>
+                    <div className="text-xl mb-2">
+                        {(() => {
+                            // 1. ลองหาว่าชื่อที่ API ส่งมา (passDetails?.place) ตรงกับ api_match ตัวไหนไหม
+                            const locationObj = LOCATIONS_DATA.find(l => l.api_match === passDetails?.place);
+                            
+                            if (locationObj) {
+                                // ถ้าเจอ ให้แสดงตามภาษาที่เลือก
+                                return currentLang === 'ENG' ? locationObj.en : locationObj.th;
+                            }
+
+                            // 2. ถ้าไม่เจอใน api_match (เผื่อกรณีมันส่ง ID ภาษาไทยกลับมาแบบเดิม) 
+                            // ให้ลองหาจาก id ปกติ
+                            const locationById = LOCATIONS_DATA.find(l => l.id === passDetails?.place);
+                            if (locationById) {
+                                return currentLang === 'ENG' ? locationById.en : locationById.th;
+                            }
+
+                            // 3. ถ้าไม่เจอเลยจริงๆ ให้แสดงค่าดิบ
+                            return passDetails?.place;
+                        })()}
+                    </div>
+                    <div className=" text-sm opacity-70 mb-8">{text.confidence_score}: {passDetails?.score.toFixed(1)}%</div>
                 </>
             )}
 
@@ -563,7 +583,7 @@ const handleGenerate = async (e: React.FormEvent) => {
 
             {status === 'generating' && (
                 <>
-                    <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold">{text.status_reconstructing}</div>
+                    <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold max-w-[90vw] mx-auto break-keep">{text.status_reconstructing}</div>
                     <p className=" text-sm md:text-base opacity-70 tracking-wider">{text.sub_reconstructing}</p>
                 </>
             )}
@@ -571,7 +591,7 @@ const handleGenerate = async (e: React.FormEvent) => {
             {/* UI สำหรับสถานะทำวิดีโอ (ANIMATING) */}
             {status === 'animating' && (
                 <>
-                    <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold">
+                    <div className="text-4xl md:text-6xl font-bold mb-6 animate-pulse serif-font tracking-widest text-gold whitespace-pre-line leading-relaxed">
                         {text.status_animating}
                     </div>
                     <p className=" text-sm md:text-base opacity-70 tracking-wider">
@@ -630,7 +650,7 @@ const handleGenerate = async (e: React.FormEvent) => {
     <AssessmentModal 
         isOpen={showAssessment} 
         onClose={() => setShowAssessment(false)} 
-        lang={currentLang} 
+        currentLang={currentLang} 
       />
     </>
   );

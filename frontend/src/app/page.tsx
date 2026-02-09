@@ -6,7 +6,7 @@ import UploadSection from "@/components/UploadSection";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
-// คงเนื้อหา Marketing/คำสวยหรู ของ Processing ไว้ตามคำขอ
+// คงเนื้อหา Marketing/คำสวยหรู ของ Processing ไว้ตามคำขอ (จาก Code ชุดใหม่ที่คุณส่งมา)
 const PAGE_TEXT = {
   TH: {
     brand_name: "บางกอกทวิกาล",
@@ -31,7 +31,7 @@ const PAGE_TEXT = {
   }
 };
 
-// 1. เปลี่ยนชื่อ Component หลักเดิมเป็น MainContent (เนื้อหาในนี้เหมือนเดิม 100%)
+// 1. เปลี่ยนชื่อ Component เดิมเป็น MainContent (เนื้อหาข้างในคือ Code ชุดใหม่ 100%)
 function MainContent() {
   const { language } = useLanguage();
   const text = PAGE_TEXT[language];
@@ -50,7 +50,6 @@ function MainContent() {
       ></div>
 
       <Navbar />
-
       {/* Hero Section */}
       <section className="mt-0 mb-0 md:mt-10 md:mb-7">
         <h1 className="bg-dark text-white font-prachachon p-3 mb-8 pt-4 pb-3 sm:pt-6 sm:pb-4 text-center break-word text-4xl sm:text-6xl md:text-7xl lg:text-8xl whitespace-pre-line tracking-[0.1em]">
@@ -59,7 +58,7 @@ function MainContent() {
         <div className="flex flex-col md:flex-row gap-4 sm:gap-8 items-stretch sm:mt-10">
           
           {/* --- กล่องรูปภาพ --- */}
-          <div className="w-full md:flex-1 h-[300px] md:h-auto bg-gold shrink-0 border-[3px] border-dark relative overflow-hidden group">
+          <div className="w-full md:flex-1 h-[300px] md:h-auto bg-gold shrink-0 border-[3px] border-dark relative overflow-hidden group"> {/* shadow-[6px_6px_0px_rgba(0,0,0,0.2)] เผื่อใส่เงากลับ */}
             
             {/* ใส่ Path รูปภาพ */}
             <img 
@@ -99,7 +98,7 @@ function MainContent() {
   );
 }
 
-// 2. สร้าง Component ใหม่ชื่อ Home เพื่อ wrap MainContent ด้วย Suspense
+// 2. สร้าง Component ใหม่ชื่อ Home (ตามกฎ Next.js) เพื่อครอบด้วย Suspense
 export default function Home() {
   return (
     <Suspense fallback={<div className="text-center p-10 font-pimdeed text-2xl">กำลังโหลด...</div>}>

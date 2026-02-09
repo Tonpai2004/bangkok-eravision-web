@@ -3,28 +3,30 @@
 interface AssessmentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  lang: 'TH' | 'ENG';
+  currentLang: 'TH' | 'ENG';
 }
 
-export default function AssessmentModal({ isOpen, onClose, lang }: AssessmentModalProps) {
+export default function AssessmentModal({ isOpen, onClose, currentLang }: AssessmentModalProps) {
   if (!isOpen) return null;
+
+  const fontClass = currentLang === 'ENG' ? 'font-merri' : 'font-krub';
 
   const content = {
     TH: {
       title: "ความพึงพอใจของคุณคือสิ่งสำคัญ",
-      desc: "คำแนะนำของคุณจะเป็นส่วนสำคัญ ทำให้วิทยานิพนธ์ฉบับนี้ให้สมบูรณ์ยิ่งขึ้น",
-      btn_form: "ไปยังแบบประเมิน (Google Form)",
+      desc: "คำแนะนำของคุณจะเป็นส่วนสำคัญ\nที่จะทำให้วิทยานิพนธ์ฉบับนี้ให้สมบูรณ์ยิ่งขึ้น",
+      btn_form: "ไปยังแบบประเมิน",
       btn_close: "ปิดหน้าต่าง"
     },
     ENG: {
       title: "Your Feedback Matters",
       desc: "Your feedback is vital for completing this thesis project.",
-      btn_form: "Go to Assessment (Google Form)",
+      btn_form: "Go to Assessment Form",
       btn_close: "Close"
     }
   };
 
-  const text = content[lang];
+  const text = content[currentLang];
   // ใส่ลิงก์ Google Form
   const GOOGLE_FORM_URL = "https://forms.gle/heekuytad"; 
 
@@ -58,10 +60,10 @@ export default function AssessmentModal({ isOpen, onClose, lang }: AssessmentMod
           className="bg-[#FFF8E7] p-8 max-w-lg w-full border-[4px] border-dark shadow-[10px_10px_0px_#C5A059] relative text-center animate-modal"
           onClick={e => e.stopPropagation()}
         >
-          <h2 className="serif-font text-3xl font-bold mb-4 text-dark italic uppercase tracking-tighter">
+          <h2 className={`font-krub text-3xl font-bold mb-4 text-dark italic uppercase tracking-tighter ${fontClass}`}>
               {text.title}
           </h2>
-          <p className="font-krub text-lg mb-8 leading-relaxed text-dark whitespace-pre-line">
+          <p className={`font-krub text-lg mb-8 leading-relaxed text-dark whitespace-pre-line ${fontClass}`}>
               {text.desc}
           </p>
 
@@ -69,14 +71,14 @@ export default function AssessmentModal({ isOpen, onClose, lang }: AssessmentMod
             href={GOOGLE_FORM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full bg-gold text-dark py-4 font-bold border-2 border-dark hover:bg-yellow-400 transition-all uppercase tracking-widest mb-4 no-underline text-center"
+            className={`${fontClass} block w-full bg-gold text-dark py-4 font-bold border-2 border-dark hover:bg-yellow-400 transition-all uppercase tracking-widest mb-4 no-underline text-center`}
           >
             {text.btn_form}
           </a>
 
           <button 
             onClick={onClose}
-            className="w-full text-dark/60 hover:text-dark transition-colors font-bold uppercase tracking-widest text-sm"
+            className={`${fontClass} w-full text-dark/60 hover:text-dark transition-colors font-bold uppercase tracking-widest text-sm`}
           >
             {text.btn_close}
           </button>

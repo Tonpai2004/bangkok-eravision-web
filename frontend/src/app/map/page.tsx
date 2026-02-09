@@ -14,7 +14,7 @@ const MAP_LOCATIONS = [
     en: "Democracy Monument", 
     top: "30%", 
     left: "41%", 
-    videoUrl: "/videos/demo1.mp4",
+    videoUrl: "/videos/democracy.mp4",
     icon: "/images/icons/Democracy_icon.png" 
   },
   { 
@@ -23,7 +23,7 @@ const MAP_LOCATIONS = [
     en: "Sala Chalermkrung", 
     top: "62.5%", 
     left: "44.5%", 
-    videoUrl: "/videos/demo2.mp4",
+    videoUrl: "/videos/chalermkrung.mp4",
     icon: "/images/icons/ChalermKrung_icon.png"
   },
   { 
@@ -32,7 +32,7 @@ const MAP_LOCATIONS = [
     en: "Giant Swing & Wat Suthat", 
     top: "47%", 
     left: "43.5%", 
-    videoUrl: "/videos/demo3.mp4",
+    videoUrl: "/videos/giantswing.mp4",
     icon: "/images/icons/Giant_icon.png"
   },
   { 
@@ -41,7 +41,7 @@ const MAP_LOCATIONS = [
     en: "Khaosan Road", 
     top: "28%", 
     left: "28%", 
-    videoUrl: "/videos/demo4.mp4",
+    videoUrl: "/videos/khaosan.mp4",
     icon: "/images/icons/Khaosan_icon.png"
   },
   { 
@@ -50,8 +50,8 @@ const MAP_LOCATIONS = [
     en: "Phra Sumen Fort", 
     top: "14%", 
     left: "20%", 
-    videoUrl: "/videos/demo5.mp4",
-    icon: "/images/icons/Sumane_icon.png" // อิงตามชื่อไฟล์ในภาพ (Sumane)
+    videoUrl: "/videos/phrasumenfort.mp4",
+    icon: "/images/icons/Sumane_icon.png"
   },
   { 
     id: 6, 
@@ -59,16 +59,16 @@ const MAP_LOCATIONS = [
     en: "National Museum", 
     top: "37%", 
     left: "17.25%", 
-    videoUrl: "/videos/demo6.mp4",
+    videoUrl: "/videos/nationalmuseum.mp4",
     icon: "/images/icons/National_icon.png"
   },
   { 
     id: 7, 
-    th: "ถนนเยาวราช", 
+    th: "เยาวราช", 
     en: "Yaowarat (Chinatown)", 
     top: "74%", 
     left: "70%", 
-    videoUrl: "/videos/demo7.mp4",
+    videoUrl: "/videos/yaowarat.mp4",
     icon: "/images/icons/Yaowarat_icon.png"
   },
   { 
@@ -77,7 +77,7 @@ const MAP_LOCATIONS = [
     en: "Sanam Luang", 
     top: "50%", 
     left: "21%", 
-    videoUrl: "/videos/demo8.mp4",
+    videoUrl: "/videos/sanamluang.mp4",
     icon: "/images/icons/SanamLuang_icon.png"
   },
 ];
