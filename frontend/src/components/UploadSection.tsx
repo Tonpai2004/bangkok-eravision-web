@@ -118,6 +118,9 @@ interface UploadSectionProps {
 }
 
 export default function UploadSection({ currentLang }: UploadSectionProps) {
+  // ✅ กำหนด URL ของ API: ถ้ามี ENV (บน Vercel) ให้ใช้ ENV ถ้าไม่มี (ในเครื่อง) ให้ใช้ localhost
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
+
   const [selectedLocation, setSelectedLocation] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -247,7 +250,8 @@ const handleGenerate = async (e: React.FormEvent) => {
 
     try {
       // === STEP 1: Verify ===
-      const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
+      // ✅ ใช้ API_BASE_URL แทน localhost
+      const verifyRes = await fetch(`${API_BASE_URL}/verify`, { method: 'POST', body: formData });
       const verifyData = await verifyRes.json();
 
       if (!verifyRes.ok || verifyData.status === 'rejected') {
@@ -272,7 +276,8 @@ const handleGenerate = async (e: React.FormEvent) => {
       genFormData.append('image', file);
       genFormData.append('location', selectedLocation);
 
-      const genRes = await fetch('http://127.0.0.1:5000/generate', {
+      // ✅ ใช้ API_BASE_URL แทน localhost
+      const genRes = await fetch(`${API_BASE_URL}/generate`, {
           method: 'POST',
           body: genFormData,
       });
@@ -292,7 +297,8 @@ const handleGenerate = async (e: React.FormEvent) => {
 
       let finalVideo = null;
       try {
-          const animRes = await fetch('http://127.0.0.1:5000/animate', {
+          // ✅ ใช้ API_BASE_URL แทน localhost
+          const animRes = await fetch(`${API_BASE_URL}/animate`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
@@ -329,123 +335,6 @@ const handleGenerate = async (e: React.FormEvent) => {
     }
   };
 
-
-  // const handleGenerate = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-    
-  //   // ตรวจสอบข้อมูลก่อนเริ่ม
-  //   if (!file || !selectedLocation) {
-  //       setShowInputWarning(true);
-  //       return;
-  //   }
-
-  //   let currentStep: 'verifying' | 'generating' | 'animating' = 'verifying'; 
-  //   setStatus('verifying'); 
-    
-  //   const formData = new FormData();
-  //   formData.append('image', file);
-  //   formData.append('location', selectedLocation);
-  //   formData.append('language', currentLang); 
-
-  //   try {
-  //     // === STEP 1: Verify (ตรวจสอบความถูกต้องของรูปถ่าย) ===
-  //     const verifyRes = await fetch('http://127.0.0.1:5000/verify', { method: 'POST', body: formData });
-  //     const verifyData = await verifyRes.json();
-
-  //     if (!verifyRes.ok || verifyData.status === 'rejected') {
-  //       setFailReason(verifyData.details || verifyData.error || "Unknown Error");
-  //       setStatus('verified_fail'); 
-  //       return; 
-  //     }
-
-  //     // แสดงสถานะเมื่อผ่านการตรวจสอบ
-  //     setPassDetails({
-  //       score: verifyData.analysis_report?.score || 0,
-  //       place: verifyData.analysis_report?.detected_place || "Confirmed"
-  //     });
-  //     setStatus('verified_pass');
-
-  //     // หน่วงเวลาเล็กน้อยเพื่อให้ User เห็นว่าผ่านแล้ว
-  //     await new Promise(r => setTimeout(r, 1500));
-
-  //     // === STEP 2: Generate Image (ส่งไปให้ Gemini/Imagen สร้างภาพ 1960s) ===
-  //     currentStep = 'generating';
-  //     setStatus('generating');
-
-  //     const genFormData = new FormData();
-  //     genFormData.append('image', file);
-  //     genFormData.append('location', selectedLocation);
-
-  //     const genRes = await fetch('http://127.0.0.1:5000/generate', {
-  //         method: 'POST',
-  //         body: genFormData,
-  //     });
-
-  //     if (!genRes.ok) {
-  //         const errData = await genRes.json().catch(() => ({}));
-  //         if (genRes.status === 503) throw new Error("503 Service Unavailable (Model Busy)");
-  //         throw new Error(errData.error || `Server Error: ${genRes.status}`);
-  //     }
-
-  //     const genData = await genRes.json();
-
-  //     if (!genData.image) throw new Error(genData.error || "Image generation failed");
-
-  //     // === FINISH (STOP AT IMAGE) ===
-  //     // เราจะไม่เรียกฟังก์ชัน animate อัตโนมัติที่นี่แล้ว เพื่อประหยัด Credit Runway
-  //     // แต่จะเก็บข้อมูลใส่ result เพื่อให้ User เลือกกดปุ่มสร้างวิดีโอเองในหน้า Modal
-  //     setResult({
-  //       image: genData.image,
-  //       video: undefined, // ยังไม่มีวิดีโอในตอนนี้
-  //       desc: genData.description,
-  //       location: genData.location_name,
-  //       location_key: genData.location_key // เก็บ key ไว้ใช้เรียก /animate ทีหลัง
-  //     });
-  //     setStatus('finished');
-
-  //   } catch (err: any) {
-  //       console.error("Process Error:", err);
-  //       // แปลงข้อความ Error ให้เป็นภาษาที่อ่านง่าย
-  //       const friendlyMsg = getFriendlyErrorMessage(err.message || "Unknown Error", currentLang);
-  //       setFailReason(friendlyMsg);
-        
-  //       if (currentStep === 'verifying') {
-  //            setStatus('verified_fail'); 
-  //       } else {
-  //            setStatus('error'); 
-  //       }
-  //   }
-  // };
-
-  // const handleAnimate = async () => {
-  //   if (!result?.image || !result?.location_key) return;
-
-  //   setHasShownAssessment(false); 
-  //   setShowAssessment(false);
-
-  //   setStatus('animating');
-  //   try {
-  //     const animRes = await fetch('http://127.0.0.1:5000/animate', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ 
-  //         image: result.image, 
-  //         location_key: result.location_key 
-  //       }),
-  //     });
-  //     const animData = await animRes.json();
-      
-  //     if (animData.video) {
-  //       setResult(prev => prev ? { ...prev, video: animData.video } : null);
-  //       setStatus('finished');
-  //     } else {
-  //       throw new Error(animData.error || "Video failed");
-  //     }
-  //   } catch (err: any) {
-  //     setFailReason(getFriendlyErrorMessage(err.message, currentLang));
-  //     setStatus('error');
-  //   }
-  // };
 
   return (
     <>
