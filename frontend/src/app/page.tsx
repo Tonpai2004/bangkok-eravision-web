@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import UploadSection from "@/components/UploadSection";
 import Link from "next/link";
@@ -14,7 +15,7 @@ const PAGE_TEXT = {
         บางกอกทวิกาล <span className="whitespace-nowrap">คืออะไร?</span>
       </>
     ),
-    desc_prefix: "คือนวัตกรรมทางเทคโนโลยีถ่ายที่เชื่อมโยงคุณเข้ากับความงามสง่าของ \'พระนคร\' ในช่วงพุทธศักราชที่ 2503 – 2512 อีกครั้ง เชิญสัมผัสประสบการณ์ย้อนเวลาด้วย",
+    desc_prefix: "คือนวัตกรรมทางเทคโนโลยีถ่ายที่เชื่อมโยงคุณเข้ากับความงามสง่าของ 'พระนคร' ในช่วงพุทธศักราชที่ 2503 – 2512 อีกครั้ง เชิญสัมผัสประสบการณ์ย้อนเวลาด้วย",
     desc_highlight: "เทคโนโลยีปัญญาประดิษฐ์ผสานศาสตร์ศิลป์และประวัติศาสตร์",
     desc_suffix: "ที่จะเนรมิตภาพถ่ายปัจจุบันของคุณ ให้กลายเป็นภาพจำลองความทรงจำแสนคลาสสิก เปี่ยมด้วยเสน่ห์และกลิ่นอายที่แท้จริงของยุคสมัย ที่แม้จะย้อนกลับไปไม่ได้ แต่ก็ได้สัมผัสประสบการณ์แห่งกาลเวลาจากเทคโนโลยีของเรา",
     link_dev: "คณะผู้รังสรรค์ผลงาน →"
@@ -30,7 +31,8 @@ const PAGE_TEXT = {
   }
 };
 
-export default function Home() {
+// 1. เปลี่ยนชื่อ Component หลักเป็น MainContent (เนื้อหาล่าสุดของคุณทั้งหมดอยู่ในนี้)
+function MainContent() {
   const { language } = useLanguage();
   const text = PAGE_TEXT[language];
 
@@ -93,5 +95,14 @@ export default function Home() {
       {/* Upload Section */}
       <UploadSection currentLang={language} />
     </main>
+  );
+}
+
+// 2. สร้าง Component ใหม่ชื่อ Home เพื่อครอบด้วย Suspense ป้องกัน Build Error บน Vercel
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="text-center p-10 font-pimdeed text-2xl">กำลังโหลด...</div>}>
+      <MainContent />
+    </Suspense>
   );
 }
