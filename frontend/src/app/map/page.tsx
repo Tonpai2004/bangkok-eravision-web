@@ -123,7 +123,7 @@ const MapPin = ({ loc, activePin, setActivePin, language, onClick }: any) => {
         }}
     >
         <div 
-            className="transition-transform duration-300 ease-out animate-bounce"
+            className="transition-transform duration-300 ease-out"
             style={{  
                 transformOrigin: 'bottom center' 
             }}
@@ -233,9 +233,9 @@ export default function MapPage() {
     <main className="w-full px-4 md:px-6 pb-20 mx-auto">
       {/* --- Background Texture Layer --- */}
       <div 
-        className="fixed inset-0 -z-10 pointer-events-none opacity-[0.4]"
+        className="fixed inset-0 -z-10 pointer-events-none opacity-[0.2]"
         style={{ 
-          backgroundImage: "url('/images/grunge-paper-background.jpg')", 
+          backgroundImage: "url('/images/grunge-paper-background3.png')", 
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center'
